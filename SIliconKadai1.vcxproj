@@ -50,7 +50,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="code\testmain.h" />
+    <ClInclude Include="code\Utilities.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Resource.h" />
@@ -146,6 +148,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="code\testmain.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="SIliconKadai1.cpp" />
   </ItemGroup>
