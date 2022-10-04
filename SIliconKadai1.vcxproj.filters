@@ -16,52 +16,69 @@
     <Filter Include="DX11">
       <UniqueIdentifier>{b8495851-de77-46bb-842b-2d0329693f1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{bb0f826c-cb75-4d13-9026-f7667759b859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{0013927c-3bf7-4ad0-a13b-2d032d3b7ef7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{79ab92cf-28b1-485f-a1f3-f31169f2988d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Application.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="code\testmain.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Utilities.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="code\DX11Graphics.h">
       <Filter>DX11</Filter>
     </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="code\testmain.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Utilities.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="code\DrawPolygon.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Application.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="code\testmain.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="code\DX11Graphics.cpp">
       <Filter>DX11</Filter>
     </ClCompile>
+    <ClCompile Include="code\testmain.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="SIliconKadai1.ico">
+      <Filter>Application</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>Application</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SIliconKadai1.rc">
-      <Filter>リソース ファイル</Filter>
+      <Filter>Application</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="SIliconKadai1.ico">
-      <Filter>リソース ファイル</Filter>
-    </Image>
+    <FxCompile Include="shader\commonshader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
