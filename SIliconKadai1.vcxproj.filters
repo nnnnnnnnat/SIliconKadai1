@@ -27,10 +27,7 @@
     <ClInclude Include="Resource.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SIliconKadai1.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
+    <ClInclude Include="Application.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="code\testmain.h">
@@ -44,10 +41,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SIliconKadai1.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
+    <ClCompile Include="Application.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="code\testmain.cpp">

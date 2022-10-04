@@ -2,7 +2,7 @@
 //
 
 #include "framework.h"
-#include "SIliconKadai1.h"
+#include "Application.h"
 
 #include "code/DX11Graphics.h"
 
@@ -45,13 +45,32 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance ,
 
     MSG msg;
 
-    // メイン メッセージ ループ:
-    while (GetMessage(&msg , nullptr , 0 , 0)) {
-        if (!TranslateAccelerator(msg.hwnd , hAccelTable , &msg)) {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+    // ゲームループ
+    while (1) {
+        if (PeekMessage(&msg , nullptr , 0 , 0 , PM_REMOVE)) { // if
+            // 終了メッセージ処理
+            if (msg.message == WM_QUIT) { // if
+                break;
+            }
+            else { // else
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+            }
         }
+
+        // ゲーム処理
+
+        // 背景色設定
+        float color[4] = { 0.2f , 0.2f , 1.0f , 1.0f };
+        DX11Graphics::GetInstance().GetDeviceContext()->ClearRenderTargetView(DX11Graphics::GetInstance().GetBackBufferPort() , color);
+
+        // バックバッファの内容を画面に表示
+        DX11Graphics::GetInstance().GetSwapChain()->Present(1 , 0);
+
     }
+
+    // Direct3Dインスタンス削除
+    DX11Graphics::GetInstance().Exit();
 
     return (int)msg.wParam;
 }
@@ -105,7 +124,7 @@ BOOL InitInstance(HINSTANCE hInstance , int nCmdShow) {
     ShowWindow(hWnd , nCmdShow);
     UpdateWindow(hWnd);
 
-    DX11Graphics::GetInstance().Initialize(hWnd , 840 , 840);
+    DX11Graphics::GetInstance().Initialize(hWnd , 1280 , 720);
 
     return TRUE;
 }

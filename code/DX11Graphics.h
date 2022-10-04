@@ -35,6 +35,7 @@ public:
     }
 
     bool Initialize(HWND , const unsigned int , const unsigned int);
+    void Exit();
     ID3D11Device* GetDXDevice() const {
         return m_device.Get();
     }
@@ -44,7 +45,7 @@ public:
     IDXGISwapChain* GetSwapChain() const {
         return m_swapChain.Get();
     }
-    ID3D11RenderTargetView* ID3D11RenderTargetView() const {
+    ID3D11RenderTargetView* GetBackBufferPort() const {
         return m_backBufferView.Get();
     }
     int GetViewPortHeight() const {

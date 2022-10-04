@@ -97,3 +97,12 @@ bool DX11Graphics::Initialize(HWND _hWnd , const unsigned int _width , const uns
     return true;
 }
 
+void DX11Graphics::Exit() {
+    if (m_deviceContext) { // if
+        m_deviceContext->ClearState();
+    }
+    if (m_swapChain) { // if
+        m_swapChain->SetFullscreenState(false , nullptr);
+    }
+}
+
