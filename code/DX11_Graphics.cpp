@@ -1,4 +1,4 @@
-#include "DX11Graphics.h"
+#include "DX11_Graphics.h"
 
 #include <windows.h>
 
@@ -51,20 +51,20 @@ bool DX11Graphics::Initialize(HWND _hWnd , const unsigned int _width , const uns
     }
 
     // スワップチェイン作成
-    DXGI_SWAP_CHAIN_DESC scDesc = {};
-    scDesc.BufferDesc.Width = _width; // 画面の幅
-    scDesc.BufferDesc.Height = _height; // 画面の高さ
-    scDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // バッファの形式
+    DXGI_SWAP_CHAIN_DESC scDesc = {};		// スワップチェーンの設定データ
+    scDesc.BufferDesc.Width = _width;						// 画面の幅
+    scDesc.BufferDesc.Height = _height;						// 画面の高さ
+    scDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;	// バッファの形式
     scDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     scDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
     scDesc.BufferDesc.RefreshRate.Numerator = 0;
     scDesc.BufferDesc.RefreshRate.Denominator = 1;
-    scDesc.SampleDesc.Count = 1; // MSAAは使用しない
-    scDesc.SampleDesc.Quality = 0; // MSAAは使用しない
-    scDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // バッファの使用方法
-    scDesc.BufferCount = 2; // バッファの数
+    scDesc.SampleDesc.Count = 1;							// MSAAは使用しない
+    scDesc.SampleDesc.Quality = 0;							// MSAAは使用しない
+    scDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;	// バッファの使用方法
+    scDesc.BufferCount = 2;									// バッファの数
     scDesc.OutputWindow = _hWnd;
-    scDesc.Windowed = TRUE;// ウィンドウモード
+    scDesc.Windowed = TRUE;									// ウィンドウモード
     scDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
     scDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 

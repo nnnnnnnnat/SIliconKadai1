@@ -4,10 +4,7 @@
 #include "framework.h"
 #include "Application.h"
 
-#include "code/DX11Graphics.h"
-
-// DirectX11のライブラリ
-#pragma comment (lib,"d3d11.lib")
+#include "code/Game_System.h"
 
 #define MAX_LOADSTRING 100
 
@@ -60,17 +57,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance ,
 
         // ゲーム処理
 
-        // 背景色設定
-        float color[4] = { 0.2f , 0.2f , 1.0f , 1.0f };
-        DX11Graphics::GetInstance().GetDeviceContext()->ClearRenderTargetView(DX11Graphics::GetInstance().GetBackBufferPort() , color);
-
-        // バックバッファの内容を画面に表示
-        DX11Graphics::GetInstance().GetSwapChain()->Present(1 , 0);
-
+        GameSystem::GetInstance().Update();
+        GameSystem::GetInstance().Draw();
     }
 
-    // Direct3Dインスタンス削除
-    DX11Graphics::GetInstance().Exit();
+    GameSystem::GetInstance().Exit();
 
     return (int)msg.wParam;
 }
@@ -124,7 +115,7 @@ BOOL InitInstance(HINSTANCE hInstance , int nCmdShow) {
     ShowWindow(hWnd , nCmdShow);
     UpdateWindow(hWnd);
 
-    DX11Graphics::GetInstance().Initialize(hWnd , 1280 , 720);
+    GameSystem::GetInstance().Initialize(hWnd);
 
     return TRUE;
 }

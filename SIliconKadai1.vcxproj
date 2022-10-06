@@ -43,7 +43,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -140,8 +140,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="code\DrawPolygon.h" />
-    <ClInclude Include="code\DX11Graphics.h" />
+    <ClInclude Include="code\DX11_Polygon.h" />
+    <ClInclude Include="code\DX11_Graphics.h" />
+    <ClInclude Include="code\DX11_Sampler.h" />
+    <ClInclude Include="code\DX11_Settransform.h" />
+    <ClInclude Include="code\DX11_Texture.h" />
+    <ClInclude Include="code\Game_System.h" />
+    <ClInclude Include="code\DX11_Shader.h" />
     <ClInclude Include="code\testmain.h" />
     <ClInclude Include="code\Utilities.h" />
     <ClInclude Include="framework.h" />
@@ -150,7 +155,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\DX11Graphics.cpp" />
+    <ClCompile Include="code\DX11_Graphics.cpp" />
+    <ClCompile Include="code\DX11_Polygon.cpp" />
+    <ClCompile Include="code\DX11_Texture.cpp" />
+    <ClCompile Include="code\Game_System.cpp" />
+    <ClCompile Include="code\DX11_Shader.cpp" />
     <ClCompile Include="code\testmain.cpp" />
     <ClCompile Include="Application.cpp" />
   </ItemGroup>
@@ -163,10 +172,18 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\commonshader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shader\SpriteShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

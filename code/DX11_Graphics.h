@@ -11,23 +11,6 @@
 using Microsoft::WRL::ComPtr;
 
 class DX11Graphics : private Util::NonCopyable {
-private:
-    // DirectX3DDevice11のデバイス
-    ComPtr<ID3D11Device> m_device;
-    // DirectX3DDevice11のデバイスコンテクスト
-    ComPtr<ID3D11DeviceContext> m_deviceContext;
-    // スワップチェイン
-    ComPtr<IDXGISwapChain> m_swapChain;
-    // バックバッファのビュー
-    ComPtr<ID3D11RenderTargetView> m_backBufferView;
-
-    // バックバッファXサイズ
-    int m_width = 0;
-    // バックバッファYサイズ
-    int m_height = 0;
-
-private:
-    DX11Graphics() {}
 public:
     static DX11Graphics& GetInstance() {
         static DX11Graphics instance;
@@ -54,4 +37,20 @@ public:
     int GetViewPortWidth() const {
         return m_width;
     };
+private:
+    DX11Graphics() {}
+
+    // DirectX3DDevice11のデバイス
+    ComPtr<ID3D11Device> m_device;
+    // DirectX3DDevice11のデバイスコンテクスト
+    ComPtr<ID3D11DeviceContext> m_deviceContext;
+    // スワップチェイン
+    ComPtr<IDXGISwapChain> m_swapChain;
+    // バックバッファのビュー
+    ComPtr<ID3D11RenderTargetView> m_backBufferView;
+
+    // バックバッファXサイズ
+    int m_width = 0;
+    // バックバッファYサイズ
+    int m_height = 0;
 };

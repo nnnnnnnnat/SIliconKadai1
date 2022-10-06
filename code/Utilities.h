@@ -7,6 +7,9 @@
 
 #include <Windows.h>
 
+// 16バイトにアラインメントする。
+#define ALIGN16 _declspec(align(16))
+
 namespace Util {
 
     class NonCopyable {
