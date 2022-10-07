@@ -85,9 +85,4 @@
       <Filter>Application</Filter>
     </ResourceCompile>
   </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="shader\SpriteShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-  </ItemGroup>
 </Project>
