@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: DX11_Graphics.h
+/// Description: DX11初期化
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #pragma once
 
 #include <d3d11.h>
@@ -12,45 +18,111 @@ using Microsoft::WRL::ComPtr;
 
 class DX11Graphics : private Util::NonCopyable {
 public:
-    static DX11Graphics& GetInstance() {
-        static DX11Graphics instance;
-        return instance;
-    }
+    //-----------------------------------------------------------------------------
+    // public methods
 
-    bool Initialize(HWND , const unsigned int , const unsigned int);
+    //-----------------------------------------------------------------------------
+    /// インスタンス受け取り
+    /// 
+    /// \return DX11Graphics&
+    //-----------------------------------------------------------------------------
+    static DX11Graphics& GetInstance();
+
+
+    //-----------------------------------------------------------------------------
+    /// 初期化
+    /// 
+    /// \param [in] _hWnd ウィンドウハンドル
+    /// \param [in] _width ウィンドウの横の大きさ
+    /// \param [in] _height ウィンドウの縦の大きさ
+    /// \return void
+    //-----------------------------------------------------------------------------
+    bool Init(
+        /*[in]*/HWND _hWnd ,
+        /*[in]*/const unsigned int _width ,
+        /*[in]*/const unsigned int _height);
+
+    //-----------------------------------------------------------------------------
+    /// 解放処理
+    /// 
+    /// \return void
+    //-----------------------------------------------------------------------------
     void Exit();
-    ID3D11Device* GetDXDevice() const {
-        return m_device.Get();
-    }
-    ID3D11DeviceContext* GetDeviceContext() const {
-        return m_deviceContext.Get();
-    }
-    IDXGISwapChain* GetSwapChain() const {
-        return m_swapChain.Get();
-    }
-    ID3D11RenderTargetView* GetBackBufferPort() const {
-        return m_backBufferView.Get();
-    }
-    int GetViewPortHeight() const {
-        return m_height;
-    }
-    int GetViewPortWidth() const {
-        return m_width;
-    };
+
+    //-----------------------------------------------------------------------------
+    /// デバイス取得
+    /// 
+    /// \return ID3D11Device*
+    //-----------------------------------------------------------------------------
+    ID3D11Device* GetDXDevice() const;
+
+    //-----------------------------------------------------------------------------
+    /// デバイスコンテキスト取得
+    /// 
+    /// \return GetDeviceContext*
+    //-----------------------------------------------------------------------------
+    ID3D11DeviceContext* GetDeviceContext() const;
+
+
+    //-----------------------------------------------------------------------------
+    /// スワップチェイン取得
+    /// 
+    /// \return IDXGISwapChain*
+    //-----------------------------------------------------------------------------
+    IDXGISwapChain* GetSwapChain() const;
+
+    //-----------------------------------------------------------------------------
+    /// レンダーターゲットビュー取得
+    /// 
+    /// \return ID3D11RenderTargetView*
+    //-----------------------------------------------------------------------------
+    ID3D11RenderTargetView* GetBackBufferPort() const;
+
+    //-----------------------------------------------------------------------------
+    /// ビューポート
+    /// 
+    /// \return ID3D11RenderTargetView*
+    //-----------------------------------------------------------------------------
+    D3D11_VIEWPORT GetViewPort() const;
+
+    //-----------------------------------------------------------------------------
+    /// バックバッファの縦の大きさ 取得
+    /// 
+    /// \return int
+    //-----------------------------------------------------------------------------
+    int GetViewPortHeight() const;
+
+    //-----------------------------------------------------------------------------
+    /// バックバッファの横の大きさ 取得
+    /// 
+    /// \return int
+    //-----------------------------------------------------------------------------
+    int GetViewPortWidth() const;
+
+    //-----------------------------------------------------------------------------
+
 private:
-    DX11Graphics() {}
+    //-----------------------------------------------------------------------------
+    // private methods
 
-    // DirectX3DDevice11のデバイス
-    ComPtr<ID3D11Device> m_device;
-    // DirectX3DDevice11のデバイスコンテクスト
-    ComPtr<ID3D11DeviceContext> m_deviceContext;
-    // スワップチェイン
-    ComPtr<IDXGISwapChain> m_swapChain;
-    // バックバッファのビュー
-    ComPtr<ID3D11RenderTargetView> m_backBufferView;
-
-    // バックバッファXサイズ
+    //-----------------------------------------------------------------------------
+    ComPtr<ID3D11Device> m_pDevice;
+    ComPtr<ID3D11DeviceContext> m_PdeviceContext;
+    ComPtr<IDXGISwapChain> m_pSwapChain;
+    ComPtr<ID3D11RenderTargetView> m_pBackBufferView;
+    D3D11_VIEWPORT m_viewport;
     int m_width = 0;
-    // バックバッファYサイズ
     int m_height = 0;
+
+    ///<
+    /// m_pDevice デバイス
+    /// m_pDeviceContext デバイスコンテキスト
+    /// m_pSwapChain スワップチェイン
+    /// m_pBackBufferView レンダーターゲットビュー
+    /// m_viewport ビューポート
+    /// m_width バックバッファの横の大きさ 
+    /// m_height バックバッファの縦の大きさ 
+    ///
+
+    //-----------------------------------------------------------------------------
 };

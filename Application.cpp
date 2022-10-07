@@ -1,5 +1,4 @@
 ﻿// SIliconKadai1.cpp : アプリケーションのエントリ ポイントを定義します。
-//
 
 #include "framework.h"
 #include "Application.h"

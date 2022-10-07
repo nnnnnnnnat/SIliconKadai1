@@ -1,19 +1,17 @@
+//==============================================================================
+/// Filename: SpriteShader.hlsl
+/// Description: シェーダー
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 Texture2D g_Tex : register(t0); 
 SamplerState g_SamplerLinear : register(s0); 
 
-cbuffer ConstantBufferWorld : register(b0)
+cbuffer ConstantBuffer
 {
-    matrix World;
-}
-
-cbuffer ConstantBufferView : register(b1)
-{
-    matrix View;
-}
-
-cbuffer ConstantBufferProjection : register(b2)
-{
-    matrix Projection;
+    float4x4 g_world;
+    float4x4 g_view;
+    float4x4 g_projection;
 }
 
 struct VSOutput
@@ -28,7 +26,9 @@ VSOutput VS(float4 pos : POSITION,
 				float2 tex : TEXCOORD)
 {
     VSOutput Out;
-    Out.m_pos = pos;
+    Out.m_pos = mul(pos,g_world);
+    Out.m_pos = mul(Out.m_pos, g_view);
+    Out.m_pos = mul(Out.m_pos, g_projection);
     Out.m_color = color;
     Out.m_tex = tex;
     return Out;
@@ -37,5 +37,4 @@ VSOutput VS(float4 pos : POSITION,
 float4 PS(VSOutput In) : SV_TARGET
 {
     return g_Tex.Sample(g_SamplerLinear , In.m_tex);
-    //return float4(0.0f, 0.0f, 1.0f, 1.0f);
 }

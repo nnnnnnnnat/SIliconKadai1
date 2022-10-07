@@ -25,9 +25,6 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{79ab92cf-28b1-485f-a1f3-f31169f2988d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Matrix">
-      <UniqueIdentifier>{e69dcf8e-3b73-4754-829b-48af9171daab}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\DX11_Graphics.h">
@@ -45,28 +42,16 @@
     <ClInclude Include="targetver.h">
       <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="code\testmain.h">
-      <Filter>Application</Filter>
-    </ClInclude>
     <ClInclude Include="code\Utilities.h">
       <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="code\DX11_Polygon.h">
-      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="code\Game_System.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="code\DX11_Shader.h">
-      <Filter>DX11</Filter>
-    </ClInclude>
-    <ClInclude Include="code\DX11_Settransform.h">
-      <Filter>DX11</Filter>
-    </ClInclude>
-    <ClInclude Include="code\DX11_Texture.h">
-      <Filter>DX11</Filter>
-    </ClInclude>
     <ClInclude Include="code\DX11_Sampler.h">
+      <Filter>DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="code\DX11_Cube.h">
       <Filter>DX11</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,22 +59,16 @@
     <ClCompile Include="code\DX11_Graphics.cpp">
       <Filter>DX11</Filter>
     </ClCompile>
-    <ClCompile Include="code\testmain.cpp">
-      <Filter>Application</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Application</Filter>
     </ClCompile>
     <ClCompile Include="code\Game_System.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="code\DX11_Polygon.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="code\DX11_Shader.cpp">
+    <ClCompile Include="code\DX11_Cube.cpp">
       <Filter>DX11</Filter>
     </ClCompile>
-    <ClCompile Include="code\DX11_Texture.cpp">
+    <ClCompile Include="code\DX11_Sampler.cpp">
       <Filter>DX11</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,15 +86,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shader\ps.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\vs.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\commonshader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
     <FxCompile Include="shader\SpriteShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>

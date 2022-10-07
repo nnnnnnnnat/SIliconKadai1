@@ -1,7 +1,5 @@
-﻿
-// header.h : 標準のシステム インクルード ファイルのインクルード ファイル、
+﻿// header.h : 標準のシステム インクルード ファイルのインクルード ファイル、
 // またはプロジェクト専用のインクルード ファイル
-//
 
 
 #pragma once
@@ -15,3 +13,17 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+
+#include <DirectXMath.h>
+
+struct Vertex {
+    DirectX::XMFLOAT3 m_pos;	// 座標
+    DirectX::XMFLOAT4 m_color;
+    DirectX::XMFLOAT2 m_tex;
+};
+
+struct ConstantBuffer {
+    DirectX::XMFLOAT4X4 m_world;
+    DirectX::XMFLOAT4X4 m_view;
+    DirectX::XMFLOAT4X4 m_projection;
+};
