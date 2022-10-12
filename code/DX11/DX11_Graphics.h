@@ -7,14 +7,11 @@
 #pragma once
 
 #include <d3d11.h>
-#include <wrl/client.h>
 
-#include "Utilities.h"
+#include "../../framework.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
-
-using Microsoft::WRL::ComPtr;
 
 class DX11Graphics : private Util::NonCopyable {
 public:
@@ -41,6 +38,21 @@ public:
         /*[in]*/HWND _hWnd ,
         /*[in]*/const unsigned int _width ,
         /*[in]*/const unsigned int _height);
+
+    //-----------------------------------------------------------------------------
+    /// 描画の前処理
+    /// 
+    /// \retrun void
+    //-----------------------------------------------------------------------------
+    void BeforeRender();
+
+
+    //-----------------------------------------------------------------------------
+    /// 描画の後処理
+    /// 
+    /// \retrun void
+    //-----------------------------------------------------------------------------
+    void AfterRender();
 
     //-----------------------------------------------------------------------------
     /// 解放処理
@@ -113,7 +125,7 @@ private:
     D3D11_VIEWPORT m_viewport;
     int m_width = 0;
     int m_height = 0;
-
+    float m_backGroundColor[4] = { 0.2f , 0.2f , 0.2f , 1.0f };
     ///<
     /// m_pDevice デバイス
     /// m_pDeviceContext デバイスコンテキスト

@@ -25,11 +25,11 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{79ab92cf-28b1-485f-a1f3-f31169f2988d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DX12">
+      <UniqueIdentifier>{6c2d75a2-f379-437a-85a6-18e4e24e3e67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="code\DX11_Graphics.h">
-      <Filter>DX11</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>Application</Filter>
     </ClInclude>
@@ -48,27 +48,36 @@
     <ClInclude Include="code\Game_System.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="code\DX11_Sampler.h">
+    <ClInclude Include="code\DX12\DX12_Graphics.h">
+      <Filter>DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="code\DX11\DX11_Graphics.h">
       <Filter>DX11</Filter>
     </ClInclude>
-    <ClInclude Include="code\DX11_Cube.h">
+    <ClInclude Include="code\DX11\DX11_Sampler.h">
+      <Filter>DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="code\DX11\DX11_Cube.h">
       <Filter>DX11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\DX11_Graphics.cpp">
-      <Filter>DX11</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Application</Filter>
     </ClCompile>
     <ClCompile Include="code\Game_System.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="code\DX11_Cube.cpp">
+    <ClCompile Include="code\DX12\DX12_Graphics.cpp">
+      <Filter>DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="code\DX11\DX11_Sampler.cpp">
       <Filter>DX11</Filter>
     </ClCompile>
-    <ClCompile Include="code\DX11_Sampler.cpp">
+    <ClCompile Include="code\DX11\DX11_Cube.cpp">
+      <Filter>DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="code\DX11\DX11_Graphics.cpp">
       <Filter>DX11</Filter>
     </ClCompile>
   </ItemGroup>

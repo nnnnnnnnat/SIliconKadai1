@@ -6,20 +6,15 @@
 
 #pragma once
 
-#include "../framework.h"
+#include "../../framework.h"
 
 #include <d3d11.h>
 #include <d3dcompiler.h>
-#include <DirectXMath.h>
-
-#include <array>
-#include <wrl/client.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-using Microsoft::WRL::ComPtr;
 
 typedef std::array<Vertex , 36> VertexCube;
 

@@ -140,9 +140,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="code\DX11_Cube.h" />
-    <ClInclude Include="code\DX11_Graphics.h" />
-    <ClInclude Include="code\DX11_Sampler.h" />
+    <ClInclude Include="code\DX11\DX11_Cube.h" />
+    <ClInclude Include="code\DX11\DX11_Graphics.h" />
+    <ClInclude Include="code\DX11\DX11_Sampler.h" />
+    <ClInclude Include="code\DX12\DX12_Graphics.h" />
     <ClInclude Include="code\Game_System.h" />
     <ClInclude Include="code\Utilities.h" />
     <ClInclude Include="framework.h" />
@@ -151,9 +152,10 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\DX11_Cube.cpp" />
-    <ClCompile Include="code\DX11_Graphics.cpp" />
-    <ClCompile Include="code\DX11_Sampler.cpp" />
+    <ClCompile Include="code\DX11\DX11_Cube.cpp" />
+    <ClCompile Include="code\DX11\DX11_Graphics.cpp" />
+    <ClCompile Include="code\DX11\DX11_Sampler.cpp" />
+    <ClCompile Include="code\DX12\DX12_Graphics.cpp" />
     <ClCompile Include="code\Game_System.cpp" />
     <ClCompile Include="Application.cpp" />
   </ItemGroup>

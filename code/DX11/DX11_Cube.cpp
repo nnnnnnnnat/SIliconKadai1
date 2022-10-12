@@ -4,9 +4,6 @@
 /// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
-#include <vector>
-#include <random>
-
 #include "DX11_Cube.h"
 #include "DX11_Graphics.h"
 

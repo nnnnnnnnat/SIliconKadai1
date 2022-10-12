@@ -13,8 +13,15 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
-
+#include <wrl/client.h>
 #include <DirectXMath.h>
+#include <array>
+#include <vector>
+#include <string>
+
+#include "code/Utilities.h"
+
+using Microsoft::WRL::ComPtr;
 
 struct Vertex {
     DirectX::XMFLOAT3 m_pos;	// 座標

@@ -133,6 +133,16 @@ bool DX11Graphics::Init(HWND _hWnd ,
     return true;
 }
 
+void DX11Graphics::BeforeRender() {
+    // 背景色設定
+    m_PdeviceContext->ClearRenderTargetView(m_pBackBufferView.Get() , m_backGroundColor);
+}
+
+void DX11Graphics::AfterRender() {
+    // バックバッファの内容を画面に表示
+    m_pSwapChain->Present(1 , 0);
+}
+
 void DX11Graphics::Exit() {
     if (m_PdeviceContext) { // if
         m_PdeviceContext->ClearState();
