@@ -33,10 +33,13 @@ void GameSystem::Initialize(HWND _hWnd) {
         DX11Sampler::GetInstance()->Set(DX11Sampler::Sampler_Mode::WRAP);
 
         // ƒLƒ…[ƒu‰Šú‰»
-        m_cube.Init(0.5f , 0.5f , 0.5f);
+        m_dx11Cube.Init(0.5f , 0.5f , 0.5f);
         break;
     case RendererType::DirectX12:
+
         DX12Graphics::GetInstance().Init(_hWnd , 1280 , 720);
+        m_dx12Cube.Init(0.5f , 0.5f , 0.5f);
+
         break;
     }
 }
@@ -50,6 +53,8 @@ void GameSystem::Update() {
         break;
     case RendererType::DirectX12:
         // XVˆ—‚ğ«‚É‘‚­
+
+        DX12Graphics::GetInstance().Update();
 
         // XVˆ—‚ğª‚É‘‚­
         break;
@@ -66,7 +71,7 @@ void GameSystem::Draw() {
 
         // •`‰æˆ—‚ğ«‚É‘‚­
 
-        m_cube.Draw();
+        m_dx11Cube.Draw();
 
         // •`‰æˆ—‚ğª‚É‘‚­
 
@@ -77,9 +82,12 @@ void GameSystem::Draw() {
 
         DX12Graphics::GetInstance().BeforeRender();
 
-        // •`‰æˆ—‚ğ«‚É‘‚­
+        //// •`‰æˆ—‚ğ«‚É‘‚­
 
-        // •`‰æˆ—‚ğª‚É‘‚­
+        m_dx12Cube.Draw();
+
+
+        //// •`‰æˆ—‚ğª‚É‘‚­
 
         DX12Graphics::GetInstance().AfterRender();
 

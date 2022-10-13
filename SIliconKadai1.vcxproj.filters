@@ -60,6 +60,12 @@
     <ClInclude Include="code\DX11\DX11_Cube.h">
       <Filter>DX11</Filter>
     </ClInclude>
+    <ClInclude Include="code\DX12\DX12_Cube.h">
+      <Filter>DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="code\DX12\DX12_util.h">
+      <Filter>DX12</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -80,6 +86,12 @@
     <ClCompile Include="code\DX11\DX11_Graphics.cpp">
       <Filter>DX11</Filter>
     </ClCompile>
+    <ClCompile Include="code\DX12\DX12_Cube.cpp">
+      <Filter>DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="code\DX12\DX12_util.cpp">
+      <Filter>DX12</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="SIliconKadai1.ico">
@@ -93,5 +105,13 @@
     <ResourceCompile Include="SIliconKadai1.rc">
       <Filter>Application</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\PixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\VertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

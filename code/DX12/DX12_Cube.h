@@ -1,24 +1,19 @@
-//==============================================================================
-/// Filename: DX11_Cube.h
-/// Description: ボックス表示するクラス
-/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
-//==============================================================================
-
 #pragma once
 
 #include "../../framework.h"
 
-#include <d3d11.h>
+#include <d3d12.h>
+#include <dxgi1_4.h>
 #include <d3dcompiler.h>
 
-#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib , "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-class DX11Cube {
+class DX12Cube {
 public:
     //-----------------------------------------------------------------------------
-    // public methods
+    // private method
 
     //-----------------------------------------------------------------------------
     /// 初期化
@@ -42,29 +37,25 @@ public:
     void Draw();
 
     //-----------------------------------------------------------------------------
+    /// 頂点バッファセット
+    /// 
+    /// \return void
+    //-----------------------------------------------------------------------------
+    void SetVertexBuffer();
 
+    //-----------------------------------------------------------------------------
 private:
-
     //-----------------------------------------------------------------------------
-    // private methods
+    // private method
 
-    //-----------------------------------------------------------------------------
-    ComPtr<ID3D11VertexShader>	m_pVertexShader = nullptr;
-    ComPtr<ID3D11PixelShader>	m_pPixelShader = nullptr;
-    ComPtr<ID3D11InputLayout>	m_pInputLayout = nullptr;
-    ComPtr<ID3D11Buffer> m_pVertexBuffer = nullptr;
-    ComPtr<ID3D11ShaderResourceView> m_pShaderResourceView = nullptr;
-    VertexCube m_cube;
-    //-----------------------------------------------------------------------------
-
-    ///<
-    /// m_pVertexShader 頂点シェーダー
-    /// m_pPixelShader ピクセルシェーダー
-    /// m_pInputLayout 入力レイアウト
-    /// m_pVertexBuffer 頂点バッファ
-    /// m_pShaderResourceView シェーダーリソースビュー
-    /// m_cube キューブ表示をする変数
-    ///<
-
+    ComPtr<ID3D12RootSignature> m_pRootSignature;
+    ComPtr<ID3D12PipelineState> m_pPipelineState;
+    ComPtr<ID3D12Resource> m_pVertexBuffer;
+    ComPtr<ID3D12Resource> m_pIndexBuffer;
+    ComPtr<ID3D12Resource> m_pConstantBuffer;
+    D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
+    D3D12_INDEX_BUFFER_VIEW m_indexBufferView;
+    ShaderObject m_vertexShader;
+    ShaderObject m_pixelShader;
     //-----------------------------------------------------------------------------
 };

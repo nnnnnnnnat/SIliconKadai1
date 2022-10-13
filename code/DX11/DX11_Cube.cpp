@@ -17,8 +17,7 @@ bool DX11Cube::Init(const float _width , const float _height , const float _dept
     dev = DX11Graphics::GetInstance().GetDXDevice();
     devcontext = DX11Graphics::GetInstance().GetDeviceContext();
 
-    // Fî•ñ (¡‰ñ‚Íg‚í‚È‚¢)
-    DirectX::XMFLOAT4 color = { 0.0f , 0.0f , 0.0f , 1.0f };
+    DirectX::XMFLOAT4 color = { 1.0f , 1.0f , 1.0f , 1.0f };
 
     // uvÀ•WŠi”[
     std::array<DirectX::XMFLOAT2 , 4> uc;

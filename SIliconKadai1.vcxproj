@@ -143,7 +143,9 @@
     <ClInclude Include="code\DX11\DX11_Cube.h" />
     <ClInclude Include="code\DX11\DX11_Graphics.h" />
     <ClInclude Include="code\DX11\DX11_Sampler.h" />
+    <ClInclude Include="code\DX12\DX12_Cube.h" />
     <ClInclude Include="code\DX12\DX12_Graphics.h" />
+    <ClInclude Include="code\DX12\DX12_util.h" />
     <ClInclude Include="code\Game_System.h" />
     <ClInclude Include="code\Utilities.h" />
     <ClInclude Include="framework.h" />
@@ -155,7 +157,9 @@
     <ClCompile Include="code\DX11\DX11_Cube.cpp" />
     <ClCompile Include="code\DX11\DX11_Graphics.cpp" />
     <ClCompile Include="code\DX11\DX11_Sampler.cpp" />
+    <ClCompile Include="code\DX12\DX12_Cube.cpp" />
     <ClCompile Include="code\DX12\DX12_Graphics.cpp" />
+    <ClCompile Include="code\DX12\DX12_util.cpp" />
     <ClCompile Include="code\Game_System.cpp" />
     <ClCompile Include="Application.cpp" />
   </ItemGroup>
@@ -165,6 +169,18 @@
   <ItemGroup>
     <Image Include="SIliconKadai1.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)..\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="shader\VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)..\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

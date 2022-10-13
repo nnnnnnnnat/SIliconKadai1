@@ -9,7 +9,7 @@
 #include "DX11_Graphics.h"
 #include "../Utilities.h"
 
-class DX11Sampler : private Util::NonCopyable {
+class DX11Sampler : private NonCopyable {
 public:
     //-----------------------------------------------------------------------------
     // public methods

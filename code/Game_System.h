@@ -9,6 +9,7 @@
 #include "../framework.h"
 
 #include "DX11/DX11_Cube.h"
+#include "DX12/DX12_Cube.h"
 
 class GameSystem {
 public:
@@ -68,7 +69,8 @@ private:
     // private methods
 
     //-----------------------------------------------------------------------------
-    DX11Cube m_cube;
+    DX11Cube m_dx11Cube;
+    DX12Cube m_dx12Cube;
     RendererType m_rendererType = RendererType::DirectX12;
     //-----------------------------------------------------------------------------
 

@@ -13,7 +13,7 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 
-class DX11Graphics : private Util::NonCopyable {
+class DX11Graphics : private NonCopyable {
 public:
     //-----------------------------------------------------------------------------
     // public methods
