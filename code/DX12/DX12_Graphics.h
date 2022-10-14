@@ -1,6 +1,6 @@
 //==============================================================================
 /// Filename: DX12_Graphics.h
-/// Description: DX12
+/// Description: DX12初期化
 /// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
@@ -162,10 +162,8 @@ private:
     ComPtr<ID3D12Resource> m_pRenderTarget[2];
     ComPtr<ID3D12Resource> m_pRenderTargetDepth;
     ComPtr<ID3D12GraphicsCommandList> m_pCommandList;
-
     ComPtr<ID3D12DescriptorHeap> m_pDescriptorHeapCB;
     ComPtr<ID3D12DescriptorHeap> m_pDescriptorHeapDSB;
-
     D3D12_CPU_DESCRIPTOR_HANDLE m_rtvHandle[2];
     D3D12_CPU_DESCRIPTOR_HANDLE m_handleDSV;
     HANDLE m_queueEvent;
@@ -182,8 +180,19 @@ private:
     /// m_pCommandAllocator コマンドアロケータ―
     /// m_pCommandQueue コマンドキュー
     /// m_pQueueFence フェンス
-    /// m_pDescriptorHeap ディスクリプタヒープ
-    /// m_pCommandList グラフィックコマンドリスト
+    /// m_pDescriptorHeapRTV レンダーターゲットビュー用のディスクリプタヒープ
+    /// m_pRenderTarget[2] レンダーターゲット
+    /// m_pRenderTargetDepth 深度バッファ
+    /// m_pDescriptorHeapCB コンスタントバッファ
+    /// m_pDescriptorHeapDSB デプスバッファ
+    /// m_rtvHandle[2] レンダーターゲットのハンドル
+    /// m_handleDSV ステンシルバッファのハンドル
+    /// m_queueEvent フェンス
+    /// m_viewPort ビューポート
+    /// m_rect シザー短形
+    /// m_windowWidth ウィンドウの横の長さ
+    /// m_windowHeight ウィンドウの横の長さ
+    /// m_backGroundColor[4] 背景色
     ///<
 
     //-----------------------------------------------------------------------------

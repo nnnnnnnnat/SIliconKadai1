@@ -1,10 +1,16 @@
-﻿#include "DX12_util.h"
+﻿//==============================================================================
+/// Filename: DX12_util.cpp
+/// Description: DX12用のUtility群
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
+#include "DX12_util.h"
 
 void DX12Util::SetResourceBarrier(
     ID3D12GraphicsCommandList* commandList ,
     ID3D12Resource* resource ,
-    D3D12_RESOURCE_STATES before ,
-    D3D12_RESOURCE_STATES after) {
+    const D3D12_RESOURCE_STATES before ,
+    const D3D12_RESOURCE_STATES after) {
     D3D12_RESOURCE_BARRIER descBarrier;
     ZeroMemory(&descBarrier , sizeof(descBarrier));
     descBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
@@ -15,7 +21,14 @@ void DX12Util::SetResourceBarrier(
     commandList->ResourceBarrier(1 , &descBarrier);
 }
 
-D3D12_GRAPHICS_PIPELINE_STATE_DESC DX12Util::CreateGraphicsPipelineStateDesc(ID3D12RootSignature* pRootSignature , const void* pBinaryVS , int vsSize , const void* pBinaryPS , int psSize , D3D12_INPUT_ELEMENT_DESC* descInputElements , int numInputElements) {
+D3D12_GRAPHICS_PIPELINE_STATE_DESC DX12Util::CreateGraphicsPipelineStateDesc(
+    ID3D12RootSignature* pRootSignature ,
+    const void* pBinaryVS ,
+    const int vsSize ,
+    const void* pBinaryPS ,
+    const int psSize ,
+    const D3D12_INPUT_ELEMENT_DESC* descInputElements ,
+    const int numInputElements) {
     D3D12_GRAPHICS_PIPELINE_STATE_DESC descState;
     ZeroMemory(&descState , sizeof(descState));
     descState.VS.pShaderBytecode = pBinaryVS;
@@ -49,7 +62,10 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC DX12Util::CreateGraphicsPipelineStateDesc(ID3
 }
 
 ComPtr<ID3D12Resource> DX12Util::CreateVertexBuffer(
-    ID3D12Device* device , int bufferSize , D3D12_HEAP_TYPE type , D3D12_RESOURCE_STATES states) {
+    ID3D12Device* device ,
+    const int bufferSize ,
+    const D3D12_HEAP_TYPE type ,
+    const D3D12_RESOURCE_STATES states) {
     D3D12_HEAP_PROPERTIES heapProps;
     D3D12_RESOURCE_DESC   descResourceVB;
     ZeroMemory(&heapProps , sizeof(heapProps));
@@ -78,13 +94,17 @@ ComPtr<ID3D12Resource> DX12Util::CreateVertexBuffer(
         nullptr ,
         IID_PPV_ARGS(vertexBuffer.GetAddressOf())
     );
-    if (FAILED(hr)) {
+    if (FAILED(hr)) { // if
         OutputDebugString("CreateCommittedResource() failed.\n");
     }
     return vertexBuffer;
 }
 
-ComPtr<ID3D12Resource> DX12Util::CreateIndexBuffer(ID3D12Device* device , int bufferSize , D3D12_HEAP_TYPE type , D3D12_RESOURCE_STATES states) {
+ComPtr<ID3D12Resource> DX12Util::CreateIndexBuffer(
+    ID3D12Device* device ,
+    const int bufferSize ,
+    const D3D12_HEAP_TYPE type ,
+    const D3D12_RESOURCE_STATES states) {
     D3D12_HEAP_PROPERTIES heapProps;
     D3D12_RESOURCE_DESC   descResourceIB;
     ZeroMemory(&heapProps , sizeof(heapProps));
@@ -113,13 +133,15 @@ ComPtr<ID3D12Resource> DX12Util::CreateIndexBuffer(ID3D12Device* device , int bu
         nullptr ,
         IID_PPV_ARGS(indexBuffer.GetAddressOf())
     );
-    if (FAILED(hr)) {
+    if (FAILED(hr)) { // if
         OutputDebugString("CreateCommittedResource() failed.\n");
     }
     return indexBuffer;
 }
 
-ComPtr<ID3D12Resource> DX12Util::CreateConstantBuffer(ID3D12Device* device , int bufferSize) {
+ComPtr<ID3D12Resource> DX12Util::CreateConstantBuffer(
+    ID3D12Device* device ,
+    const int bufferSize) {
     ComPtr<ID3D12Resource> cbBuffer;
     D3D12_HEAP_PROPERTIES heapProps;
     D3D12_RESOURCE_DESC   descResourceVB;
@@ -148,7 +170,7 @@ ComPtr<ID3D12Resource> DX12Util::CreateConstantBuffer(ID3D12Device* device , int
         nullptr ,
         IID_PPV_ARGS(cbBuffer.GetAddressOf())
     );
-    if (FAILED(hr)) {
+    if (FAILED(hr)) { // if
         OutputDebugString("CreateCommittedResource() failed.\n");
     }
     return cbBuffer;
@@ -188,6 +210,42 @@ ComPtr<ID3D12Resource> DX12Util::CreateDepthBuffer(ID3D12Device* device , int wi
         IID_PPV_ARGS(depthBuffer.ReleaseAndGetAddressOf())
     );
     return depthBuffer;
+}
+
+const std::vector<UINT8> DX12Util::CreateTexture(
+    const UINT textureWidth ,
+    const UINT textureHeight ,
+    const UINT pixelSize) {
+
+    const UINT rowPitch = textureWidth * pixelSize;
+    const UINT cellPitch = rowPitch >> 3;
+    const UINT cellHeight = textureWidth >> 3;
+    const UINT textureSize = rowPitch * textureHeight;
+
+    std::vector<UINT8> data(textureSize);
+    UINT8* pData = &data[0];
+
+    for (UINT i = 0; i < textureSize; i += pixelSize) {
+        UINT a = i % rowPitch;
+        UINT b = i / rowPitch;
+        UINT c = a / cellPitch;
+        UINT d = b / cellHeight;
+
+        if (c % 2 == d % 2) { // if
+            pData[i] = 0x00;
+            pData[i + 1] = 0x00;
+            pData[i + 2] = 0x00;
+            pData[i + 3] = 0x00;
+        }
+        else { // else
+            pData[i] = 0xff;
+            pData[i + 1] = 0xff;
+            pData[i + 2] = 0xff;
+            pData[i + 3] = 0xff;
+        }
+    }
+
+    return data;
 }
 
 

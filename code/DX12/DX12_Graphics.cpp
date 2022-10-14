@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: DX12_util.cpp
+/// Description: DX12èâä˙âª
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #include "DX12_Graphics.h"
 
 /*
@@ -147,7 +153,6 @@ bool DX12Graphics::Init(HWND _hWnd , const UINT _width , const UINT _height) {
     if (FAILED(hr)) { // if
         MessageBox(nullptr , "CreateCommittedResource" , "" , MB_OK);
     }
-
 
     D3D12_DEPTH_STENCIL_VIEW_DESC descDSV;
     ZeroMemory(&descDSV , sizeof(descDSV));

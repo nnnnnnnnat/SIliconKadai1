@@ -1,23 +1,31 @@
+//==============================================================================
+/// Filename: DX12_Cube.cpp
+/// Description: DX12キューブ
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #include "DX12_Cube.h"
 
 #include "DX12_Graphics.h"
 
+using namespace DirectX;
+
 struct DX12Vertex {
     DirectX::XMFLOAT3 Pos;
     DirectX::XMFLOAT3 Color;
+    DirectX::XMFLOAT2 Tex;
 };
 
-using namespace DirectX;
 
 DX12Vertex g_cubeVertices[] = {
-    { XMFLOAT3(-1.0f , -1.0f , -1.0f) , XMFLOAT3(0.0f , 0.0f , 0.0f) } ,
-    { XMFLOAT3(-1.0f , -1.0f , 1.0f) , XMFLOAT3(0.0f , 0.0f , 1.0f) } ,
-    { XMFLOAT3(-1.0f , 1.0f , -1.0f) , XMFLOAT3(0.0f , 1.0f , 0.0f) } ,
-    { XMFLOAT3(-1.0f , 1.0f , 1.0f) , XMFLOAT3(0.0f , 1.0f , 1.0f) } ,
-    { XMFLOAT3(1.0f , -1.0f , -1.0f) , XMFLOAT3(1.0f , 0.0f , 0.0f) } ,
-    { XMFLOAT3(1.0f , -1.0f , 1.0f) , XMFLOAT3(1.0f , 0.0f , 1.0f) } ,
-    { XMFLOAT3(1.0f , 1.0f , -1.0f) , XMFLOAT3(1.0f , 1.0f , 0.0f) } ,
-    { XMFLOAT3(1.0f , 1.0f , 1.0f) , XMFLOAT3(1.0f , 1.0f , 1.0f) }
+    { XMFLOAT3(-1.0f , -1.0f , -1.0f) , XMFLOAT3(0.0f , 0.0f , 0.0f) , XMFLOAT2(0.0f , 0.0f) } ,
+    { XMFLOAT3(-1.0f , -1.0f , 1.0f) , XMFLOAT3(0.0f , 0.0f , 1.0f) , XMFLOAT2(1.0f , 0.0f) } ,
+    { XMFLOAT3(-1.0f , 1.0f , -1.0f) , XMFLOAT3(0.0f , 1.0f , 0.0f) , XMFLOAT2(0.0f , 1.0f) } ,
+    { XMFLOAT3(-1.0f , 1.0f , 1.0f) , XMFLOAT3(0.0f , 1.0f , 1.0f) , XMFLOAT2(1.0f , 1.0f) } ,
+    { XMFLOAT3(1.0f , -1.0f , -1.0f) , XMFLOAT3(1.0f , 0.0f , 0.0f) , XMFLOAT2(1.0f , 1.0f) } ,
+    { XMFLOAT3(1.0f , -1.0f , 1.0f) , XMFLOAT3(1.0f , 0.0f , 1.0f) , XMFLOAT2(0.0f , 1.0f) } ,
+    { XMFLOAT3(1.0f , 1.0f , -1.0f) , XMFLOAT3(1.0f , 1.0f , 0.0f) , XMFLOAT2(1.0f , 0.0f) } ,
+    { XMFLOAT3(1.0f , 1.0f , 1.0f) , XMFLOAT3(1.0f , 1.0f , 1.0f) , XMFLOAT2(0.0f , 0.0f) }
 
 };
 uint16_t g_cubeIndices[] = {
@@ -97,7 +105,8 @@ bool DX12Cube::Init(
     // セマンティクス設定
     D3D12_INPUT_ELEMENT_DESC inputElementDesc[] = {
         { "POSITION" , 0 , DXGI_FORMAT_R32G32B32_FLOAT , 0 , 0 , D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA , 0 } ,
-        { "COLOR" , 0 , DXGI_FORMAT_R32G32B32_FLOAT , 0 , 12 , D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA , 0 }
+        { "COLOR" , 0 , DXGI_FORMAT_R32G32B32_FLOAT , 0 , 12 , D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA , 0 } ,
+        { "TEXCOORD" , 0 , DXGI_FORMAT_R32G32_FLOAT , 0 , 0 , D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA , 0 } ,
     };
 
     // PipelineStateオブジェクトの作成.
@@ -180,6 +189,74 @@ bool DX12Cube::Init(
         m_pConstantBuffer->Unmap(0 , nullptr);
     }
 
+    D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
+    srvHeapDesc.NumDescriptors = 1;
+    srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+    srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+    hr = dev->CreateDescriptorHeap(&srvHeapDesc , IID_PPV_ARGS(m_pShaderResourceViewHeap.GetAddressOf()));
+    if (FAILED(hr)) {
+        MessageBox(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
+        return false;
+    }
+
+    {
+
+        textureData.resize(256 * 256);
+        for (auto& rgba : textureData) {
+            rgba.R = 255;
+            rgba.G = 0;
+            rgba.B = 0;
+            rgba.A = 255;
+        }
+
+        D3D12_HEAP_PROPERTIES heapProperties = {};
+        heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;
+        heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
+        heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
+        heapProperties.CreationNodeMask = 0;
+        heapProperties.VisibleNodeMask = 0;
+
+        D3D12_RESOURCE_DESC resDesc = {};
+        resDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        resDesc.Width = 256;
+        resDesc.Height = 256;
+        resDesc.DepthOrArraySize = 1;
+        resDesc.SampleDesc.Count = 1;
+        resDesc.SampleDesc.Quality = 0;
+        resDesc.MipLevels = 1;
+        resDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+        resDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+        resDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+        hr = dev->CreateCommittedResource(
+            &heapProperties ,
+            D3D12_HEAP_FLAG_NONE ,
+            &resDesc ,
+            D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE ,
+            nullptr ,
+            IID_PPV_ARGS(m_pTextureUproadHeap.GetAddressOf())
+        );
+        if (FAILED(hr)) {
+            MessageBox(nullptr , "CreateCommittedResource" , "" , MB_OK);
+            return false;
+        }
+
+        hr = m_pTextureUproadHeap->WriteToSubresource(
+            0 ,
+            nullptr ,
+            textureData.data() ,
+            sizeof(TexRGBA) * 256 ,
+            sizeof(TexRGBA) * textureData.size()
+        );
+        if (FAILED(hr)) {
+            MessageBox(nullptr , "WriteToSubresource" , "" , MB_OK);
+            return false;
+        }
+
+        // m_pShaderResourceViewHeap
+        D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
+    }
+
     return true;
 }
 
@@ -219,6 +296,7 @@ void DX12Cube::Draw() {
     pCommandList->SetGraphicsRootSignature(m_pRootSignature.Get());
     pCommandList->SetPipelineState(m_pPipelineState.Get());
     pCommandList->SetGraphicsRootConstantBufferView(0 , m_pConstantBuffer->GetGPUVirtualAddress());
+    //pCommandList->SetGraphicsRootDescriptorTable(0 , m_pShaderResourceViewHeap->GetGPUDescriptorHandleForHeapStart());
     pCommandList->RSSetViewports(1 , &viewPort);
     pCommandList->RSSetScissorRects(1 , &rect);
 
@@ -230,5 +308,3 @@ void DX12Cube::Draw() {
 
     s_count++;
 }
-
-void DX12Cube::SetVertexBuffer() {}
