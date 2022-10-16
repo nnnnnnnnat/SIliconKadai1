@@ -6,7 +6,8 @@
 #pragma once
 
 #include <Windows.h>
-
+#include <DirectXMath.h>
+#include <array>
 // 16バイトにアラインメントする。
 #define ALIGN16 _declspec(align(16))
 
@@ -39,3 +40,6 @@ struct ShaderObject {
     void* binaryPtr;
     int   size;
 };
+
+template<typename T> void SafeRelease(T*& _ptr);
+

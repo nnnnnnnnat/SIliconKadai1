@@ -1,278 +1,479 @@
 //==============================================================================
-/// Filename: DX12_util.cpp
-/// Description: DX12初期化
-/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+// Filename: System_DirectX12.cpp
+// Description: DirectX12 System
+// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 #include "DX12_Graphics.h"
+#include <Windows.h>
+#include <iostream>
 
-/*
-DirectX12 の描画について
-1. CommandList にコマンドを積む
-2. CommandList を Close
-3. CommandQueue に CommandList を渡して実行
-4. CommandAllocator を Reset
-5. CommandList を Reset
-という順序で行われる
-*/
+using namespace std;
 
 DX12Graphics& DX12Graphics::GetInstance() {
     static DX12Graphics instance;
     return instance;
 }
 
-bool DX12Graphics::Init(HWND _hWnd , const UINT _width , const UINT _height) {
+bool DX12Graphics::Init(HWND hWnd) {
 
-    m_windowWidth = _width;
-    m_windowHeight = _height;
+#if defined(DEBUG) || defined(_DEBUG)
+    ID3D12Debug* debug;
 
-    HRESULT hr;
-    UINT dxgiFlags = 0;
-    ID3D12Debug* debug = nullptr;
+    auto hl = D3D12GetDebugInterface(IID_PPV_ARGS(&debug));
 
-#if _DEBUG
-
-    D3D12GetDebugInterface(IID_PPV_ARGS(&debug));
-    if (debug) { // if
+    // デバッグレイヤーを有効化
+    if (SUCCEEDED(hl)) {
         debug->EnableDebugLayer();
-        debug->Release();
     }
-    dxgiFlags |= DXGI_CREATE_FACTORY_DEBUG;
-
 #endif
 
-    // ファクトリー作成
-    hr = CreateDXGIFactory2(dxgiFlags , IID_PPV_ARGS(m_pFactory.ReleaseAndGetAddressOf()));
-    if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateDXGIFactory2" , "" , MB_OK);
-    }
+    // デバイスの生成
+    auto hr = D3D12CreateDevice(
+        nullptr ,
+        D3D_FEATURE_LEVEL_11_0 ,
+        IID_PPV_ARGS(&m_pDevice));
 
-    // アダプター作成
-    ComPtr<IDXGIAdapter> pAdapter;
-    hr = m_pFactory->EnumAdapters(0 , pAdapter.GetAddressOf());
-    if (FAILED(hr)) { // if
-        MessageBox(nullptr , "EnumAdapters" , "" , MB_OK);
-    }
-
-    // デバイス作成
-    hr = D3D12CreateDevice(pAdapter.Get() , D3D_FEATURE_LEVEL_11_0 , IID_PPV_ARGS(m_pDevice.GetAddressOf()));
-    if (FAILED(hr)) { // if
+    if (FAILED(hr)) {
         MessageBox(nullptr , "D3D12CreateDevice" , "" , MB_OK);
+        return false;
     }
 
-    D3D12_FEATURE_DATA_D3D12_OPTIONS options;
-    hr = m_pDevice->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS , (void*)&options , sizeof(options));
-    if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CheckFeatureSupport" , "" , MB_OK);
-    }
+    // コマンドキューの生成
+    {
+        D3D12_COMMAND_QUEUE_DESC desc = {};
 
-    // コマンドアロケータ作成
-    hr = m_pDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT , IID_PPV_ARGS(m_pCommandAllocator.GetAddressOf()));
-    if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateCommandAllocator" , "" , MB_OK);
-    }
+        // コマンドキューに登録可能なコマンドリストのタイプ設定
+        desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 
-    // コマンドキュー作成
-    D3D12_COMMAND_QUEUE_DESC descCommandQueue;
-    ZeroMemory(&descCommandQueue , sizeof(descCommandQueue));
-    descCommandQueue.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-    descCommandQueue.Priority = 0;
-    descCommandQueue.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-    hr = m_pDevice->CreateCommandQueue(&descCommandQueue , IID_PPV_ARGS(m_pCommandQueue.GetAddressOf()));
-    if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateCommandQueue" , "" , MB_OK);
-    }
+        // コマンドキューの優先度
+        desc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
 
-    // コマンドキュー用のフェンス作成
-    m_queueEvent = CreateEvent(NULL , FALSE , FALSE , NULL);
-    hr = m_pDevice->CreateFence(0 , D3D12_FENCE_FLAG_NONE , IID_PPV_ARGS(m_pQueueFence.GetAddressOf()));
-    if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateFence" , "" , MB_OK);
-    }
+        // コマンドキューを生成する際の特性設定フラグ
+        desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 
-    // スワップチェインを生成.
-    DXGI_SWAP_CHAIN_DESC descSwapChain;
-    ZeroMemory(&descSwapChain , sizeof(descSwapChain));
-    descSwapChain.BufferCount = 2;
-    descSwapChain.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    descSwapChain.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    descSwapChain.OutputWindow = _hWnd;
-    descSwapChain.SampleDesc.Count = 1;
-    descSwapChain.Windowed = TRUE;
-    descSwapChain.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-    descSwapChain.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-    hr = m_pFactory->CreateSwapChain(m_pCommandQueue.Get() , &descSwapChain , (IDXGISwapChain**)m_pSwapChain.GetAddressOf());
-    if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateSwapChain" , "" , MB_OK);
-    }
+        // GPUノードの識別(GPUが複数ある場合のみ設定)
+        desc.NodeMask = 0;
 
-    // コマンドリスト作成
-    hr = m_pDevice->CreateCommandList(0 , D3D12_COMMAND_LIST_TYPE_DIRECT , m_pCommandAllocator.Get() , nullptr , IID_PPV_ARGS(m_pCommandList.GetAddressOf()));
-    if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateCommandList" , "" , MB_OK);
-    }
+        hr = m_pDevice->CreateCommandQueue(&desc , IID_PPV_ARGS(&m_pQueue));
 
-    // ディスクリプタヒープ(RenderTarget用)の作成
-    D3D12_DESCRIPTOR_HEAP_DESC descHeap;
-    ZeroMemory(&descHeap , sizeof(descHeap));
-    descHeap.NumDescriptors = 2;
-    descHeap.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-    descHeap.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-    hr = m_pDevice->CreateDescriptorHeap(&descHeap , IID_PPV_ARGS(m_pDescriptorHeapRTV.GetAddressOf()));
-    if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
-    }
-
-    // レンダーターゲット(プライマリ用)の作成.
-    UINT strideHandleBytes = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-    for (UINT i = 0; i < descSwapChain.BufferCount; ++i) {
-        hr = m_pSwapChain->GetBuffer(i , IID_PPV_ARGS(m_pRenderTarget[i].GetAddressOf()));
-        if (FAILED(hr)) { // if
-            MessageBox(nullptr , "GetBuffer" , "" , MB_OK);
+        if (FAILED(hr)) {
+            MessageBox(nullptr , "CreateCommandQueue" , "" , MB_OK);
+            return false;
         }
-        m_rtvHandle[i] = m_pDescriptorHeapRTV->GetCPUDescriptorHandleForHeapStart();
-        m_rtvHandle[i].ptr += i * strideHandleBytes;
-        m_pDevice->CreateRenderTargetView(m_pRenderTarget[i].Get() , nullptr , m_rtvHandle[i]);
     }
 
-    // デプスバッファの準備.
-    D3D12_DESCRIPTOR_HEAP_DESC descDescriptorHeapDSB;
-    ZeroMemory(&descDescriptorHeapDSB , sizeof(descDescriptorHeapDSB));
-    descDescriptorHeapDSB.NumDescriptors = 1;
-    descDescriptorHeapDSB.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-    descDescriptorHeapDSB.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-    hr = m_pDevice->CreateDescriptorHeap(
-        &descDescriptorHeapDSB ,
-        IID_PPV_ARGS(m_pDescriptorHeapDSB.GetAddressOf()));
-    if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
+
+    // スワップチェインの生成
+    {
+        // DXGIファクトリーの生成
+        ComPtr<IDXGIFactory4> pFactory = nullptr;
+        hr = CreateDXGIFactory1(IID_PPV_ARGS(&pFactory));
+
+        if (FAILED(hr)) {
+            MessageBox(nullptr , "CreateDXGIFactory1" , "" , MB_OK);
+            return false;
+        }
+
+        DXGI_SWAP_CHAIN_DESC desc = {};
+
+        // 解像度の横幅
+        desc.BufferDesc.Width = SCREEN_WIDTH;
+
+        // 解像度の縦幅
+        desc.BufferDesc.Height = SCREEN_HEIGHT;
+
+        // リフレッシュレート(Hz単位)の分子を指定
+        desc.BufferDesc.RefreshRate.Numerator = 60;
+
+        // リフレッシュレート(Hz単位)の分母を指定
+        desc.BufferDesc.RefreshRate.Denominator = 1;
+
+        // 走査線描画モード
+        desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+
+        // 拡大縮小の設定
+        desc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+
+        // 表示形式のピクセルフォーマット
+        desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+        // ピクセル単位のマルチサンプリング数
+        desc.SampleDesc.Count = 1;
+
+        // 画像の品質 品質が高いほどパフォーマンスは低下
+        desc.SampleDesc.Quality = 0;
+
+        // バックバッファの使用方法
+        desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+
+        // バックバッファの数
+        desc.BufferCount = FRAME_COUNT;
+
+        // 出力するウィンドウのウィンドウハンドル
+        desc.OutputWindow = hWnd;
+
+        // フルスクリーン指定
+        desc.Windowed = TRUE;
+
+        // バックバッファの入れ替え時効果
+        desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+
+        // スワップチェインの動作オプション
+        desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+
+        // スワップチェインの生成
+        ComPtr<IDXGISwapChain> pSwapChain = nullptr;
+
+        hr = pFactory->CreateSwapChain(m_pQueue.Get() , &desc , &pSwapChain);
+
+        if (FAILED(hr)) {
+            MessageBox(nullptr , "CreateSwapChain" , "" , MB_OK);
+            return false;
+        }
+
+        //IDXGISwapChain3を取得
+        hr = pSwapChain->QueryInterface(IID_PPV_ARGS(&m_pSwapChain));
+
+        if (FAILED(hr)) {
+            MessageBox(nullptr , "QueryInterface" , "" , MB_OK);
+            return false;
+        }
+
+        // バックバッファ番号を取得
+        m_FrameIndex = m_pSwapChain->GetCurrentBackBufferIndex();
     }
 
-    m_pRenderTargetDepth = DX12Util::CreateDepthBuffer(m_pDevice.Get() , m_windowWidth , m_windowHeight);
 
-    if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateCommittedResource" , "" , MB_OK);
+    // コマンドアロケータの生成
+    {
+        for (auto i = 0u; i < FRAME_COUNT; i++) {
+            hr = m_pDevice->CreateCommandAllocator(
+                D3D12_COMMAND_LIST_TYPE_DIRECT ,
+                IID_PPV_ARGS(&m_pCmdAllocator[i]));
+
+            if (FAILED(hr)) {
+                MessageBox(nullptr , "CreateCommandAllocator" , "" , MB_OK);
+                return false;
+            }
+        }
     }
 
-    D3D12_DEPTH_STENCIL_VIEW_DESC descDSV;
-    ZeroMemory(&descDSV , sizeof(descDSV));
-    descDSV.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-    descDSV.Format = DXGI_FORMAT_D32_FLOAT;
-    descDSV.Texture2D.MipSlice = 0;
-    m_pDevice->CreateDepthStencilView(
-        m_pRenderTargetDepth.Get() ,
-        &descDSV ,
-        m_pDescriptorHeapDSB->GetCPUDescriptorHandleForHeapStart()
-    );
+    // コマンドリストの生成
+    {
+        hr = m_pDevice->CreateCommandList(
+            0 ,
+            D3D12_COMMAND_LIST_TYPE_DIRECT ,
+            m_pCmdAllocator[m_FrameIndex].Get() ,
+            nullptr ,
+            IID_PPV_ARGS(&m_pCmdList));
 
-    m_handleDSV = m_pDescriptorHeapDSB->GetCPUDescriptorHandleForHeapStart();
+        if (FAILED(hr)) {
+            MessageBox(nullptr , "CreateCommandList" , "" , MB_OK);
+            return false;
+        }
+    }
 
-    m_viewPort = { 0.0f ,
-        0.0f ,
-        (float)m_windowWidth ,
-        (float)m_windowHeight ,
-        0.0f ,
-        1.0f };
+    // レンダーターゲットビューの生成
+    {
+        // ディスクリプタヒープの設定
+        D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 
-    m_rect = {
-        0 ,
-        0 ,
-        m_windowWidth ,
-        m_windowHeight ,
-    };
+        // ヒープ内のディスクリプタ数
+        desc.NumDescriptors = FRAME_COUNT;
+
+        // ディスクリプタヒープのタイプ
+        desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+
+        // D3D12_DESCRIPTOR_HEAP_FLAGS型をビット演算による値の組み合わせで指定
+        desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+
+        // GPUノードの識別(GPUが複数ある場合のみ設定)
+        desc.NodeMask = 0;
+
+        // ディスクリプタヒープの生成
+        hr = m_pDevice->CreateDescriptorHeap(&desc , IID_PPV_ARGS(&m_pHeadRTV));
+
+        if (FAILED(hr)) {
+            MessageBox(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
+            return false;
+        }
+
+        auto handle = m_pHeadRTV->GetCPUDescriptorHandleForHeapStart();
+        auto incrementSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+        for (auto i = 0u; i < FRAME_COUNT; i++) {
+            hr = m_pSwapChain->GetBuffer(i , IID_PPV_ARGS(&m_pColorBuffer[i]));
+
+            if (FAILED(hr)) {
+                MessageBox(nullptr , "GetBuffer" , "" , MB_OK);
+                return false;
+            }
+
+            D3D12_RENDER_TARGET_VIEW_DESC viewDesc = {};
+
+            // 画面で見る時のピクセルフォーマットの指定
+            viewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+
+            // どのようにレンダーターゲットのリソースにアクセスするかの次元を指定
+            viewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+
+            // 使用するミップマップレベルの番号
+            viewDesc.Texture2D.MipSlice = 0;
+
+            // 使用するテクスチャの平面スライス番号
+            viewDesc.Texture2D.PlaneSlice = 0;
+
+            // レンダーターゲットビューの生成
+            m_pDevice->CreateRenderTargetView(m_pColorBuffer[i].Get() , &viewDesc , handle);
+
+            m_HandleRTV[i] = handle;
+            handle.ptr += incrementSize;
+        }
+    }
+
+
+    // フェンスの生成
+    {
+        // フェンスカウンターをリセット
+        for (auto i = 0u; i < FRAME_COUNT; i++) {
+            m_FenceCounter[i] = 0;
+        }
+
+        // フェンスの生成
+        hr = m_pDevice->CreateFence(
+            m_FenceCounter[m_FrameIndex] ,
+            D3D12_FENCE_FLAG_NONE ,
+            IID_PPV_ARGS(&m_pFence));
+
+        if (FAILED(hr)) {
+            MessageBox(nullptr , "CreateFence" , "" , MB_OK);
+            return false;
+        }
+
+        m_FenceCounter[m_FrameIndex]++;
+
+        // イベントの生成
+        m_FenceEvent = CreateEvent(nullptr , FALSE , FALSE , nullptr);
+
+        if (m_FenceEvent == nullptr) {
+            MessageBox(nullptr , "m_FenceEvent" , "" , MB_OK);
+            return false;
+        }
+    }
+
+    // 深度ステンシルバッファの生成
+    {
+        D3D12_HEAP_PROPERTIES prop = {};
+
+        prop.Type = D3D12_HEAP_TYPE_DEFAULT;
+        prop.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+        prop.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+        prop.CreationNodeMask = 1;
+        prop.VisibleNodeMask = 1;
+
+        D3D12_RESOURCE_DESC resDesc = {};
+
+        resDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+        resDesc.Alignment = 0;
+        resDesc.Width = SCREEN_WIDTH;
+        resDesc.Height = SCREEN_HEIGHT;
+        resDesc.DepthOrArraySize = 1;
+        resDesc.MipLevels = 1;
+        resDesc.Format = DXGI_FORMAT_D32_FLOAT;
+        resDesc.SampleDesc.Count = 1;
+        resDesc.SampleDesc.Quality = 0;
+        resDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+        resDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+
+        D3D12_CLEAR_VALUE clearValue;
+
+        clearValue.Format = DXGI_FORMAT_D32_FLOAT;
+        clearValue.DepthStencil.Depth = 1.0;
+        clearValue.DepthStencil.Stencil = 0;
+
+        hr = DX12Graphics::GetDevice()->CreateCommittedResource(
+            &prop ,
+            D3D12_HEAP_FLAG_NONE ,
+            &resDesc ,
+            D3D12_RESOURCE_STATE_DEPTH_WRITE ,
+            &clearValue ,
+            IID_PPV_ARGS(&m_pDepthBuffer));
+
+        if (FAILED(hr)) {
+            MessageBox(nullptr , "CreateCommittedResource" , "" , MB_OK);
+            return false;
+        }
+
+        // ディスクリプタヒープの設定
+        D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
+
+        heapDesc.NumDescriptors = 1;
+        heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+        heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+        heapDesc.NodeMask = 0;
+
+        hr = m_pDevice->CreateDescriptorHeap(
+            &heapDesc ,
+            IID_PPV_ARGS(&m_pHeapDSV));
+
+        if (FAILED(hr)) {
+            MessageBox(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
+            return false;
+        }
+
+        auto handle = m_pHeapDSV->GetCPUDescriptorHandleForHeapStart();
+        auto incrementSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+
+        D3D12_DEPTH_STENCIL_VIEW_DESC viewDesc = {};
+
+        viewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+        viewDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+        viewDesc.Texture2D.MipSlice = 0;
+        viewDesc.Flags = D3D12_DSV_FLAG_NONE;
+
+        m_pDevice->CreateDepthStencilView(m_pDepthBuffer.Get() , &viewDesc , handle);
+
+        m_HandleDSV = handle;
+    }
+
+    // コマンドリストを閉じる
+    m_pCmdList->Close();
 
     return true;
 }
 
-void DX12Graphics::Update() {
-
-}
-
-void DX12Graphics::BeforeRender() {
-    int targetIdx = m_pSwapChain->GetCurrentBackBufferIndex();
-
-    DX12Util::SetResourceBarrier(
-        m_pCommandList.Get() ,
-        m_pRenderTarget[targetIdx].Get() ,
-        D3D12_RESOURCE_STATE_PRESENT ,
-        D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-    // レンダーターゲットのクリア処理.
-    m_pCommandList->ClearDepthStencilView(m_handleDSV , D3D12_CLEAR_FLAG_DEPTH , 1.0f , 0 , 0 , nullptr);
-    m_pCommandList->ClearRenderTargetView(m_rtvHandle[targetIdx] , m_backGroundColor , 0 , nullptr);
-    m_pCommandList->OMSetRenderTargets(1 , &m_rtvHandle[targetIdx] , TRUE , &m_handleDSV);
-
-}
-
-void DX12Graphics::AfterRender() {
-    int targetIdx = m_pSwapChain->GetCurrentBackBufferIndex();
-
-    // Presentする前の準備.
-    DX12Util::SetResourceBarrier(
-        m_pCommandList.Get() ,
-        m_pRenderTarget[targetIdx].Get() ,
-        D3D12_RESOURCE_STATE_RENDER_TARGET ,
-        D3D12_RESOURCE_STATE_PRESENT);
-
-    // 2. CommandList を Close
-    m_pCommandList->Close();
-
-    // 3. CommandQueue に CommandList を渡して実行
-    ID3D12CommandList* pCommandList = m_pCommandList.Get();
-    m_pCommandQueue->ExecuteCommandLists(1 , &pCommandList);
-    m_pSwapChain->Present(1 , 0);
-    WaitForCommandQueue(m_pCommandQueue.Get());
-
-    // 4. CommandAllocator を Reset
-    m_pCommandAllocator->Reset();
-    // 5. CommandList を Reset
-    m_pCommandList->Reset(m_pCommandAllocator.Get() , nullptr);
-
-}
-
 void DX12Graphics::Release() {
+    // GPU処理の完了を待機
+    SystemWaitGPU();
 
+    // イベント破棄
+    if (m_FenceEvent != nullptr) {
+        CloseHandle(m_FenceEvent);
+        m_FenceEvent = nullptr;
+    }
+
+}
+
+void DX12Graphics::SystemBeforeRender() {
+    // コマンドの記録を開始
+    m_pCmdAllocator[m_FrameIndex]->Reset();
+    m_pCmdList->Reset(m_pCmdAllocator[m_FrameIndex].Get() , nullptr);
+
+    // リソースバリアの書き込み設定
+    D3D12_RESOURCE_BARRIER barrier = {};
+
+    // リソースバリアのタイプ
+    barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+
+    // フラグ設定
+    barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+
+    // 遷移に使用するリソースのポインタ
+    barrier.Transition.pResource = m_pColorBuffer[m_FrameIndex].Get();
+
+    // サブリソースの使用前の状態
+    barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+
+    // サブリソースの使用後の状態
+    barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+
+    // 遷移の為のサブリソースの番号
+    barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+
+    // リソースバリア
+    m_pCmdList->ResourceBarrier(1 , &barrier);
+
+    // レンダーターゲットの設定
+    m_pCmdList->OMSetRenderTargets(1 , &m_HandleRTV[m_FrameIndex] , FALSE , &m_HandleDSV);
+
+    // レンダーターゲットビューをクリア
+    m_pCmdList->ClearRenderTargetView(m_HandleRTV[m_FrameIndex] , m_backGroundColor , 0 , nullptr);
+
+    // 深度ステンシルビューをクリア
+    m_pCmdList->ClearDepthStencilView(m_HandleDSV , D3D12_CLEAR_FLAG_DEPTH , 1.0f , 0 , 0 , nullptr);
+}
+
+void DX12Graphics::SystemAfterRender() {
+    // リソースバリアの表示設定
+    D3D12_RESOURCE_BARRIER barrier = {};
+
+    barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+    barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+    barrier.Transition.pResource = m_pColorBuffer[m_FrameIndex].Get();
+    barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+    barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+    barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+
+    // リソースバリア
+    m_pCmdList->ResourceBarrier(1 , &barrier);
+
+    // コマンドの記録を終了
+    m_pCmdList->Close();
+
+    // コマンドを実行
+    ID3D12CommandList* ppCmdLists[] = { m_pCmdList.Get() };
+    m_pQueue->ExecuteCommandLists(1 , ppCmdLists);
+
+    // 画面に表示
+    SystemPresent(1);
 }
 
 ID3D12Device* DX12Graphics::GetDevice() {
     return m_pDevice.Get();
 }
 
+ID3D12CommandQueue* DX12Graphics::GetCommandQueue() {
+    return m_pQueue.Get();
+}
+
 ID3D12GraphicsCommandList* DX12Graphics::GetCommandList() {
-    return m_pCommandList.Get();
+    return m_pCmdList.Get();
 }
 
-int DX12Graphics::GetSwapChainCurrentBackBufferindex() {
-    return m_pSwapChain->GetCurrentBackBufferIndex();
+uint32_t DX12Graphics::SystemGetFrameIndex() {
+    return m_FrameIndex;
 }
 
-D3D12_VIEWPORT DX12Graphics::GetViewPort() {
-    return m_viewPort;
-}
-
-D3D12_RECT DX12Graphics::GetRect() {
-    return m_rect;
-}
-
-int DX12Graphics::GetWindowWidth() {
-    return m_windowWidth;
-}
-
-int DX12Graphics::GetWindowHeight() {
-    return m_windowHeight;
-}
-
-void DX12Graphics::WaitForCommandQueue(
-    ID3D12CommandQueue* _pCommandQueue) {
-    static UINT64 s_frames = 0;
-    m_pQueueFence->SetEventOnCompletion(s_frames , m_queueEvent);
-    _pCommandQueue->Signal(m_pQueueFence.Get() , s_frames);
-    WaitForSingleObject(m_queueEvent , INFINITE);
-    s_frames++;
-}
-
-void DX12Graphics::SetBackGroundColor(const float _color[4]) {
+void DX12Graphics::SetBackGroundColor(float _color[4]) {
     for (int i = 0; i < 4; i++) {
         m_backGroundColor[i] = _color[i];
     }
 }
+
+void DX12Graphics::SystemWaitGPU() {
+
+    // シグナル処理
+    m_pQueue->Signal(m_pFence.Get() , m_FenceCounter[m_FrameIndex]);
+
+    // 完了時にイベントを設定する
+    m_pFence->SetEventOnCompletion(m_FenceCounter[m_FrameIndex] , m_FenceEvent);
+
+    // 待機処理
+    WaitForSingleObjectEx(m_FenceEvent , INFINITE , FALSE);
+
+    // カウンターを増やす
+    m_FenceCounter[m_FrameIndex]++;
+}
+
+void DX12Graphics::SystemPresent(uint32_t _interval) {
+    // 画面に表示
+    m_pSwapChain->Present(_interval , 0);
+
+    // シグナル処理
+    const auto currentValue = m_FenceCounter[m_FrameIndex];
+    m_pQueue->Signal(m_pFence.Get() , currentValue);
+
+    // バックバッファ番号を更新
+    m_FrameIndex = m_pSwapChain->GetCurrentBackBufferIndex();
+
+    // 次のフレームの描画準備がまだであれば待機する
+    if (m_pFence->GetCompletedValue() < m_FenceCounter[m_FrameIndex]) {
+        m_pFence->SetEventOnCompletion(m_FenceCounter[m_FrameIndex] , m_FenceEvent);
+        WaitForSingleObjectEx(m_FenceEvent , INFINITE , FALSE);
+    }
+
+    // 次のフレームのフェンスカウンターを増やす
+    m_FenceCounter[m_FrameIndex] = currentValue + 1;
+}
+

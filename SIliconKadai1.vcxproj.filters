@@ -95,6 +95,9 @@
     <ClCompile Include="code\DX12\DX12_util.cpp">
       <Filter>DX12</Filter>
     </ClCompile>
+    <ClCompile Include="code\Utilities.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="SIliconKadai1.ico">
@@ -108,13 +111,5 @@
     <ResourceCompile Include="SIliconKadai1.rc">
       <Filter>Application</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="shader\PixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\VertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

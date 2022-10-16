@@ -37,8 +37,8 @@ void GameSystem::Initialize(HWND _hWnd) {
         break;
     case RendererType::DirectX12:
 
-        DX12Graphics::GetInstance().Init(_hWnd , 1280 , 720);
-        m_dx12Cube.Init(0.5f , 0.5f , 0.5f);
+        DX12Graphics::GetInstance().Init(_hWnd);
+        m_dx12Cube.Init();
 
         break;
     }
@@ -53,8 +53,6 @@ void GameSystem::Update() {
         break;
     case RendererType::DirectX12:
         // 更新処理を↓に書く
-
-        DX12Graphics::GetInstance().Update();
 
         // 更新処理を↑に書く
         break;
@@ -80,16 +78,15 @@ void GameSystem::Draw() {
         break;
     case RendererType::DirectX12:
 
-        DX12Graphics::GetInstance().BeforeRender();
+        DX12Graphics::GetInstance().SystemBeforeRender();
 
         //// 描画処理を↓に書く
 
         m_dx12Cube.Draw();
 
-
         //// 描画処理を↑に書く
 
-        DX12Graphics::GetInstance().AfterRender();
+        DX12Graphics::GetInstance().SystemAfterRender();
 
         break;
     }
@@ -98,6 +95,18 @@ void GameSystem::Draw() {
 }
 
 void GameSystem::Exit() {
-    // Direct3Dインスタンス削除
-    DX11Graphics::GetInstance().Exit();
+
+    switch (m_rendererType) { // switch
+    case RendererType::DirectX11:
+
+        DX11Graphics::GetInstance().Exit();
+
+        break;
+    case RendererType::DirectX12:
+
+        m_dx12Cube.Release();
+        DX12Graphics::GetInstance().Release();
+
+        break;
+    }
 }
