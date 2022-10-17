@@ -1,6 +1,6 @@
 //==============================================================================
-// Filename: Model_CubeDX12.cpp
-// Description: CubeClass for DirectX12
+// Filename: DX12_Cube.cpp
+// Description: DX12用 キューブ作成クラス
 // Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 

@@ -1,9 +1,10 @@
-#pragma once
 //==============================================================================
-// Filename: System_DirectX12.h
-// Description: DirectX12 System
+// Filename: DX12_Graohics.h
+// Description: DirectX12 ƒNƒ‰ƒX
 // Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
+
+#pragma once
 
 #include "../../framework.h"
 

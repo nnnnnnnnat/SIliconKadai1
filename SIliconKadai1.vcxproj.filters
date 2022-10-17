@@ -63,12 +63,6 @@
     <ClInclude Include="code\DX12\DX12_Cube.h">
       <Filter>DX12</Filter>
     </ClInclude>
-    <ClInclude Include="code\DX12\DX12_util.h">
-      <Filter>DX12</Filter>
-    </ClInclude>
-    <ClInclude Include="code\DX12\d3dx12.h">
-      <Filter>DX12</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -90,9 +84,6 @@
       <Filter>DX11</Filter>
     </ClCompile>
     <ClCompile Include="code\DX12\DX12_Cube.cpp">
-      <Filter>DX12</Filter>
-    </ClCompile>
-    <ClCompile Include="code\DX12\DX12_util.cpp">
       <Filter>DX12</Filter>
     </ClCompile>
     <ClCompile Include="code\Utilities.cpp">

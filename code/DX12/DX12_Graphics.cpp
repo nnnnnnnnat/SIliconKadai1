@@ -1,6 +1,6 @@
 //==============================================================================
-// Filename: System_DirectX12.cpp
-// Description: DirectX12 System
+// Filename: DX12_Graphics.cpp
+// Description: DirectX12 ƒNƒ‰ƒX
 // Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 

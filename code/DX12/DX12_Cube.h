@@ -1,9 +1,10 @@
-#pragma once
 //==============================================================================
 // Filename: DX12_Cube.h
-// Description: CubeClass for DirectX12
+// Description: DX12用 キューブ作成クラス
 // Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
+
+#pragma once
 
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
