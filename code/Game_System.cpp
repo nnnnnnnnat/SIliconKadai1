@@ -72,8 +72,7 @@ void GameSystem::Draw() {
         m_dx11Cube.Draw();
 
         // •`‰æˆ—‚ðª‚É‘‚­
-
-        DX11Graphics::GetInstance().AfterRender();
+        DX11Graphics::GetInstance().GetSwapChain()->Present(1 , 0);
 
         break;
     case RendererType::DirectX12:

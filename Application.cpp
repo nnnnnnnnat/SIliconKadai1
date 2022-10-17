@@ -53,11 +53,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance ,
                 DispatchMessage(&msg);
             }
         }
-
-        // ゲーム処理
-
         GameSystem::GetInstance().Update();
         GameSystem::GetInstance().Draw();
+
     }
 
     GameSystem::GetInstance().Exit();

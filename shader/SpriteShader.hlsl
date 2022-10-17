@@ -17,7 +17,7 @@ cbuffer ConstantBuffer
 struct VSOutput
 {
     float4 m_pos : SV_Position;
-    float4 m_color : COLOR0;
+    float4 m_color : COLOR;
     float2 m_tex : TEXCOORD;
 };
 
@@ -38,5 +38,5 @@ float4 PS(VSOutput In) : SV_TARGET
 {
     float4 texcol = g_Tex.Sample(g_SamplerLinear , In.m_tex);
     float4 finalcolor = texcol;
-    return finalcolor;
+    return In.m_color;
 }
