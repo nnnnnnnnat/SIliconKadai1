@@ -83,7 +83,7 @@ bool DX11Graphics::Init(HWND _hWnd ,
     scDesc.BufferCount = 2; // バッファの数
     scDesc.OutputWindow = _hWnd;
     scDesc.Windowed = TRUE; // ウィンドウモード
-    scDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+    scDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
     scDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
     // スワップチェインの作成

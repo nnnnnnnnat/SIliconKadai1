@@ -37,6 +37,6 @@ VSOutput VS(float4 pos : POSITION,
 float4 PS(VSOutput In) : SV_TARGET
 {
     float4 texcol = g_Tex.Sample(g_SamplerLinear , In.m_tex);
-    float4 finalcolor = texcol;
-    return In.m_color;
+    float4 finalcolor = texcol * In.m_color;
+    return finalcolor;
 }
