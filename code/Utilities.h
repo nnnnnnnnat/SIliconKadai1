@@ -11,18 +11,32 @@
 // 16バイトにアラインメントする。
 #define ALIGN16 _declspec(align(16))
 
-
+// コピーコンストラクタを禁止にするためのクラス
 class NonCopyable {
 protected:
+    //-----------------------------------------------------------------------------
+    // protected method
+
+    //-----------------------------------------------------------------------------
+    /// コンストラクタ
+    //-----------------------------------------------------------------------------
     NonCopyable() {}
+
+    //-----------------------------------------------------------------------------
+    /// デストラクタ
+    //-----------------------------------------------------------------------------
     ~NonCopyable() {}
 private:
+    //-----------------------------------------------------------------------------
+    // private method
     NonCopyable& operator = (const NonCopyable& src) {};
     NonCopyable(const NonCopyable& src) {};
+    //-----------------------------------------------------------------------------
+
 };
 
 struct Vertex {
-    DirectX::XMFLOAT3 m_pos;	// 座標
+    DirectX::XMFLOAT3 m_pos;
     DirectX::XMFLOAT4 m_color;
     DirectX::XMFLOAT2 m_tex;
 };
@@ -34,7 +48,6 @@ struct ConstantBuffer {
 };
 
 typedef std::array<Vertex , 36> VertexCube;
-typedef std::array<Vertex , 8> VertexParam;
 
 struct ShaderObject {
     void* binaryPtr;
@@ -42,4 +55,5 @@ struct ShaderObject {
 };
 
 template<typename T> void SafeRelease(T*& _ptr);
-
+VertexCube CubeIdentify();
+VertexCube CubeIdentify(const float ratio);

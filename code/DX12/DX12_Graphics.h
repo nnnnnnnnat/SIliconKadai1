@@ -21,7 +21,7 @@
 
 #define FRAME_COUNT 2
 
-class DX12Graphics {
+class DX12Graphics : private NonCopyable {
 public:
     //-----------------------------------------------------------------------------
     // public methods

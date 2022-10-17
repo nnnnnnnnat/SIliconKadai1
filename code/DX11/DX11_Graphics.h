@@ -125,7 +125,7 @@ private:
     D3D11_VIEWPORT m_viewport;
     int m_width = 0;
     int m_height = 0;
-    float m_backGroundColor[4] = { 0.2f , 0.2f , 0.2f , 1.0f };
+    float m_backGroundColor[4] = { 1.0f , 0.2f , 0.2f , 1.0f };
     ///<
     /// m_pDevice デバイス
     /// m_pDeviceContext デバイスコンテキスト

@@ -188,7 +188,8 @@ bool DX11Cube::Init(const float _width , const float _height , const float _dept
     D3D11_MAPPED_SUBRESOURCE msr;
     devcontext->Map(D3DTexture.Get() , 0 , D3D11_MAP_WRITE_DISCARD , 0 , &msr);
 
-    byte srcData[iPixSize * iPixSize * 4] = { 0 };// ビットマップを黒で初期化
+    // 初期値は全て黒
+    byte srcData[iPixSize * iPixSize * 4] = { 0 };
     for (int i = 0; i < iPixSize * iPixSize * 4; i += 4) {
         if (i % 32 >= 0 && i % 32 < 16) {
             if (i % 8 == 0) { // if
@@ -264,7 +265,7 @@ void DX11Cube::Draw() {
 
     // カメラ(仮)を設定
     constexpr float fov = DirectX::XMConvertToRadians(45.0f);
-    float aspect = 1280.0f / 720.0f;
+    float aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
     float nearz = 0.1f;
     float farz = 100.0f;
 
@@ -307,4 +308,3 @@ void DX11Cube::Draw() {
     // 描画
     devcontext->Draw(m_cube.size() , 0);
 }
-

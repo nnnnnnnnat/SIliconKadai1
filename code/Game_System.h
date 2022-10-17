@@ -71,7 +71,7 @@ private:
     //-----------------------------------------------------------------------------
     DX11Cube m_dx11Cube;
     DX12Cube m_dx12Cube;
-    RendererType m_rendererType = RendererType::DirectX12;
+    RendererType m_rendererType = RendererType::DirectX11;
     //-----------------------------------------------------------------------------
 
     ///< 
