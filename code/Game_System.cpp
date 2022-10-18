@@ -21,7 +21,7 @@ void GameSystem::Initialize(HWND _hWnd) {
     bool sts;
 
     switch (m_rendererType) { // switch
-    case RendererType::DirectX11:
+    case GameLayerMgr::RendererType::DirectX11:
         // 初期化処理
         sts = DX11Graphics::GetInstance().Init(_hWnd , 1280 , 720);
         if (!sts) {
@@ -35,7 +35,7 @@ void GameSystem::Initialize(HWND _hWnd) {
         // キューブ初期化
         m_dx11Cube.Init(0.5f , 0.5f , 0.5f);
         break;
-    case RendererType::DirectX12:
+    case GameLayerMgr::RendererType::DirectX12:
 
         DX12Graphics::GetInstance().Init(_hWnd);
         m_dx12Cube.Init();
@@ -46,12 +46,12 @@ void GameSystem::Initialize(HWND _hWnd) {
 
 void GameSystem::Update() {
     switch (m_rendererType) { // switch
-    case RendererType::DirectX11:
+    case GameLayerMgr::RendererType::DirectX11:
         // 更新処理を↓に書く
 
         // 更新処理を↑に書く
         break;
-    case RendererType::DirectX12:
+    case GameLayerMgr::RendererType::DirectX12:
         // 更新処理を↓に書く
 
         m_dx12Cube.Update(DX12Graphics::GetInstance().SystemGetFrameIndex());
@@ -65,7 +65,7 @@ void GameSystem::Update() {
 void GameSystem::Draw() {
 
     switch (m_rendererType) { // switch
-    case RendererType::DirectX11:
+    case GameLayerMgr::RendererType::DirectX11:
 
         DX11Graphics::GetInstance().BeforeRender();
 
@@ -77,9 +77,9 @@ void GameSystem::Draw() {
         DX11Graphics::GetInstance().GetSwapChain()->Present(1 , 0);
 
         break;
-    case RendererType::DirectX12:
+    case GameLayerMgr::RendererType::DirectX12:
 
-        DX12Graphics::GetInstance().SystemBeforeRender();
+        DX12Graphics::GetInstance().BeforeRender();
 
         //// 描画処理を↓に書く
 
@@ -87,7 +87,7 @@ void GameSystem::Draw() {
 
         //// 描画処理を↑に書く
 
-        DX12Graphics::GetInstance().SystemAfterRender();
+        DX12Graphics::GetInstance().AfterRender();
 
         break;
     }
@@ -98,12 +98,12 @@ void GameSystem::Draw() {
 void GameSystem::Exit() {
 
     switch (m_rendererType) { // switch
-    case RendererType::DirectX11:
+    case GameLayerMgr::RendererType::DirectX11:
 
         DX11Graphics::GetInstance().Exit();
 
         break;
-    case RendererType::DirectX12:
+    case GameLayerMgr::RendererType::DirectX12:
 
         m_dx12Cube.Release();
         DX12Graphics::GetInstance().Release();

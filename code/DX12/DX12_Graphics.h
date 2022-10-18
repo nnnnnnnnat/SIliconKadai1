@@ -7,6 +7,7 @@
 #pragma once
 
 #include "../../framework.h"
+#include "../Game/Game_Device.h"
 
 #include <cstdint>
 #include <d3d12.h>
@@ -21,7 +22,7 @@
 
 #define FRAME_COUNT 2
 
-class DX12Graphics : private NonCopyable {
+class DX12Graphics : public GameDevice {
 public:
     //-----------------------------------------------------------------------------
     // public methods
@@ -54,14 +55,14 @@ public:
     /// 
     /// \return void
     //-----------------------------------------------------------------------------
-    void SystemBeforeRender();
+    void BeforeRender();
 
     //-----------------------------------------------------------------------------
     /// 描画後処理
     /// 
     /// \return void
     //-----------------------------------------------------------------------------
-    void SystemAfterRender();
+    void AfterRender();
 
     //-----------------------------------------------------------------------------
     /// デバイス取得

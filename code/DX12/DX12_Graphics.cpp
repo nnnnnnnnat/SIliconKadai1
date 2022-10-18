@@ -355,7 +355,7 @@ void DX12Graphics::Release() {
 
 }
 
-void DX12Graphics::SystemBeforeRender() {
+void DX12Graphics::BeforeRender() {
     // コマンドの記録を開始
     m_pCmdAllocator[m_FrameIndex]->Reset();
     m_pCmdList->Reset(m_pCmdAllocator[m_FrameIndex].Get() , nullptr);
@@ -394,7 +394,7 @@ void DX12Graphics::SystemBeforeRender() {
     m_pCmdList->ClearDepthStencilView(m_HandleDSV , D3D12_CLEAR_FLAG_DEPTH , 1.0f , 0 , 0 , nullptr);
 }
 
-void DX12Graphics::SystemAfterRender() {
+void DX12Graphics::AfterRender() {
     // リソースバリアの表示設定
     D3D12_RESOURCE_BARRIER barrier = {};
 

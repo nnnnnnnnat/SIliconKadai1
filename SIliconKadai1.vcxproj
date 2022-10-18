@@ -146,6 +146,8 @@
     <ClInclude Include="code\DX12\DX12_Cube.h" />
     <ClInclude Include="code\DX12\DX12_Graphics.h" />
     <ClInclude Include="code\Game\Game_Cube.h" />
+    <ClInclude Include="code\Game\Game_Device.h" />
+    <ClInclude Include="code\Game\Game_LayerMgr.h" />
     <ClInclude Include="code\Game_System.h" />
     <ClInclude Include="code\Utilities.h" />
     <ClInclude Include="framework.h" />
@@ -160,6 +162,8 @@
     <ClCompile Include="code\DX12\DX12_Cube.cpp" />
     <ClCompile Include="code\DX12\DX12_Graphics.cpp" />
     <ClCompile Include="code\Game\Game_Cube.cpp" />
+    <ClCompile Include="code\Game\Game_Device.cpp" />
+    <ClCompile Include="code\Game\Game_LayerMgr.cpp" />
     <ClCompile Include="code\Game_System.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="code\Utilities.cpp" />

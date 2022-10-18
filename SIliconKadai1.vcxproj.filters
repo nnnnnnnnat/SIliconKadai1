@@ -66,6 +66,12 @@
     <ClInclude Include="code\Game\Game_Cube.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="code\Game\Game_LayerMgr.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Game\Game_Device.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -93,6 +99,12 @@
       <Filter>Application</Filter>
     </ClCompile>
     <ClCompile Include="code\Game\Game_Cube.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Game\Game_Device.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Game\Game_LayerMgr.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,18 +11,11 @@
 #include "DX11/DX11_Cube.h"
 #include "DX12/DX12_Cube.h"
 
+#include "Game/Game_Device.h"
+#include "Game/Game_LayerMgr.h"
+
 class GameSystem {
 public:
-    //-----------------------------------------------------------------------------
-    // public enum
-
-    enum class RendererType {
-        DirectX11 ,
-        DirectX12 ,
-    };
-
-    //-----------------------------------------------------------------------------
-
     //-----------------------------------------------------------------------------
     // public methods
 
@@ -71,7 +64,7 @@ private:
     //-----------------------------------------------------------------------------
     DX11Cube m_dx11Cube;
     DX12Cube m_dx12Cube;
-    RendererType m_rendererType = RendererType::DirectX11;
+    GameLayerMgr::RendererType m_rendererType = GameLayerMgr::RendererType::DirectX12;
     //-----------------------------------------------------------------------------
 
     ///< 
