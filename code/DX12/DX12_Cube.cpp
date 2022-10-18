@@ -16,40 +16,45 @@ bool DX12Cube::Init() {
     // 頂点バッファの生成
     {
         // 頂点データ
-        Vertex vertices[]
-        {
+        Vertex vertices[36];
+        VertexCube cube = CubeIdentify();
+        for (int i = 0; i < cube.size(); i++) {
+            vertices[i] = cube[i];
+        }
+        //Vertex vertices[]
+        //{
 
-            { DirectX::XMFLOAT3(-1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-            { DirectX::XMFLOAT3(-1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-            { DirectX::XMFLOAT3(+1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
-            { DirectX::XMFLOAT3(+1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
 
-            { DirectX::XMFLOAT3(+1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-            { DirectX::XMFLOAT3(+1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-            { DirectX::XMFLOAT3(+1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
-            { DirectX::XMFLOAT3(+1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
 
-            { DirectX::XMFLOAT3(+1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-            { DirectX::XMFLOAT3(+1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-            { DirectX::XMFLOAT3(-1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
-            { DirectX::XMFLOAT3(-1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
 
-            { DirectX::XMFLOAT3(-1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-            { DirectX::XMFLOAT3(-1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-            { DirectX::XMFLOAT3(-1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
-            { DirectX::XMFLOAT3(-1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
 
-            { DirectX::XMFLOAT3(-1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-            { DirectX::XMFLOAT3(+1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-            { DirectX::XMFLOAT3(-1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
-            { DirectX::XMFLOAT3(+1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
 
-            { DirectX::XMFLOAT3(-1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-            { DirectX::XMFLOAT3(-1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-            { DirectX::XMFLOAT3(+1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
-            { DirectX::XMFLOAT3(+1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
+        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
 
-        };
+        //};
 
         // ヒーププロパティ
         D3D12_HEAP_PROPERTIES prop = {};
@@ -111,15 +116,19 @@ bool DX12Cube::Init() {
 
     // インデックスバッファの生成
     {
-        uint32_t indices[] =
-        {
-            0 , 1 , 2 , 3 , 2 , 1 ,
-            4 , 5 , 6 , 7 , 6 , 5 ,
-            8 , 9 , 10 , 11 , 10 , 9 ,
-            12 , 13 , 14 , 15 , 14 , 13 ,
-            16 , 17 , 18 , 19 , 18 , 17 ,
-            20 , 21 , 22 , 23 , 22 , 21 ,
-        };
+        //uint32_t indices[] =
+        //{
+        //    0 , 1 , 2 , 3 , 2 , 1 ,
+        //    4 , 5 , 6 , 7 , 6 , 5 ,
+        //    8 , 9 , 10 , 11 , 10 , 9 ,
+        //    12 , 13 , 14 , 15 , 14 , 13 ,
+        //    16 , 17 , 18 , 19 , 18 , 17 ,
+        //    20 , 21 , 22 , 23 , 22 , 21 ,
+        //};
+        uint32_t indices[36];
+        for (int i = 0; i < 36; i++) {
+            indices[i] = i;
+        }
 
         // ヒーププロパティ
         D3D12_HEAP_PROPERTIES prop = {};
@@ -533,25 +542,17 @@ bool DX12Cube::Init() {
         uint32_t* p = (uint32_t*)malloc(k_Width * k_Width * sizeof(uint32_t));
 
         for (int i = 0; i < k_Width * k_Width; i++) {
-            if (i / k_Width % 8 == 0 ||
-                i / k_Width % 8 == 1 ||
-                i / k_Width % 8 == 2 ||
-                i / k_Width % 8 == 3) {
-                if (i % 8 == 0 ||
-                    i % 8 == 1 ||
-                    i % 8 == 2 ||
-                    i % 8 == 3) {
-                    p[i] = 0xFFFFFFFF;
-                }
-                else {
-                    p[i] = 0xFF000000;
-                }
+            if (i / k_Width % 32 == 1 ||
+                i / k_Width % 32 == 3 ||
+                i / k_Width % 32 == 28 ||
+                i / k_Width % 32 == 30) {
+                p[i] = 0xFFFFFFFF;
             }
             else {
-                if (i % 8 == 4 ||
-                    i % 8 == 5 ||
-                    i % 8 == 6 ||
-                    i % 8 == 7) {
+                if (i % k_Width == 1 ||
+                    i % k_Width == 3 ||
+                    i % k_Width == 28 ||
+                    i % k_Width == 30) {
                     p[i] = 0xFFFFFFFF;
                 }
                 else {

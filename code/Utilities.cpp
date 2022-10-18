@@ -24,52 +24,52 @@ VertexCube CubeIdentify(const float ratio) {
     // uvç¿ïWäiî[
     std::array<DirectX::XMFLOAT2 , 4> uc;
     uc[0] = { 0.0f , 0.0f };
-    uc[1] = { 0.0f , 1.0f };
-    uc[2] = { 1.0f , 0.0f };
+    uc[1] = { 1.0f , 0.0f };
+    uc[2] = { 0.0f , 1.0f };
     uc[3] = { 1.0f , 1.0f };
 
     // í∏ì_Ç…èÓïÒÇäiî[ÇµÇƒÇ¢Ç≠
     cube[0] = { { -length , +length , -length } , color , uc[0] };
-    cube[1] = { { +length , +length , -length } , color , uc[2] };
+    cube[1] = { { +length , +length , -length } , color , uc[1] };
     cube[2] = { { +length , -length , -length } , color , uc[3] };
     cube[3] = { { +length , -length , -length } , color , uc[3] };
-    cube[4] = { { -length , -length , -length } , color , uc[1] };
+    cube[4] = { { -length , -length , -length } , color , uc[2] };
     cube[5] = { { -length , +length , -length } , color , uc[0] };
 
-    cube[6] = { { +length , -length , +length } , color , uc[0] };
-    cube[7] = { { +length , +length , +length } , color , uc[1] };
-    cube[8] = { { -length , +length , +length } , color , uc[2] };
-    cube[9] = { { -length , +length , +length } , color , uc[2] };
-    cube[10] = { { -length , -length , +length } , color , uc[3] };
-    cube[11] = { { +length , -length , +length } , color , uc[0] };
+    cube[6] = { { -length , -length , +length } , color , uc[0] };
+    cube[7] = { { -length , +length , +length } , color , uc[1] };
+    cube[8] = { { +length , +length , +length } , color , uc[3] };
+    cube[9] = { { +length , +length , +length } , color , uc[3] };
+    cube[10] = { { +length , -length , +length } , color , uc[2] };
+    cube[11] = { { -length , -length , +length } , color , uc[0] };
 
-    cube[12] = { { +length , +length , -length } , color , uc[0] };
-    cube[13] = { { +length , +length , +length } , color , uc[1] };
-    cube[14] = { { +length , -length , +length } , color , uc[2] };
-    cube[15] = { { +length , -length , +length } , color , uc[2] };
-    cube[16] = { { +length , -length , -length } , color , uc[3] };
-    cube[17] = { { +length , +length , -length } , color , uc[0] };
+    cube[12] = { { -length , -length , -length } , color , uc[0] };
+    cube[13] = { { -length , +length , -length } , color , uc[1] };
+    cube[14] = { { -length , +length , +length } , color , uc[3] };
+    cube[15] = { { -length , +length , +length } , color , uc[3] };
+    cube[16] = { { -length , -length , +length } , color , uc[2] };
+    cube[17] = { { -length , -length , -length } , color , uc[0] };
 
-    cube[18] = { { -length , -length , +length } , color , uc[0] };
-    cube[19] = { { -length , +length , +length } , color , uc[3] };
-    cube[20] = { { -length , +length , -length } , color , uc[2] };
-    cube[21] = { { -length , +length , -length } , color , uc[2] };
-    cube[22] = { { -length , -length , -length } , color , uc[1] };
-    cube[23] = { { -length , -length , +length } , color , uc[0] };
+    cube[18] = { { +length , -length , -length } , color , uc[0] };
+    cube[19] = { { +length , +length , -length } , color , uc[1] };
+    cube[20] = { { +length , +length , +length } , color , uc[3] };
+    cube[21] = { { +length , +length , +length } , color , uc[3] };
+    cube[22] = { { +length , -length , +length } , color , uc[2] };
+    cube[23] = { { +length , -length , -length } , color , uc[0] };
 
     cube[24] = { { -length , +length , +length } , color , uc[0] };
     cube[25] = { { +length , +length , +length } , color , uc[1] };
-    cube[26] = { { +length , +length , -length } , color , uc[2] };
-    cube[27] = { { +length , +length , -length } , color , uc[2] };
-    cube[28] = { { -length , +length , -length } , color , uc[3] };
+    cube[26] = { { +length , +length , -length } , color , uc[3] };
+    cube[27] = { { +length , +length , -length } , color , uc[3] };
+    cube[28] = { { -length , +length , -length } , color , uc[2] };
     cube[29] = { { -length , +length , +length } , color , uc[0] };
 
-    cube[30] = { { +length , -length , -length } , color , uc[0] };
+    cube[30] = { { -length , -length , +length } , color , uc[0] };
     cube[31] = { { +length , -length , +length } , color , uc[1] };
-    cube[32] = { { -length , -length , +length } , color , uc[2] };
-    cube[33] = { { -length , -length , +length } , color , uc[2] };
-    cube[34] = { { -length , -length , -length } , color , uc[3] };
-    cube[35] = { { +length , -length , -length } , color , uc[0] };
+    cube[32] = { { +length , -length , -length } , color , uc[3] };
+    cube[33] = { { +length , -length , -length } , color , uc[3] };
+    cube[34] = { { -length , -length , -length } , color , uc[2] };
+    cube[35] = { { -length , -length , +length } , color , uc[0] };
 
     return cube;
 }

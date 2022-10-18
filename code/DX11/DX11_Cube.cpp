@@ -27,47 +27,7 @@ bool DX11Cube::Init(const float _width , const float _height , const float _dept
     uc[3] = { 1.0f , 1.0f };
 
     // 頂点に情報を格納していく
-    m_cube[0] = { { -_width , +_height , -_depth } , color , uc[0] };
-    m_cube[1] = { { +_width , +_height , -_depth } , color , uc[2] };
-    m_cube[2] = { { +_width , -_height , -_depth } , color , uc[3] };
-    m_cube[3] = { { +_width , -_height , -_depth } , color , uc[3] };
-    m_cube[4] = { { -_width , -_height , -_depth } , color , uc[1] };
-    m_cube[5] = { { -_width , +_height , -_depth } , color , uc[0] };
-
-    m_cube[6] = { { +_width , -_height , +_depth } , color , uc[0] };
-    m_cube[7] = { { +_width , +_height , +_depth } , color , uc[1] };
-    m_cube[8] = { { -_width , +_height , +_depth } , color , uc[2] };
-    m_cube[9] = { { -_width , +_height , +_depth } , color , uc[2] };
-    m_cube[10] = { { -_width , -_height , +_depth } , color , uc[3] };
-    m_cube[11] = { { +_width , -_height , +_depth } , color , uc[0] };
-
-    m_cube[12] = { { +_width , +_height , -_depth } , color , uc[0] };
-    m_cube[13] = { { +_width , +_height , +_depth } , color , uc[1] };
-    m_cube[14] = { { +_width , -_height , +_depth } , color , uc[2] };
-    m_cube[15] = { { +_width , -_height , +_depth } , color , uc[2] };
-    m_cube[16] = { { +_width , -_height , -_depth } , color , uc[3] };
-    m_cube[17] = { { +_width , +_height , -_depth } , color , uc[0] };
-
-    m_cube[18] = { { -_width , -_height , +_depth } , color , uc[0] };
-    m_cube[19] = { { -_width , +_height , +_depth } , color , uc[3] };
-    m_cube[20] = { { -_width , +_height , -_depth } , color , uc[2] };
-    m_cube[21] = { { -_width , +_height , -_depth } , color , uc[2] };
-    m_cube[22] = { { -_width , -_height , -_depth } , color , uc[1] };
-    m_cube[23] = { { -_width , -_height , +_depth } , color , uc[0] };
-
-    m_cube[24] = { { -_width , +_height , +_depth } , color , uc[0] };
-    m_cube[25] = { { +_width , +_height , +_depth } , color , uc[1] };
-    m_cube[26] = { { +_width , +_height , -_depth } , color , uc[2] };
-    m_cube[27] = { { +_width , +_height , -_depth } , color , uc[2] };
-    m_cube[28] = { { -_width , +_height , -_depth } , color , uc[3] };
-    m_cube[29] = { { -_width , +_height , +_depth } , color , uc[0] };
-
-    m_cube[30] = { { +_width , -_height , -_depth } , color , uc[0] };
-    m_cube[31] = { { +_width , -_height , +_depth } , color , uc[1] };
-    m_cube[32] = { { -_width , -_height , +_depth } , color , uc[2] };
-    m_cube[33] = { { -_width , -_height , +_depth } , color , uc[2] };
-    m_cube[34] = { { -_width , -_height , -_depth } , color , uc[3] };
-    m_cube[35] = { { +_width , -_height , -_depth } , color , uc[0] };
+    m_cube = CubeIdentify();
 
     //-----------------------------
     // 頂点バッファ作成
@@ -253,9 +213,9 @@ void DX11Cube::Draw() {
         s_angle -= 360.0f;
     }
     DirectX::XMMATRIX worldMatlix = DirectX::XMMatrixTranslation(0.0f , 0.0f , 0.0f);
-    DirectX::XMVECTOR eye = { sinf(DirectX::XMConvertToRadians(45.0f)) * 2.0f ,
+    DirectX::XMVECTOR eye = { sinf(DirectX::XMConvertToRadians(s_angle)) * 5.0f ,
         2.0f ,
-        cosf(DirectX::XMConvertToRadians(45.0f)) * 2.0f , 0.0f };
+        cosf(DirectX::XMConvertToRadians(s_angle)) * 5.0f , 0.0f };
     DirectX::XMVECTOR focus = { 0.0f , 0.0f , 0.0f , 0.0f };
     DirectX::XMVECTOR up = { 0.0f , 1.0f , 0.0f , 0.0f };
 

@@ -54,6 +54,8 @@ void GameSystem::Update() {
     case RendererType::DirectX12:
         // 更新処理を↓に書く
 
+        m_dx12Cube.Update(DX12Graphics::GetInstance().SystemGetFrameIndex());
+
         // 更新処理を↑に書く
         break;
     }
