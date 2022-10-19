@@ -9,18 +9,7 @@
 
 #include <windows.h>
 
-DX11Graphics& DX11Graphics::GetInstance() {
-    static DX11Graphics instance;
-    return instance;
-}
-
-bool DX11Graphics::Init(HWND _hWnd ,
-    const unsigned int _width ,
-    const unsigned int _height) {
-
-    // ウィンドウサイズ格納
-    m_width = _width;
-    m_height = _height;
+bool DX11Graphics::Init(HWND _hWnd) {
 
     ComPtr<IDXGIFactory> factory;
     HRESULT hr;
@@ -70,8 +59,8 @@ bool DX11Graphics::Init(HWND _hWnd ,
 
     // スワップチェイン作成
     DXGI_SWAP_CHAIN_DESC scDesc = {}; // スワップチェーンの設定データ
-    scDesc.BufferDesc.Width = _width; // 画面の幅
-    scDesc.BufferDesc.Height = _height; // 画面の高さ
+    scDesc.BufferDesc.Width = SCREEN_WIDTH; // 画面の幅
+    scDesc.BufferDesc.Height = SCREEN_HEIGHT; // 画面の高さ
     scDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // バッファの形式
     scDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     scDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
@@ -123,8 +112,8 @@ bool DX11Graphics::Init(HWND _hWnd ,
     // ビューポートの設定
     m_viewport = { 0.0f ,
         0.0f ,
-        (float)m_width ,
-        (float)m_height ,
+        (float)SCREEN_WIDTH ,
+        (float)SCREEN_HEIGHT ,
         0.0f ,
         1.0f };
 
@@ -143,7 +132,7 @@ void DX11Graphics::AfterRender() {
     m_pSwapChain->Present(1 , 0);
 }
 
-void DX11Graphics::Exit() {
+void DX11Graphics::Release() {
     if (m_PdeviceContext) { // if
         m_PdeviceContext->ClearState();
     }
@@ -171,15 +160,3 @@ ID3D11RenderTargetView* DX11Graphics::GetBackBufferPort() const {
 D3D11_VIEWPORT DX11Graphics::GetViewPort() const {
     return m_viewport;
 }
-
-int DX11Graphics::GetViewPortHeight() const {
-    return m_height;
-}
-
-int DX11Graphics::GetViewPortWidth() const {
-    return m_width;
-};
-
-
-
-

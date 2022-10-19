@@ -8,6 +8,7 @@
 #include <Windows.h>
 #include <DirectXMath.h>
 #include <array>
+
 // 16バイトにアラインメントする。
 #define ALIGN16 _declspec(align(16))
 

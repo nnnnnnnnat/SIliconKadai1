@@ -5,6 +5,7 @@
 //==============================================================================
 
 #include "Game_System.h"
+#include "Game/Game_Input.h"
 
 #include "DX11/DX11_Graphics.h"
 #include "DX11/DX11_Sampler.h"
@@ -20,94 +21,90 @@ void GameSystem::Initialize(HWND _hWnd) {
     // 変数宣言
     bool sts;
 
-    switch (m_rendererType) { // switch
+    GameLayerMgr::GetInstance().Init(_hWnd);
+
+    m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX11);
+
+    DX11Sampler::GetInstance()->Init(dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDXDevice());
+    DX11Sampler::GetInstance()->Set(dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDeviceContext() , DX11Sampler::Sampler_Mode::WRAP);
+
+    // キューブ初期化
+    m_dx11Cube.Init(dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDXDevice() , dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDeviceContext());
+
+    m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX12);
+
+    m_dx12Cube.Init(dynamic_cast<DX12Graphics*>( m_pGameDevice )->GetDevice() , dynamic_cast<DX12Graphics*>( m_pGameDevice )->GetCommandList());
+
+    switch (m_rendererType) {
     case GameLayerMgr::RendererType::DirectX11:
-        // 初期化処理
-        sts = DX11Graphics::GetInstance().Init(_hWnd , 1280 , 720);
-        if (!sts) {
-            MessageBox(NULL , "DX11Graphics Init" , "Error" , MB_OK);
-        }
 
-        // サンプラー設定
-        DX11Sampler::GetInstance()->Init();
-        DX11Sampler::GetInstance()->Set(DX11Sampler::Sampler_Mode::WRAP);
+        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX11);
 
-        // キューブ初期化
-        m_dx11Cube.Init(0.5f , 0.5f , 0.5f);
         break;
     case GameLayerMgr::RendererType::DirectX12:
 
-        DX12Graphics::GetInstance().Init(_hWnd);
-        m_dx12Cube.Init();
+        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX12);
 
         break;
     }
+    GameInput::Init();
 }
 
 void GameSystem::Update() {
-    switch (m_rendererType) { // switch
+    GameInput::Update();
+    if (GameInput::GetKeyTrigger(VK_F1)) {
+        if (m_rendererType != GameLayerMgr::RendererType::DirectX11) {
+            m_pGameDevice->BeforeRender();
+            m_pGameDevice->AfterRender();
+            m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX11);
+            m_rendererType = GameLayerMgr::RendererType::DirectX11;
+            m_pGameDevice->BeforeRender();
+            m_pGameDevice->AfterRender();
+        }
+    }
+    if (GameInput::GetKeyTrigger(VK_F2)) {
+        m_rendererType = GameLayerMgr::RendererType::DirectX12;
+        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX12);
+        m_rendererType = GameLayerMgr::RendererType::DirectX12;
+    }
+    switch (m_rendererType) {
     case GameLayerMgr::RendererType::DirectX11:
-        // 更新処理を↓に書く
 
-        // 更新処理を↑に書く
         break;
     case GameLayerMgr::RendererType::DirectX12:
-        // 更新処理を↓に書く
 
-        m_dx12Cube.Update(DX12Graphics::GetInstance().SystemGetFrameIndex());
+        m_dx12Cube.Update(dynamic_cast<DX12Graphics*>( m_pGameDevice )->SystemGetFrameIndex());
 
-        // 更新処理を↑に書く
         break;
     }
-
 }
 
 void GameSystem::Draw() {
 
-    switch (m_rendererType) { // switch
+
+    // 描画処理を↓に書く
+
+    switch (m_rendererType) {
     case GameLayerMgr::RendererType::DirectX11:
-
-        DX11Graphics::GetInstance().BeforeRender();
-
-        // 描画処理を↓に書く
-
+        m_pGameDevice->BeforeRender();
         m_dx11Cube.Draw();
-
-        // 描画処理を↑に書く
-        DX11Graphics::GetInstance().GetSwapChain()->Present(1 , 0);
+        m_pGameDevice->AfterRender();
 
         break;
     case GameLayerMgr::RendererType::DirectX12:
-
-        DX12Graphics::GetInstance().BeforeRender();
-
-        //// 描画処理を↓に書く
-
+        m_pGameDevice->BeforeRender();
         m_dx12Cube.Draw();
-
-        //// 描画処理を↑に書く
-
-        DX12Graphics::GetInstance().AfterRender();
+        m_pGameDevice->AfterRender();
 
         break;
     }
 
+    // 描画処理を↑に書く
 
 }
 
 void GameSystem::Exit() {
 
-    switch (m_rendererType) { // switch
-    case GameLayerMgr::RendererType::DirectX11:
+    GameLayerMgr::GetInstance().Release();
 
-        DX11Graphics::GetInstance().Exit();
-
-        break;
-    case GameLayerMgr::RendererType::DirectX12:
-
-        m_dx12Cube.Release();
-        DX12Graphics::GetInstance().Release();
-
-        break;
-    }
 }

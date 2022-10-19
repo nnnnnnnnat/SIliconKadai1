@@ -9,35 +9,25 @@
 #include <d3d11.h>
 
 #include "../../framework.h"
+#include "../Game/Game_Device.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 
-class DX11Graphics : private NonCopyable {
+class DX11Graphics : public GameDevice {
 public:
     //-----------------------------------------------------------------------------
     // public methods
 
     //-----------------------------------------------------------------------------
-    /// インスタンス受け取り
-    /// 
-    /// \return DX11Graphics&
-    //-----------------------------------------------------------------------------
-    static DX11Graphics& GetInstance();
-
-
-    //-----------------------------------------------------------------------------
     /// 初期化
     /// 
     /// \param [in] _hWnd ウィンドウハンドル
-    /// \param [in] _width ウィンドウの横の大きさ
-    /// \param [in] _height ウィンドウの縦の大きさ
+    /// 
     /// \return void
     //-----------------------------------------------------------------------------
     bool Init(
-        /*[in]*/HWND _hWnd ,
-        /*[in]*/const unsigned int _width ,
-        /*[in]*/const unsigned int _height);
+        /*[in]*/HWND _hWnd);
 
     //-----------------------------------------------------------------------------
     /// 描画の前処理
@@ -59,7 +49,7 @@ public:
     /// 
     /// \return void
     //-----------------------------------------------------------------------------
-    void Exit();
+    void Release();
 
     //-----------------------------------------------------------------------------
     /// デバイス取得
@@ -98,34 +88,21 @@ public:
     D3D11_VIEWPORT GetViewPort() const;
 
     //-----------------------------------------------------------------------------
-    /// バックバッファの縦の大きさ 取得
-    /// 
-    /// \return int
-    //-----------------------------------------------------------------------------
-    int GetViewPortHeight() const;
-
-    //-----------------------------------------------------------------------------
-    /// バックバッファの横の大きさ 取得
-    /// 
-    /// \return int
-    //-----------------------------------------------------------------------------
-    int GetViewPortWidth() const;
-
-    //-----------------------------------------------------------------------------
 
 private:
     //-----------------------------------------------------------------------------
     // private methods
 
     //-----------------------------------------------------------------------------
+
     ComPtr<ID3D11Device> m_pDevice;
     ComPtr<ID3D11DeviceContext> m_PdeviceContext;
     ComPtr<IDXGISwapChain> m_pSwapChain;
     ComPtr<ID3D11RenderTargetView> m_pBackBufferView;
     D3D11_VIEWPORT m_viewport;
-    int m_width = 0;
-    int m_height = 0;
-    float m_backGroundColor[4] = { 1.0f , 0.2f , 0.2f , 1.0f };
+
+    float m_backGroundColor[4] = { 1.0f , 0.5f , 0.5f , 1.0f };
+
     ///<
     /// m_pDevice デバイス
     /// m_pDeviceContext デバイスコンテキスト

@@ -64,7 +64,8 @@ private:
     //-----------------------------------------------------------------------------
     DX11Cube m_dx11Cube;
     DX12Cube m_dx12Cube;
-    GameLayerMgr::RendererType m_rendererType = GameLayerMgr::RendererType::DirectX12;
+    GameDevice* m_pGameDevice = nullptr;
+    GameLayerMgr::RendererType m_rendererType = GameLayerMgr::RendererType::DirectX11;
     //-----------------------------------------------------------------------------
 
     ///< 

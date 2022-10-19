@@ -7,16 +7,11 @@
 #include "DX11_Cube.h"
 #include "DX11_Graphics.h"
 
-bool DX11Cube::Init(const float _width , const float _height , const float _depth) {
+bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext) {
 
     HRESULT hr;
-    ID3D11Device* dev;
-    ID3D11DeviceContext* devcontext;
-
-    // デバイスとデバイスコンテキスト取得
-    dev = DX11Graphics::GetInstance().GetDXDevice();
-    devcontext = DX11Graphics::GetInstance().GetDeviceContext();
-
+    m_pDevice = _pDev;
+    m_pDeviceContext = _pDevContext;
     DirectX::XMFLOAT4 color = { 1.0f , 1.0f , 1.0f , 1.0f };
 
     // uv座標格納
@@ -41,7 +36,7 @@ bool DX11Cube::Init(const float _width , const float _height , const float _dept
 
     D3D11_SUBRESOURCE_DATA initData = { &m_cube[0] , sizeof(m_cube) , 0 }; // 書き込むデータ
     // 頂点バッファの作成
-    hr = dev->CreateBuffer(&vbDesc , &initData , &m_pVertexBuffer);
+    hr = m_pDevice->CreateBuffer(&vbDesc , &initData , &m_pVertexBuffer);
     if (FAILED(hr)) { // if
         MessageBox(nullptr , "CreateBuffer" , "" , MB_OK);
         return false;
@@ -82,7 +77,7 @@ bool DX11Cube::Init(const float _width , const float _height , const float _dept
     }
 
     // 頂点シェーダー作成
-    hr = dev->CreateVertexShader(compiledVS->GetBufferPointer() ,
+    hr = m_pDevice->CreateVertexShader(compiledVS->GetBufferPointer() ,
         compiledVS->GetBufferSize() ,
         nullptr ,
         &m_pVertexShader);
@@ -92,7 +87,7 @@ bool DX11Cube::Init(const float _width , const float _height , const float _dept
     }
 
     // ピクセルシェーダー作成
-    hr = dev->CreatePixelShader(compiledPS->GetBufferPointer() ,
+    hr = m_pDevice->CreatePixelShader(compiledPS->GetBufferPointer() ,
         compiledPS->GetBufferSize() ,
         nullptr ,
         &m_pPixelShader);
@@ -107,7 +102,7 @@ bool DX11Cube::Init(const float _width , const float _height , const float _dept
         { "TEXCOORD" , 0 , DXGI_FORMAT_R32G32_FLOAT , 0 , D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA , 0 }
     };
 
-    hr = dev->CreateInputLayout(
+    hr = m_pDevice->CreateInputLayout(
         layout ,
         ARRAYSIZE(layout) ,
         compiledVS->GetBufferPointer() ,
@@ -138,7 +133,7 @@ bool DX11Cube::Init(const float _width , const float _height , const float _dept
     td.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
     td.MiscFlags = 0;
 
-    hr = dev->CreateTexture2D(&td , nullptr , &D3DTexture);
+    hr = m_pDevice->CreateTexture2D(&td , nullptr , &D3DTexture);
     if (FAILED(hr)) { // if
         MessageBox(nullptr , "CreateTexture2D" , "" , MB_OK);
         return false;
@@ -146,7 +141,7 @@ bool DX11Cube::Init(const float _width , const float _height , const float _dept
 
     //テクスチャ書き替え
     D3D11_MAPPED_SUBRESOURCE msr;
-    devcontext->Map(D3DTexture.Get() , 0 , D3D11_MAP_WRITE_DISCARD , 0 , &msr);
+    _pDevContext->Map(D3DTexture.Get() , 0 , D3D11_MAP_WRITE_DISCARD , 0 , &msr);
 
     byte srcData[iPixSize * iPixSize * 4] = { 0 };// ビットマップを黒で初期化
     for (int i = 0; i < iPixSize * iPixSize * 4; i += 4) {
@@ -165,14 +160,14 @@ bool DX11Cube::Init(const float _width , const float _height , const float _dept
     }
     memcpy(msr.pData , srcData , sizeof(srcData));
 
-    devcontext->Unmap(D3DTexture.Get() , 0);
+    _pDevContext->Unmap(D3DTexture.Get() , 0);
 
     //シェーダリソースビューの作成
     D3D11_SHADER_RESOURCE_VIEW_DESC srv = {};
     srv.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     srv.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     srv.Texture2D.MipLevels = 1;
-    hr = dev->CreateShaderResourceView(D3DTexture.Get() , &srv , &m_pShaderResourceView);
+    hr = m_pDevice->CreateShaderResourceView(D3DTexture.Get() , &srv , &m_pShaderResourceView);
     if (FAILED(hr)) {
         MessageBox(nullptr , "CreateShaderResourceView" , "" , MB_OK);
         return false;
@@ -184,11 +179,6 @@ bool DX11Cube::Init(const float _width , const float _height , const float _dept
 void DX11Cube::Draw() {
 
     HRESULT hr;
-    ID3D11Device* dev;
-    ID3D11DeviceContext* devcontext;
-
-    dev = DX11Graphics::GetInstance().GetDXDevice();
-    devcontext = DX11Graphics::GetInstance().GetDeviceContext();
 
     D3D11_BUFFER_DESC constantBufferDesc;
     constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -200,7 +190,7 @@ void DX11Cube::Draw() {
 
     ID3D11Buffer* cb;
 
-    hr = dev->CreateBuffer(&constantBufferDesc , nullptr , &cb);
+    hr = m_pDevice->CreateBuffer(&constantBufferDesc , nullptr , &cb);
 
     if (FAILED(hr)) {
         MessageBox(nullptr , "CreateBuffer" , "" , MB_OK);
@@ -223,7 +213,7 @@ void DX11Cube::Draw() {
     DirectX::XMMATRIX viewMatrix = DirectX::XMMatrixLookAtLH(eye , focus , up);
 
     // カメラ(仮)を設定
-    constexpr float fov = DirectX::XMConvertToRadians(45.0f);
+    constexpr float fov = DirectX::XMConvertToRadians(35.0f);
     float aspect = 1280.0f / 720.0f;
     float nearz = 0.1f;
     float farz = 100.0f;
@@ -240,31 +230,36 @@ void DX11Cube::Draw() {
     DirectX::XMStoreFloat4x4(&constBuffer.m_projection ,
         DirectX::XMMatrixTranspose(projectionMatrix));
 
-    devcontext->UpdateSubresource(cb , 0 , nullptr , &constBuffer , 0 , 0);
+    m_pDeviceContext->UpdateSubresource(cb , 0 , nullptr , &constBuffer , 0 , 0);
 
     // 頂点バッファを描画で使えるようにセットする
     UINT stride = sizeof(Vertex);
     UINT offset = 0;
-    devcontext->IASetVertexBuffers(0 ,
+    m_pDeviceContext->IASetVertexBuffers(0 ,
         1 ,
         m_pVertexBuffer.GetAddressOf() ,
         &stride ,
         &offset);
 
     // プロミティブ・トポロジーをセット
-    devcontext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // 定数バッファセット
-    devcontext->VSSetConstantBuffers(0 , 1 , &cb);
+    m_pDeviceContext->VSSetConstantBuffers(0 , 1 , &cb);
 
-    devcontext->VSSetShader(m_pVertexShader.Get() , 0 , 0);
-    devcontext->PSSetShader(m_pPixelShader.Get() , 0 , 0);
-    devcontext->IASetInputLayout(m_pInputLayout.Get());
-    devcontext->PSSetShaderResources(0 , 1 , m_pShaderResourceView.GetAddressOf());
-    D3D11_VIEWPORT m_viewport = DX11Graphics::GetInstance().GetViewPort();
-    devcontext->RSSetViewports(1 , &m_viewport);
+    m_pDeviceContext->VSSetShader(m_pVertexShader.Get() , 0 , 0);
+    m_pDeviceContext->PSSetShader(m_pPixelShader.Get() , 0 , 0);
+    m_pDeviceContext->IASetInputLayout(m_pInputLayout.Get());
+    m_pDeviceContext->PSSetShaderResources(0 , 1 , m_pShaderResourceView.GetAddressOf());
+    D3D11_VIEWPORT m_viewport = { 0.0f ,
+        0.0f ,
+        (float)SCREEN_WIDTH ,
+        (float)SCREEN_HEIGHT ,
+        0.0f ,
+        1.0f };
+    m_pDeviceContext->RSSetViewports(1 , &m_viewport);
 
     // 描画
-    devcontext->Draw(m_cube.size() , 0);
+    m_pDeviceContext->Draw(m_cube.size() , 0);
 }
 

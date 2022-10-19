@@ -10,9 +10,12 @@
 using namespace std;
 using namespace DirectX;
 
-bool DX12Cube::Init() {
-    ID3D12Device* pDev = DX12Graphics::GetInstance().GetDevice();
+bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandList) {
 
+    HRESULT hr;
+
+    m_pDevice = _pDev;
+    m_pCommandList = _pCommandList;
     // 頂点バッファの生成
     {
         // 頂点データ
@@ -21,40 +24,6 @@ bool DX12Cube::Init() {
         for (int i = 0; i < cube.size(); i++) {
             vertices[i] = cube[i];
         }
-        //Vertex vertices[]
-        //{
-
-        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
-        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
-
-        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
-        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
-
-        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
-        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
-
-        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
-        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
-
-        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-        //    { DirectX::XMFLOAT3(-1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
-        //    { DirectX::XMFLOAT3(+1.0f , +1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
-
-        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 1.0f) } ,
-        //    { DirectX::XMFLOAT3(-1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(0.0f , 0.0f) } ,
-        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , -1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 1.0f) } ,
-        //    { DirectX::XMFLOAT3(+1.0f , -1.0f , +1.0f) , DirectX::XMFLOAT4(1.0f , 1.0f , 1.0f , 1.0f) , DirectX::XMFLOAT2(1.0f , 0.0f) } ,
-
-        //};
 
         // ヒーププロパティ
         D3D12_HEAP_PROPERTIES prop = {};
@@ -81,7 +50,7 @@ bool DX12Cube::Init() {
         desc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
         // リソースを生成
-        auto hr = pDev->CreateCommittedResource(
+        auto hr = m_pDevice->CreateCommittedResource(
             &prop ,
             D3D12_HEAP_FLAG_NONE ,
             &desc ,
@@ -155,7 +124,7 @@ bool DX12Cube::Init() {
         desc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
         // リソースの生成
-        auto hr = pDev->CreateCommittedResource(
+        auto hr = m_pDevice->CreateCommittedResource(
             &prop ,
             D3D12_HEAP_FLAG_NONE ,
             &desc ,
@@ -199,7 +168,7 @@ bool DX12Cube::Init() {
         desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
         desc.NodeMask = 0;
 
-        auto hr = pDev->CreateDescriptorHeap(
+        auto hr = m_pDevice->CreateDescriptorHeap(
             &desc ,
             IID_PPV_ARGS(&m_pHeapCBV));
 
@@ -235,13 +204,13 @@ bool DX12Cube::Init() {
         desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
         desc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
-        auto incrementSize = pDev->GetDescriptorHandleIncrementSize(
+        auto incrementSize = m_pDevice->GetDescriptorHandleIncrementSize(
             D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
         );
 
         for (auto i = 0; i < FRAME_COUNT; ++i) {
             // リソースの生成
-            auto hr = pDev->CreateCommittedResource(
+            auto hr = m_pDevice->CreateCommittedResource(
                 &prop ,
                 D3D12_HEAP_FLAG_NONE ,
                 &desc ,
@@ -268,7 +237,7 @@ bool DX12Cube::Init() {
             m_constantBufferView[i].Desc.SizeInBytes = sizeof(Transform);
 
             // 定数バッファビューを生成
-            pDev->CreateConstantBufferView(
+            m_pDevice->CreateConstantBufferView(
                 &m_constantBufferView[i].Desc ,
                 handleCPU);
 
@@ -369,7 +338,7 @@ bool DX12Cube::Init() {
         }
 
         // ルートシグネイチャの生成
-        hr = pDev->CreateRootSignature(
+        hr = m_pDevice->CreateRootSignature(
             0 ,
             pBlob->GetBufferPointer() ,
             pBlob->GetBufferSize() ,
@@ -470,7 +439,7 @@ bool DX12Cube::Init() {
         desc.SampleDesc.Quality = 0;
 
         // パイプラインステートを生成
-        hr = pDev->CreateGraphicsPipelineState(
+        hr = m_pDevice->CreateGraphicsPipelineState(
             &desc ,
             IID_PPV_ARGS(&m_pPipelineState));
 
@@ -521,7 +490,7 @@ bool DX12Cube::Init() {
         texDesc.SampleDesc.Count = 1;
         texDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
-        auto hr = pDev->CreateCommittedResource(
+        auto hr = m_pDevice->CreateCommittedResource(
             &heapProp ,
             D3D12_HEAP_FLAG_NONE ,
             &texDesc ,
@@ -564,7 +533,7 @@ bool DX12Cube::Init() {
         m_texture.pResource->WriteToSubresource(0 , &box , p , 4 * k_Width , 4 * k_Width * k_Width);
 
         // インクリメントサイズを取得
-        auto incrementSize = pDev->GetDescriptorHandleIncrementSize(
+        auto incrementSize = m_pDevice->GetDescriptorHandleIncrementSize(
             D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
         // CPUディスクリプタハンドルとGPUディスクリプタハンドルを取得
@@ -592,7 +561,7 @@ bool DX12Cube::Init() {
         viewDesc.Texture2D.ResourceMinLODClamp = 0.0f;
 
         // シェーダーリソースビューを生成
-        pDev->CreateShaderResourceView(
+        m_pDevice->CreateShaderResourceView(
             m_texture.pResource , &viewDesc , handleCPU);
     }
     return true;
@@ -606,21 +575,20 @@ void DX12Cube::Update(const uint32_t frameindex) {
 }
 
 void DX12Cube::Draw() {
-    ID3D12GraphicsCommandList* pCmd = DX12Graphics::GetInstance().GetCommandList();
 
-    pCmd->SetGraphicsRootSignature(m_pRootSignature);
-    pCmd->SetDescriptorHeaps(1 , &m_pHeapCBV);
-    pCmd->SetGraphicsRootConstantBufferView(0 , m_constantBufferView[m_frameIndex].Desc.BufferLocation);
-    pCmd->SetGraphicsRootDescriptorTable(1 , m_texture.HandleGPU);
-    pCmd->SetPipelineState(m_pPipelineState);
+    m_pCommandList->SetGraphicsRootSignature(m_pRootSignature);
+    m_pCommandList->SetDescriptorHeaps(1 , &m_pHeapCBV);
+    m_pCommandList->SetGraphicsRootConstantBufferView(0 , m_constantBufferView[m_frameIndex].Desc.BufferLocation);
+    m_pCommandList->SetGraphicsRootDescriptorTable(1 , m_texture.HandleGPU);
+    m_pCommandList->SetPipelineState(m_pPipelineState);
 
-    pCmd->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    pCmd->IASetVertexBuffers(0 , 1 , &m_vertexBufferView);
-    pCmd->IASetIndexBuffer(&m_indexBufferView);
-    pCmd->RSSetViewports(1 , &m_viewport);
-    pCmd->RSSetScissorRects(1 , &m_scissor);
+    m_pCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    m_pCommandList->IASetVertexBuffers(0 , 1 , &m_vertexBufferView);
+    m_pCommandList->IASetIndexBuffer(&m_indexBufferView);
+    m_pCommandList->RSSetViewports(1 , &m_viewport);
+    m_pCommandList->RSSetScissorRects(1 , &m_scissor);
 
-    pCmd->DrawIndexedInstanced(36 , 1 , 0 , 0 , 0);
+    m_pCommandList->DrawIndexedInstanced(36 , 1 , 0 , 0 , 0);
 }
 
 void DX12Cube::Release() {

@@ -17,13 +17,13 @@ public:
         max ,
     };
 
-    GameLayerMgr& GetInstance();
+    static GameLayerMgr& GetInstance();
     bool Init(HWND);
     void Release();
-    void GetDevicePtr();
+    GameDevice* GetDevicePtr(RendererType);
 private:
 
-    std::string m_render[(int)RendererType::max] = {
+    std::string m_renderName[(int)RendererType::max] = {
         "DirectX11" ,
         "DirectX12"
     };

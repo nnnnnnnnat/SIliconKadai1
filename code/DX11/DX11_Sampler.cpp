@@ -11,13 +11,7 @@ DX11Sampler* DX11Sampler::GetInstance() {
     return &instance;
 }
 
-void DX11Sampler::Init() {
-
-    // 変数宣言
-    ID3D11Device* device;
-
-    // デバイスを取得する
-    device = DX11Graphics::GetInstance().GetDXDevice();
+void DX11Sampler::Init(ID3D11Device* _pDev) {
 
     for (int i = 0; i < 5; i++) {
         // 変数宣言してゼロメモリーする
@@ -35,23 +29,17 @@ void DX11Sampler::Init() {
         smpDesc.AddressW = m_rappingMode[i];
 
         // サンプラーステート生成
-        HRESULT hr = device->CreateSamplerState(&smpDesc , &m_samplerState[i]);
+        HRESULT hr = _pDev->CreateSamplerState(&smpDesc , &m_samplerState[i]);
         if (FAILED(hr)) {
             MessageBox(nullptr , "CreateSamplerState" , "" , MB_OK);
         }
     }
 }
 
-void DX11Sampler::Set(const Sampler_Mode _mode) {
-
-    // デバイスコンテキスト
-    ID3D11DeviceContext* devicecontext;
-
-    // デバイスコンテキストを取得する
-    devicecontext = DX11Graphics::GetInstance().GetDeviceContext();
+void DX11Sampler::Set(ID3D11DeviceContext* _pDevContext , const Sampler_Mode _mode) {
 
     // サンプラーモードを変更する
-    devicecontext->PSSetSamplers(0 , 1 , &m_samplerState[(int)_mode]);
+    _pDevContext->PSSetSamplers(0 , 1 , &m_samplerState[(int)_mode]);
     HWND hwnd = GetActiveWindow();
 
 }

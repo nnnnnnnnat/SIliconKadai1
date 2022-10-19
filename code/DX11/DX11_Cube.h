@@ -23,16 +23,14 @@ public:
     //-----------------------------------------------------------------------------
     /// 初期化
     /// 
-    /// \param [in] _width 横の大きさ
-    /// \param [in] _height 縦の大きさ
-    /// \param [in] _depth 奥行き
+    /// \param [in] _pDev DX11のデバイス
+    /// \param [in] _pDevContext DX11のデバイスコンテキスト
     /// 
     /// \return bool
     //-----------------------------------------------------------------------------
     bool Init(
-        /*[in]*/ const float _width ,
-        /*[in]*/ const float _height ,
-        /*[in]*/ const float _depth);
+        ID3D11Device* _pDev ,
+        ID3D11DeviceContext* _pDevContext);
 
     //-----------------------------------------------------------------------------
     /// 描画
@@ -54,6 +52,10 @@ private:
     ComPtr<ID3D11InputLayout>	m_pInputLayout = nullptr;
     ComPtr<ID3D11Buffer> m_pVertexBuffer = nullptr;
     ComPtr<ID3D11ShaderResourceView> m_pShaderResourceView = nullptr;
+
+    ID3D11Device* m_pDevice = nullptr;
+    ID3D11DeviceContext* m_pDeviceContext = nullptr;
+
     VertexCube m_cube;
     //-----------------------------------------------------------------------------
 

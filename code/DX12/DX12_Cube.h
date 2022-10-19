@@ -58,9 +58,14 @@ public:
     //-----------------------------------------------------------------------------
     /// 初期化
     /// 
+    /// ID3D12Device* [in] DX12デバイス
+    /// ID3D12GraphicsCommandList* [in] DX12コマンドリスト
+    /// 
     /// \return bool
     //-----------------------------------------------------------------------------
-    bool Init();
+    bool Init(
+        /*[in]*/ ID3D12Device* _pDev ,
+        /*[in]*/ ID3D12GraphicsCommandList* _pCommandList);
 
     //-----------------------------------------------------------------------------
     /// 更新処理
@@ -106,6 +111,9 @@ private:
     ID3D12Resource* m_pConstantBuffer[FRAME_COUNT];
     ID3D12RootSignature* m_pRootSignature;
     ID3D12PipelineState* m_pPipelineState;
+
+    ID3D12Device* m_pDevice = nullptr;
+    ID3D12GraphicsCommandList* m_pCommandList = nullptr;
 
     uint32_t m_frameIndex;
 

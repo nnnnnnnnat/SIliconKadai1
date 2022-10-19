@@ -28,13 +28,6 @@ public:
     // public methods
 
     //-----------------------------------------------------------------------------
-    /// インスタンス取得
-    /// 
-    /// \return SystemDirectX12&
-    //-----------------------------------------------------------------------------
-    static DX12Graphics& GetInstance();
-
-    //-----------------------------------------------------------------------------
     /// 初期化
     /// 
     /// \param [in] hWnd ウィンドウハンドル
@@ -145,7 +138,7 @@ private:
     D3D12_CPU_DESCRIPTOR_HANDLE	m_HandleRTV[FRAME_COUNT];
     D3D12_CPU_DESCRIPTOR_HANDLE	m_HandleDSV;
 
-    float m_backGroundColor[4] = { 0.2f , 0.2f , 0.2f , 1.0f };
+    float m_backGroundColor[4] = { 0.5f , 1.0f , 0.5f , 1.0f };
 
     ///<
     /// m_pDevice デバイス

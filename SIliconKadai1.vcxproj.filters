@@ -28,6 +28,12 @@
     <Filter Include="DX12">
       <UniqueIdentifier>{6c2d75a2-f379-437a-85a6-18e4e24e3e67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OpenGL">
+      <UniqueIdentifier>{bf54d851-5e2a-4191-adce-6d8df89a56fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{88c6f8dc-4158-4c24-9ab5-fcdf8efb72e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -72,6 +78,18 @@
     <ClInclude Include="code\Game\Game_Device.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="code\Game\Game_Input.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Game\Game_Camera.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="code\OpenGL\OpenGL_Graphics.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Math\Math_Quartanion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -105,6 +123,18 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="code\Game\Game_LayerMgr.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Game\Game_Input.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="code\OpenGL\OpenGL_Graphics.cpp">
+      <Filter>OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Math\Math_Quartanion.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Game\Game_Camera.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
