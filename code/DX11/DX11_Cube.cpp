@@ -7,22 +7,12 @@
 #include "DX11_Cube.h"
 #include "DX11_Graphics.h"
 
-bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext) {
+bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , GameCube _cube) {
 
     HRESULT hr;
     m_pDevice = _pDev;
     m_pDeviceContext = _pDevContext;
-    DirectX::XMFLOAT4 color = { 1.0f , 1.0f , 1.0f , 1.0f };
-
-    // uv座標格納
-    std::array<DirectX::XMFLOAT2 , 4> uc;
-    uc[0] = { 0.0f , 0.0f };
-    uc[1] = { 0.0f , 1.0f };
-    uc[2] = { 1.0f , 0.0f };
-    uc[3] = { 1.0f , 1.0f };
-
-    // 頂点に情報を格納していく
-    m_cube = CubeIdentify();
+    m_cube = _cube;
 
     //-----------------------------
     // 頂点バッファ作成
@@ -34,7 +24,7 @@ bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext) {
     vbDesc.Usage = D3D11_USAGE_DEFAULT;	// 作成するバッファの使用法
     vbDesc.CPUAccessFlags = 0;
 
-    D3D11_SUBRESOURCE_DATA initData = { &m_cube[0] , sizeof(m_cube) , 0 }; // 書き込むデータ
+    D3D11_SUBRESOURCE_DATA initData = { &m_cube.GetCubevertex()[0] , sizeof(m_cube.GetCubevertex()) , 0 }; // 書き込むデータ
     // 頂点バッファの作成
     hr = m_pDevice->CreateBuffer(&vbDesc , &initData , &m_pVertexBuffer);
     if (FAILED(hr)) { // if
@@ -196,30 +186,13 @@ void DX11Cube::Draw() {
         MessageBox(nullptr , "CreateBuffer" , "" , MB_OK);
     }
 
-    // カメラの座標を回転させる
-    static float s_angle = 0.0f;
-    s_angle += 1.0f;
-    if (s_angle >= 360.0f) {
-        s_angle -= 360.0f;
-    }
     DirectX::XMMATRIX worldMatlix = DirectX::XMMatrixTranslation(0.0f , 0.0f , 0.0f);
-    DirectX::XMVECTOR eye = { sinf(DirectX::XMConvertToRadians(s_angle)) * 5.0f ,
-        2.0f ,
-        cosf(DirectX::XMConvertToRadians(s_angle)) * 5.0f , 0.0f };
-    DirectX::XMVECTOR focus = { 0.0f , 0.0f , 0.0f , 0.0f };
-    DirectX::XMVECTOR up = { 0.0f , 1.0f , 0.0f , 0.0f };
 
     // 左手座標系で設定
-    DirectX::XMMATRIX viewMatrix = DirectX::XMMatrixLookAtLH(eye , focus , up);
-
-    // カメラ(仮)を設定
-    constexpr float fov = DirectX::XMConvertToRadians(35.0f);
-    float aspect = 1280.0f / 720.0f;
-    float nearz = 0.1f;
-    float farz = 100.0f;
+    DirectX::XMMATRIX viewMatrix = GameCamera::GetInstance().GetViewMatrix();
 
     DirectX::XMMATRIX projectionMatrix =
-        DirectX::XMMatrixPerspectiveFovLH(fov , aspect , nearz , farz);
+        GameCamera::GetInstance().GetProjectionMatrix();
 
     ConstantBuffer constBuffer;
 
@@ -260,6 +233,6 @@ void DX11Cube::Draw() {
     m_pDeviceContext->RSSetViewports(1 , &m_viewport);
 
     // 描画
-    m_pDeviceContext->Draw(m_cube.size() , 0);
+    m_pDeviceContext->Draw(m_cube.GetCubevertex().size() , 0);
 }
 

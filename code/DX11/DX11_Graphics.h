@@ -96,7 +96,7 @@ private:
     //-----------------------------------------------------------------------------
 
     ComPtr<ID3D11Device> m_pDevice;
-    ComPtr<ID3D11DeviceContext> m_PdeviceContext;
+    ComPtr<ID3D11DeviceContext> m_pDeviceContext;
     ComPtr<IDXGISwapChain> m_pSwapChain;
     ComPtr<ID3D11RenderTargetView> m_pBackBufferView;
     D3D11_VIEWPORT m_viewport;

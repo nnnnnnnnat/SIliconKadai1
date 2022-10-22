@@ -5,15 +5,16 @@
 //==============================================================================
 
 #include "DX12_Cube.h"
+
 #include <iostream>
 
 using namespace std;
 using namespace DirectX;
 
-bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandList) {
+bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandList , GameCube _cube) {
 
     HRESULT hr;
-
+    m_cube = _cube;
     m_pDevice = _pDev;
     m_pCommandList = _pCommandList;
     // 頂点バッファの生成
@@ -22,7 +23,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
         Vertex vertices[36];
         VertexCube cube = CubeIdentify();
         for (int i = 0; i < cube.size(); i++) {
-            vertices[i] = cube[i];
+            vertices[i] = m_cube.GetCubevertex()[i];
         }
 
         // ヒーププロパティ
@@ -252,18 +253,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
                 return false;
             }
 
-            // カメラ設定
-            auto eyePos = XMVectorSet(-4.0f , 4.0 , -6.0f , 0.0f);
-            auto targetPos = XMVectorZero();
-            auto upward = XMVectorSet(0.0f , 1.0f , 0.0f , 0.0f);
 
-            constexpr float fovY = XMConvertToRadians(37.5f);
-            auto aspect = static_cast<float>( SCREEN_WIDTH ) / static_cast<float>( SCREEN_HEIGHT );
-
-            // 変換行列の設定
-            m_constantBufferView[i].pBuffer->World = XMMatrixIdentity();
-            m_constantBufferView[i].pBuffer->View = XMMatrixLookAtRH(eyePos , targetPos , upward);
-            m_constantBufferView[i].pBuffer->Proj = XMMatrixPerspectiveFovRH(fovY , aspect , 1.0f , 1000.0f);
         }
     }
 
@@ -569,12 +559,17 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
 
 void DX12Cube::Update(const uint32_t frameindex) {
     m_frameIndex = frameindex;
-
-    m_rotateAngle += 0.025f;
-    m_constantBufferView[m_frameIndex].pBuffer->World = XMMatrixRotationY(m_rotateAngle);
+    m_constantBufferView[m_frameIndex].pBuffer->World = DirectX::XMMATRIX();
 }
 
 void DX12Cube::Draw() {
+
+    for (auto i = 0; i < FRAME_COUNT; ++i) {
+
+        m_constantBufferView[i].pBuffer->View = GameCamera::GetInstance().GetViewMatrix();
+        m_constantBufferView[i].pBuffer->Proj = GameCamera::GetInstance().GetProjectionMatrix();
+
+    }
 
     m_pCommandList->SetGraphicsRootSignature(m_pRootSignature);
     m_pCommandList->SetDescriptorHeaps(1 , &m_pHeapCBV);

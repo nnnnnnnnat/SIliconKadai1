@@ -4,7 +4,6 @@
 /// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
-
 #include "DX11_Graphics.h"
 
 #include <windows.h>
@@ -52,7 +51,7 @@ bool DX11Graphics::Init(HWND _hWnd) {
         D3D11_SDK_VERSION ,
         &m_pDevice ,
         &featureLevel ,
-        &m_PdeviceContext);
+        &m_pDeviceContext);
     if (FAILED(hr)) { // if
         return false;
     }
@@ -105,7 +104,7 @@ bool DX11Graphics::Init(HWND _hWnd) {
     }
 
     // バックバッファをRTとしてセット
-    m_PdeviceContext->OMSetRenderTargets(1 ,
+    m_pDeviceContext->OMSetRenderTargets(1 ,
         m_pBackBufferView.GetAddressOf() ,
         nullptr);
 
@@ -117,14 +116,14 @@ bool DX11Graphics::Init(HWND _hWnd) {
         0.0f ,
         1.0f };
 
-    m_PdeviceContext->RSSetViewports(1 , &m_viewport);
+    m_pDeviceContext->RSSetViewports(1 , &m_viewport);
 
     return true;
 }
 
 void DX11Graphics::BeforeRender() {
     // 背景色設定
-    m_PdeviceContext->ClearRenderTargetView(m_pBackBufferView.Get() , m_backGroundColor);
+    m_pDeviceContext->ClearRenderTargetView(m_pBackBufferView.Get() , m_backGroundColor);
 }
 
 void DX11Graphics::AfterRender() {
@@ -133,8 +132,8 @@ void DX11Graphics::AfterRender() {
 }
 
 void DX11Graphics::Release() {
-    if (m_PdeviceContext) { // if
-        m_PdeviceContext->ClearState();
+    if (m_pDeviceContext) { // if
+        m_pDeviceContext->ClearState();
     }
     if (m_pSwapChain) { // if
         m_pSwapChain->SetFullscreenState(false , nullptr);
@@ -146,7 +145,7 @@ ID3D11Device* DX11Graphics::GetDXDevice() const {
 }
 
 ID3D11DeviceContext* DX11Graphics::GetDeviceContext() const {
-    return m_PdeviceContext.Get();
+    return m_pDeviceContext.Get();
 }
 
 IDXGISwapChain* DX11Graphics::GetSwapChain() const {

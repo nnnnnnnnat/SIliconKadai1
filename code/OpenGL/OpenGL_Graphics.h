@@ -4,36 +4,39 @@
 #pragma comment(lib, "glu32.lib")
 
 #include <windows.h>
-#include	<gl/gl.h>
-#include	<gl/glu.h>
-
-struct Position_GL {
-    float x;
-    float y;
-    float z;
-};
-
-struct Color_GL {
-    float r;
-    float g;
-    float b;
-};
-
-struct Vertex_GL {
-    Position_GL postion;
-    Color_GL color;
-};
+#include <gl/gl.h>
+#include <gl/glu.h>
 
 class OpenGL {
 public:
 
-    static bool Initialize(HWND hwnd);
-    static bool Update();
-    static bool Draw();
-    static bool Finalize();
+    bool Init(HWND hwnd);
+    bool Update();
+    bool Draw();
+    void BeforeRender();
+    void AfterRender();
+    void Release();
 
 private:
-    static HDC m_hdc;
-    static Vertex_GL m_vertex[24];
+
+    struct Position {
+        float x;
+        float y;
+        float z;
+    };
+
+    struct Color {
+        float r;
+        float g;
+        float b;
+    };
+
+    struct Vertex_GL {
+        Position postion;
+        Color color;
+    };
+
+    HDC m_hdc;
+    Vertex_GL m_vertex[24];
 
 };

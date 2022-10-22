@@ -62,6 +62,7 @@ private:
     // private methods
 
     //-----------------------------------------------------------------------------
+    GameCube m_cube;
     DX11Cube m_dx11Cube;
     DX12Cube m_dx12Cube;
     GameDevice* m_pGameDevice = nullptr;

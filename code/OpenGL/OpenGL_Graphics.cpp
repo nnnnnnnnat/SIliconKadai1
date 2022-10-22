@@ -1,9 +1,6 @@
 #include "OpenGL_Graphics.h"
 
-HDC OpenGL::m_hdc;
-Vertex_GL OpenGL::m_vertex[24];
-
-bool OpenGL::Initialize(HWND hwnd) {
+bool OpenGL::Init(HWND hwnd) {
     m_hdc = GetDC(hwnd);
 
     PIXELFORMATDESCRIPTOR pfd = { sizeof(PIXELFORMATDESCRIPTOR) ,
@@ -127,6 +124,20 @@ bool OpenGL::Draw() {
     return false;
 }
 
-bool OpenGL::Finalize() {
-    return false;
+void OpenGL::BeforeRender() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void OpenGL::AfterRender() {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_TEXTURE_2D);
+
+    glFlush();
+    SwapBuffers(m_hdc);
+
+}
+
+void OpenGL::Release() {
+
 }

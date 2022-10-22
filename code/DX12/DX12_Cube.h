@@ -11,6 +11,9 @@
 
 #include "DX12_Graphics.h"
 
+#include "../Game/Game_Camera.h"
+#include "../Game/Game_Cube.h"
+
 template<typename T>
 struct ConstantBufferView {
     D3D12_CONSTANT_BUFFER_VIEW_DESC Desc;
@@ -65,7 +68,8 @@ public:
     //-----------------------------------------------------------------------------
     bool Init(
         /*[in]*/ ID3D12Device* _pDev ,
-        /*[in]*/ ID3D12GraphicsCommandList* _pCommandList);
+        /*[in]*/ ID3D12GraphicsCommandList* _pCommandList ,
+        /*[in]*/ GameCube _cube);
 
     //-----------------------------------------------------------------------------
     /// 更新処理
@@ -79,6 +83,8 @@ public:
 
     //-----------------------------------------------------------------------------
     /// 描画
+    /// 
+    /// _camera [in] カメラの情報
     /// 
     /// \return void
     //-----------------------------------------------------------------------------
@@ -124,7 +130,7 @@ private:
     ConstantBufferView<Transform> m_constantBufferView[FRAME_COUNT];
     Texture m_texture;
 
-    float m_rotateAngle;
+    GameCube m_cube;
 
     ///<
     /// m_pHeapCBV ディスクリプタヒープ
@@ -143,7 +149,7 @@ private:
     /// m_constantBufferView 定数バッファビュー
     /// m_texture テクスチャデータ
     /// 
-    /// m_rotateAngle 回転角
+    /// m_cube キューブの情報
     //-----------------------------------------------------------------------------
 
 };

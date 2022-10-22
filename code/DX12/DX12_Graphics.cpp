@@ -382,8 +382,8 @@ void DX12Graphics::BeforeRender() {
     // レンダーターゲットの設定
     m_pCmdList->OMSetRenderTargets(1 , &m_HandleRTV[m_FrameIndex] , FALSE , &m_HandleDSV);
 
-    //// レンダーターゲットビューをクリア
-    //m_pCmdList->ClearRenderTargetView(m_HandleRTV[m_FrameIndex] , m_backGroundColor , 0 , nullptr);
+    // レンダーターゲットビューをクリア
+    m_pCmdList->ClearRenderTargetView(m_HandleRTV[m_FrameIndex] , m_backGroundColor , 0 , nullptr);
 
     // 深度ステンシルビューをクリア
     m_pCmdList->ClearDepthStencilView(m_HandleDSV , D3D12_CLEAR_FLAG_DEPTH , 1.0f , 0 , 0 , nullptr);

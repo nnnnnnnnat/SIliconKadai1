@@ -46,7 +46,6 @@ bool GameLayerMgr::Init(HWND _hWnd) {
         m_deviceHashMap[m_renderName[(int)RendererType::DirectX11]].swap(p);
     }
 
-
     return true;
 }
 

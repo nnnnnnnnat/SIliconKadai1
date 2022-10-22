@@ -8,6 +8,10 @@
 
 #include "../../framework.h"
 
+#include "../Game/Game_Camera.h"
+
+#include "../Game/Game_Cube.h"
+
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
@@ -25,12 +29,14 @@ public:
     /// 
     /// \param [in] _pDev DX11のデバイス
     /// \param [in] _pDevContext DX11のデバイスコンテキスト
+    /// \param [in] _cube  
     /// 
     /// \return bool
     //-----------------------------------------------------------------------------
     bool Init(
         ID3D11Device* _pDev ,
-        ID3D11DeviceContext* _pDevContext);
+        ID3D11DeviceContext* _pDevContext ,
+        GameCube _cube);
 
     //-----------------------------------------------------------------------------
     /// 描画
@@ -42,7 +48,6 @@ public:
     //-----------------------------------------------------------------------------
 
 private:
-
     //-----------------------------------------------------------------------------
     // private methods
 
@@ -56,7 +61,7 @@ private:
     ID3D11Device* m_pDevice = nullptr;
     ID3D11DeviceContext* m_pDeviceContext = nullptr;
 
-    VertexCube m_cube;
+    GameCube m_cube;
     //-----------------------------------------------------------------------------
 
     ///<
@@ -65,6 +70,10 @@ private:
     /// m_pInputLayout 入力レイアウト
     /// m_pVertexBuffer 頂点バッファ
     /// m_pShaderResourceView シェーダーリソースビュー
+    /// 
+    /// m_pDevice　DirectX11のデバイス
+    /// m_pDeviceContext DirectX11のデバイスコンテキスト
+    /// 
     /// m_cube キューブ表示をする変数
     ///<
 

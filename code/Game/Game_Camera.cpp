@@ -1,39 +1,39 @@
 #include "Game_Camera.h"
 
-C_Camera& C_Camera::GetInstance() {
-    static C_Camera instance;
+GameCamera& GameCamera::GetInstance() {
+    static GameCamera instance;
     return instance;
 }
 
-void C_Camera::Init(const float nearclip , const float farclip ,
+void GameCamera::Init(const float nearclip , const float farclip ,
     const float fov , const float width , const float height ,
-    const XMFLOAT3 eye , const XMFLOAT3 lookat , const XMFLOAT3 up) {
+    const XMFLOAT4& eye , const XMFLOAT4& lookat , const XMFLOAT4& up) {
     SetProjection(nearclip , farclip , fov , width , height);
     SetCamera(eye , lookat , up);
 }
 
-void C_Camera::Update() {
+void GameCamera::Update() {
     CreateCameraMatrix();
     CreateProjectionMatrix();
 }
 
-void C_Camera::SetNear(float nearclip) {
+void GameCamera::SetNear(float nearclip) {
     m_near = nearclip;
 }
 
-void C_Camera::SetFar(float farclip) {
+void GameCamera::SetFar(float farclip) {
     m_far = farclip;
 }
 
-void C_Camera::SetFov(float fov) {
+void GameCamera::SetFov(float fov) {
     m_fov = fov;
 }
 
-void C_Camera::SetAspect(float width , float height) {
+void GameCamera::SetAspect(float width , float height) {
     m_aspect = width / height;
 }
 
-void C_Camera::SetProjection(float nearclip , float farclip , float fov , float width , float height) {
+void GameCamera::SetProjection(float nearclip , float farclip , float fov , float width , float height) {
     SetNear(nearclip);
     SetFar(farclip);
     SetFov(fov);
@@ -41,7 +41,7 @@ void C_Camera::SetProjection(float nearclip , float farclip , float fov , float 
     CreateProjectionMatrix();
 }
 
-void C_Camera::SetCamera(const XMFLOAT3& eye , const XMFLOAT3& lookat , const XMFLOAT3& up) {
+void GameCamera::SetCamera(const XMFLOAT4& eye , const XMFLOAT4& lookat , const XMFLOAT4& up) {
 
     SetEye(eye);
     SetLookat(lookat);
@@ -49,29 +49,29 @@ void C_Camera::SetCamera(const XMFLOAT3& eye , const XMFLOAT3& lookat , const XM
     CreateCameraMatrix();
 }
 
-void C_Camera::SetEye(const XMFLOAT3& eye) {
-    m_Eye = eye;
+void GameCamera::SetEye(const XMFLOAT4& eye) {
+    m_eye = eye;
 }
 
-void C_Camera::SetLookat(const XMFLOAT3& lookat) {
-    m_Lookat = lookat;
+void GameCamera::SetLookat(const XMFLOAT4& lookat) {
+    m_lookat = lookat;
 }
 
-void C_Camera::SetUp(const XMFLOAT3& up) {
-    m_Up = up;
+void GameCamera::SetUp(const XMFLOAT4& up) {
+    m_up = up;
 }
 
-void C_Camera::CreateCameraMatrix() {
-    ALIGN16 XMVECTOR Eye = XMVectorSet(m_Eye.x , m_Eye.y , m_Eye.z , 0.0f);
-    ALIGN16 XMVECTOR At = XMVectorSet(m_Lookat.x , m_Lookat.y , m_Lookat.z , 0.0f);
-    ALIGN16 XMVECTOR Up = XMVectorSet(m_Up.x , m_Up.y , m_Up.z , 0.0f);
+void GameCamera::CreateCameraMatrix() {
+    ALIGN16 XMVECTOR Eye = XMVectorSet(m_eye.x , m_eye.y , m_eye.z , 0.0f);
+    ALIGN16 XMVECTOR At = XMVectorSet(m_lookat.x , m_lookat.y , m_lookat.z , 0.0f);
+    ALIGN16 XMVECTOR Up = XMVectorSet(m_up.x , m_up.y , m_up.z , 0.0f);
 
     XMMATRIX r_mtx;
     m_viewMtx = XMMatrixLookAtLH(Eye , At , Up);
 
 }
 
-void C_Camera::CreateProjectionMatrix() {
+void GameCamera::CreateProjectionMatrix() {
 
     ALIGN16 XMMATRIX projection;
 
@@ -79,10 +79,38 @@ void C_Camera::CreateProjectionMatrix() {
 
 }
 
-const XMMATRIX& C_Camera::GetViewMatrix() {
+const XMMATRIX GameCamera::GetViewMatrix() {
     return m_viewMtx;
 }
 
-const XMMATRIX& C_Camera::GetProjectionMatrix() {
+const XMMATRIX GameCamera::GetProjectionMatrix() {
     return m_projectionMtx;
+}
+
+const XMFLOAT4 GameCamera::GetPos() {
+    return m_eye;
+}
+
+const XMFLOAT4 GameCamera::GetLookAt() {
+    return m_lookat;
+}
+
+const XMFLOAT4 GameCamera::GetUpVector() {
+    return m_up;
+}
+
+const float GameCamera::GetNearClip() {
+    return m_near;
+}
+
+const float GameCamera::GetFarClip() {
+    return m_far;
+}
+
+const float GameCamera::GetAspect() {
+    return m_aspect;
+}
+
+const float GameCamera::GetFov() {
+    return m_fov;
 }
