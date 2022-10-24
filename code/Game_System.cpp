@@ -13,6 +13,8 @@
 
 #include "DX12/DX12_Graphics.h"
 
+#include "OpenGL/OpenGL_Graphics.h"
+
 GameSystem& GameSystem::GetInstance() {
     static GameSystem instance;
     return instance;
@@ -28,7 +30,7 @@ void GameSystem::Initialize(HWND _hWnd) {
         45.0f ,
         SCREEN_WIDTH ,
         SCREEN_HEIGHT ,
-        XMFLOAT4(0.0f , 2.0f , -2.0f , 0.0f) ,
+        XMFLOAT4(0.0f , 3.0f , -5.0f , 0.0f) ,
         XMFLOAT4(0.0f , 0.0f , 0.0f , 0.0f) ,
         XMFLOAT4(0.0f , 1.0f , 0.0f , 0.0f)
     );
@@ -41,11 +43,13 @@ void GameSystem::Initialize(HWND _hWnd) {
     DX11Sampler::GetInstance()->Set(dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDeviceContext() , DX11Sampler::Sampler_Mode::WRAP);
 
     // ÉLÉÖÅ[Éuèâä˙âª
-    m_dx11Cube.Init(dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDXDevice() , dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDeviceContext() , m_cube);
+    m_dx11Cube.Init(dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDXDevice() , dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDeviceContext() , &m_cube);
 
     m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX12);
 
-    m_dx12Cube.Init(dynamic_cast<DX12Graphics*>( m_pGameDevice )->GetDevice() , dynamic_cast<DX12Graphics*>( m_pGameDevice )->GetCommandList() , m_cube);
+    m_dx12Cube.Init(dynamic_cast<DX12Graphics*>( m_pGameDevice )->GetDevice() , dynamic_cast<DX12Graphics*>( m_pGameDevice )->GetCommandList() , &m_cube);
+
+    m_glCube.Init(&m_cube);
 
     switch (m_rendererType) {
     case GameLayerMgr::RendererType::DirectX11:
@@ -58,30 +62,32 @@ void GameSystem::Initialize(HWND _hWnd) {
         m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX12);
 
         break;
+    case GameLayerMgr::RendererType::OpenGL:
+
+        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::OpenGL);
+
+        break;
     }
+
     GameInput::Init();
 }
 
 void GameSystem::Update() {
     GameInput::Update();
-    if (GameInput::GetKeyTrigger(VK_F1)) {
-        if (m_rendererType != GameLayerMgr::RendererType::DirectX11) {
-            m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX11);
-            m_rendererType = GameLayerMgr::RendererType::DirectX11;
-        }
-    }
-    if (GameInput::GetKeyTrigger(VK_F2)) {
-        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX12);
-        m_rendererType = GameLayerMgr::RendererType::DirectX12;
-    }
     switch (m_rendererType) {
     case GameLayerMgr::RendererType::DirectX11:
+
+        m_dx11Cube.Update();
 
         break;
     case GameLayerMgr::RendererType::DirectX12:
 
         m_dx12Cube.Update(dynamic_cast<DX12Graphics*>( m_pGameDevice )->SystemGetFrameIndex());
 
+        break;
+
+    case GameLayerMgr::RendererType::OpenGL:
+        m_glCube.Update();
         break;
     }
 }
@@ -99,6 +105,12 @@ void GameSystem::Draw() {
     case GameLayerMgr::RendererType::DirectX12:
 
         m_dx12Cube.Draw();
+
+        break;
+
+    case GameLayerMgr::RendererType::OpenGL:
+
+        m_glCube.Draw();
 
         break;
     }

@@ -101,16 +101,12 @@ private:
     ComPtr<ID3D11RenderTargetView> m_pBackBufferView;
     D3D11_VIEWPORT m_viewport;
 
-    float m_backGroundColor[4] = { 1.0f , 0.5f , 0.5f , 1.0f };
-
     ///<
     /// m_pDevice デバイス
     /// m_pDeviceContext デバイスコンテキスト
     /// m_pSwapChain スワップチェイン
     /// m_pBackBufferView レンダーターゲットビュー
     /// m_viewport ビューポート
-    /// m_width バックバッファの横の大きさ 
-    /// m_height バックバッファの縦の大きさ 
     ///
 
     //-----------------------------------------------------------------------------

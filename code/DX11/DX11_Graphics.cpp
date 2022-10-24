@@ -123,7 +123,7 @@ bool DX11Graphics::Init(HWND _hWnd) {
 
 void DX11Graphics::BeforeRender() {
     // ”wŒiFÝ’è
-    m_pDeviceContext->ClearRenderTargetView(m_pBackBufferView.Get() , m_backGroundColor);
+    m_pDeviceContext->ClearRenderTargetView(m_pBackBufferView.Get() , m_backColor);
 }
 
 void DX11Graphics::AfterRender() {

@@ -1,6 +1,7 @@
 #include "Game_LayerMgr.h"
 #include "../DX11/DX11_Graphics.h"
 #include "../DX12/DX12_Graphics.h"
+#include "../OpenGL/OpenGL_Graphics.h"
 
 GameLayerMgr& GameLayerMgr::GetInstance() {
     static GameLayerMgr instance;
@@ -9,6 +10,26 @@ GameLayerMgr& GameLayerMgr::GetInstance() {
 
 
 bool GameLayerMgr::Init(HWND _hWnd) {
+
+
+    // DX11Device çÏê¨
+    {
+        std::unique_ptr<GameDevice> p;
+
+        p = std::make_unique<DX11Graphics>();
+
+        bool sts = p->Init(_hWnd);
+
+        if (!sts) {
+            if (!sts) {
+                MessageBox(NULL , "DX11Graphics Init" , "Error" , MB_OK);
+            }
+            return false;
+        }
+
+        m_deviceHashMap[m_renderName[(int)RendererType::DirectX11]].swap(p);
+    }
+
 
     // DX12Device çÏê¨
     {
@@ -28,22 +49,22 @@ bool GameLayerMgr::Init(HWND _hWnd) {
         m_deviceHashMap[m_renderName[(int)RendererType::DirectX12]].swap(p);
     }
 
-    // DX11Device çÏê¨
+    // OpenGLèâä˙âª
     {
         std::unique_ptr<GameDevice> p;
 
-        p = std::make_unique<DX11Graphics>();
+        p = std::make_unique<OpenGLGraphics>();
 
         bool sts = p->Init(_hWnd);
 
         if (!sts) {
             if (!sts) {
-                MessageBox(NULL , "DX11Graphics Init" , "Error" , MB_OK);
+                MessageBox(NULL , "OpenGLGraphics Init" , "Error" , MB_OK);
             }
             return false;
         }
 
-        m_deviceHashMap[m_renderName[(int)RendererType::DirectX11]].swap(p);
+        m_deviceHashMap[m_renderName[(int)RendererType::OpenGL]].swap(p);
     }
 
     return true;

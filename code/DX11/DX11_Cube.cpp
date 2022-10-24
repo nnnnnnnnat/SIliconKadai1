@@ -7,7 +7,7 @@
 #include "DX11_Cube.h"
 #include "DX11_Graphics.h"
 
-bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , GameCube _cube) {
+bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , GameCube* _cube) {
 
     HRESULT hr;
     m_pDevice = _pDev;
@@ -18,13 +18,13 @@ bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , Ga
     // 頂点バッファ作成
     D3D11_BUFFER_DESC vbDesc = {};
     vbDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER; // デバイスにバインドするときの種類(頂点バッファ、インデックスバッファ、定数バッファなど)
-    vbDesc.ByteWidth = sizeof(m_cube); // 作成するバッファのバイトサイズ
+    vbDesc.ByteWidth = sizeof(m_cube->GetCubevertex()); // 作成するバッファのバイトサイズ
     vbDesc.MiscFlags = 0; // その他のフラグ
     vbDesc.StructureByteStride = 0;	// 構造化バッファの場合、その構造体のサイズ
     vbDesc.Usage = D3D11_USAGE_DEFAULT;	// 作成するバッファの使用法
     vbDesc.CPUAccessFlags = 0;
 
-    D3D11_SUBRESOURCE_DATA initData = { &m_cube.GetCubevertex()[0] , sizeof(m_cube.GetCubevertex()) , 0 }; // 書き込むデータ
+    D3D11_SUBRESOURCE_DATA initData = { &m_cube->GetCubevertex()[0] , sizeof(m_cube->GetCubevertex()) , 0 }; // 書き込むデータ
     // 頂点バッファの作成
     hr = m_pDevice->CreateBuffer(&vbDesc , &initData , &m_pVertexBuffer);
     if (FAILED(hr)) { // if
@@ -166,6 +166,10 @@ bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , Ga
     return true;
 }
 
+void DX11Cube::Update() {
+    m_cube->Update();
+}
+
 void DX11Cube::Draw() {
 
     HRESULT hr;
@@ -186,7 +190,10 @@ void DX11Cube::Draw() {
         MessageBox(nullptr , "CreateBuffer" , "" , MB_OK);
     }
 
-    DirectX::XMMATRIX worldMatlix = DirectX::XMMatrixTranslation(0.0f , 0.0f , 0.0f);
+
+    DirectX::XMMATRIX worldMatlix = DirectX::XMMatrixIdentity();
+    DirectX::XMFLOAT4X4 mtx = m_cube->GetMatrix();
+    worldMatlix = DirectX::XMLoadFloat4x4(&mtx);
 
     // 左手座標系で設定
     DirectX::XMMATRIX viewMatrix = GameCamera::GetInstance().GetViewMatrix();
@@ -233,6 +240,6 @@ void DX11Cube::Draw() {
     m_pDeviceContext->RSSetViewports(1 , &m_viewport);
 
     // 描画
-    m_pDeviceContext->Draw(m_cube.GetCubevertex().size() , 0);
+    m_pDeviceContext->Draw(m_cube->GetCubevertex().size() , 0);
 }
 

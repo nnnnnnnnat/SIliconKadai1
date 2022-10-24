@@ -29,14 +29,21 @@ public:
     /// 
     /// \param [in] _pDev DX11のデバイス
     /// \param [in] _pDevContext DX11のデバイスコンテキスト
-    /// \param [in] _cube  
+    /// \param [in] _cube 描画するキューブのポインタ
     /// 
     /// \return bool
     //-----------------------------------------------------------------------------
     bool Init(
         ID3D11Device* _pDev ,
         ID3D11DeviceContext* _pDevContext ,
-        GameCube _cube);
+        GameCube* _cube);
+
+    //-----------------------------------------------------------------------------
+    /// 更新処理
+    /// 
+    /// \return void
+    //-----------------------------------------------------------------------------
+    void Update();
 
     //-----------------------------------------------------------------------------
     /// 描画
@@ -61,7 +68,7 @@ private:
     ID3D11Device* m_pDevice = nullptr;
     ID3D11DeviceContext* m_pDeviceContext = nullptr;
 
-    GameCube m_cube;
+    GameCube* m_cube;
     //-----------------------------------------------------------------------------
 
     ///<

@@ -383,7 +383,7 @@ void DX12Graphics::BeforeRender() {
     m_pCmdList->OMSetRenderTargets(1 , &m_HandleRTV[m_FrameIndex] , FALSE , &m_HandleDSV);
 
     // レンダーターゲットビューをクリア
-    m_pCmdList->ClearRenderTargetView(m_HandleRTV[m_FrameIndex] , m_backGroundColor , 0 , nullptr);
+    m_pCmdList->ClearRenderTargetView(m_HandleRTV[m_FrameIndex] , m_backColor , 0 , nullptr);
 
     // 深度ステンシルビューをクリア
     m_pCmdList->ClearDepthStencilView(m_HandleDSV , D3D12_CLEAR_FLAG_DEPTH , 1.0f , 0 , 0 , nullptr);
@@ -428,12 +428,6 @@ ID3D12GraphicsCommandList* DX12Graphics::GetCommandList() {
 
 uint32_t DX12Graphics::SystemGetFrameIndex() {
     return m_FrameIndex;
-}
-
-void DX12Graphics::SetBackGroundColor(float _color[4]) {
-    for (int i = 0; i < 4; i++) {
-        m_backGroundColor[i] = _color[i];
-    }
 }
 
 void DX12Graphics::SystemWaitGPU() {

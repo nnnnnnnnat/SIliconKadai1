@@ -90,6 +90,9 @@
     <ClInclude Include="code\Math\Math_Quartanion.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="code\OpenGL\OpenGL_Cube.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -136,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="code\Game\Game_Camera.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="code\OpenGL\OpenGL_Cube.cpp">
+      <Filter>OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

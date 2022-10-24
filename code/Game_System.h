@@ -10,6 +10,7 @@
 
 #include "DX11/DX11_Cube.h"
 #include "DX12/DX12_Cube.h"
+#include "OpenGL/OpenGL_Cube.h"
 
 #include "Game/Game_Device.h"
 #include "Game/Game_LayerMgr.h"
@@ -65,6 +66,7 @@ private:
     GameCube m_cube;
     DX11Cube m_dx11Cube;
     DX12Cube m_dx12Cube;
+    OpenGLCube m_glCube;
     GameDevice* m_pGameDevice = nullptr;
     GameLayerMgr::RendererType m_rendererType = GameLayerMgr::RendererType::DirectX11;
     //-----------------------------------------------------------------------------

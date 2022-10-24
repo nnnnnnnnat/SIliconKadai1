@@ -61,15 +61,16 @@ public:
     //-----------------------------------------------------------------------------
     /// 初期化
     /// 
-    /// ID3D12Device* [in] DX12デバイス
-    /// ID3D12GraphicsCommandList* [in] DX12コマンドリスト
+    /// \param [in] _pDev DX12デバイス
+    /// \param [in] _pCommandList DX12コマンドリスト
+    /// \param [in] _cube 描画するキューブのポインタ
     /// 
     /// \return bool
     //-----------------------------------------------------------------------------
     bool Init(
         /*[in]*/ ID3D12Device* _pDev ,
         /*[in]*/ ID3D12GraphicsCommandList* _pCommandList ,
-        /*[in]*/ GameCube _cube);
+        /*[in]*/ GameCube* _cube);
 
     //-----------------------------------------------------------------------------
     /// 更新処理
@@ -130,7 +131,7 @@ private:
     ConstantBufferView<Transform> m_constantBufferView[FRAME_COUNT];
     Texture m_texture;
 
-    GameCube m_cube;
+    GameCube* m_cube;
 
     ///<
     /// m_pHeapCBV ディスクリプタヒープ

@@ -41,6 +41,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance ,
 
     MSG msg;
 
+    uint64_t current_time = 0;
+    uint64_t last_time = 0;
+
     // ゲームループ
     while (1) {
         if (PeekMessage(&msg , nullptr , 0 , 0 , PM_REMOVE)) { // if
@@ -53,6 +56,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance ,
                 DispatchMessage(&msg);
             }
         }
+
         GameSystem::GetInstance().Update();
         GameSystem::GetInstance().Draw();
 

@@ -14,6 +14,7 @@ public:
     enum class RendererType {
         DirectX11 ,
         DirectX12 ,
+        OpenGL ,
         max ,
     };
 
@@ -25,7 +26,8 @@ private:
 
     std::string m_renderName[(int)RendererType::max] = {
         "DirectX11" ,
-        "DirectX12"
+        "DirectX12" ,
+        "OpenGL" ,
     };
 
     std::unordered_map<std::string , std::unique_ptr<GameDevice>> m_deviceHashMap;

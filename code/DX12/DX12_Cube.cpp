@@ -11,7 +11,7 @@
 using namespace std;
 using namespace DirectX;
 
-bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandList , GameCube _cube) {
+bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandList , GameCube* _cube) {
 
     HRESULT hr;
     m_cube = _cube;
@@ -21,9 +21,8 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
     {
         // 頂点データ
         Vertex vertices[36];
-        VertexCube cube = CubeIdentify();
-        for (int i = 0; i < cube.size(); i++) {
-            vertices[i] = m_cube.GetCubevertex()[i];
+        for (int i = 0; i < m_cube->GetCubevertex().size(); i++) {
+            vertices[i] = m_cube->GetCubevertex()[i];
         }
 
         // ヒーププロパティ
@@ -558,8 +557,13 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
 }
 
 void DX12Cube::Update(const uint32_t frameindex) {
+    m_cube->Update();
     m_frameIndex = frameindex;
-    m_constantBufferView[m_frameIndex].pBuffer->World = DirectX::XMMATRIX();
+    DirectX::XMMATRIX m_mat = XMMatrixIdentity();
+    DirectX::XMFLOAT4X4 m_mtx = m_cube->GetMatrix();
+    m_mat = XMLoadFloat4x4(&m_mtx);
+    m_constantBufferView[m_frameIndex].pBuffer->World = m_mat;
+
 }
 
 void DX12Cube::Draw() {
