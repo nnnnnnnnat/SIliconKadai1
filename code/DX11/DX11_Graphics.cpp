@@ -118,6 +118,9 @@ bool DX11Graphics::Init(HWND _hWnd) {
 
     m_pDeviceContext->RSSetViewports(1 , &m_viewport);
 
+    DX11Sampler::GetInstance()->Init(m_pDevice.Get());
+    DX11Sampler::GetInstance()->Set(m_pDeviceContext.Get() , DX11Sampler::Sampler_Mode::WRAP);
+
     return true;
 }
 
@@ -128,7 +131,7 @@ void DX11Graphics::BeforeRender() {
 
 void DX11Graphics::AfterRender() {
     // バックバッファの内容を画面に表示
-    m_pSwapChain->Present(1 , 0);
+    m_pSwapChain->Present(0 , 0);
 }
 
 void DX11Graphics::Release() {

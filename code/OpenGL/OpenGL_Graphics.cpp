@@ -6,6 +6,8 @@ OpenGLGraphics& GetInstance() {
 }
 
 bool OpenGLGraphics::Init(HWND _hWnd) {
+
+
     m_hdc = GetDC(_hWnd);
 
     PIXELFORMATDESCRIPTOR pfd = { sizeof(PIXELFORMATDESCRIPTOR) ,

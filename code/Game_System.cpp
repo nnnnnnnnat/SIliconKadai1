@@ -22,8 +22,6 @@ GameSystem& GameSystem::GetInstance() {
 
 void GameSystem::Initialize(HWND _hWnd) {
 
-    m_cube.Init(1.0f);
-
     GameCamera::GetInstance().Init(
         1.0f ,
         1000.0f ,
@@ -37,35 +35,33 @@ void GameSystem::Initialize(HWND _hWnd) {
 
     GameLayerMgr::GetInstance().Init(_hWnd);
 
-    m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX11);
-
-    DX11Sampler::GetInstance()->Init(dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDXDevice());
-    DX11Sampler::GetInstance()->Set(dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDeviceContext() , DX11Sampler::Sampler_Mode::WRAP);
-
-    // キューブ初期化
-    m_dx11Cube.Init(dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDXDevice() , dynamic_cast<DX11Graphics*>( m_pGameDevice )->GetDeviceContext() , &m_cube);
-
-    m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX12);
-
-    m_dx12Cube.Init(dynamic_cast<DX12Graphics*>( m_pGameDevice )->GetDevice() , dynamic_cast<DX12Graphics*>( m_pGameDevice )->GetCommandList() , &m_cube);
-
-    m_glCube.Init(&m_cube);
-
-    switch (m_rendererType) {
+    switch (m_rendererType) { // switch
     case GameLayerMgr::RendererType::DirectX11:
 
-        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX11);
+        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(m_rendererType);
+        m_cube = new DX11Cube();
+        m_cube->Init(m_pGameDevice);
+        SetWindowTextA(_hWnd , "DirectX11");
 
         break;
     case GameLayerMgr::RendererType::DirectX12:
 
-        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::DirectX12);
+        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(m_rendererType);
+        m_cube = new DX12Cube();
+        m_cube->Init(m_pGameDevice);
+        SetWindowTextA(_hWnd , "DirectX12");
 
         break;
     case GameLayerMgr::RendererType::OpenGL:
 
-        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(GameLayerMgr::RendererType::OpenGL);
+        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(m_rendererType);
+        m_cube = new OpenGLCube();
+        m_cube->Init(m_pGameDevice);
+        SetWindowTextA(_hWnd , "OpenGL");
 
+        break;
+    default:
+        MessageBoxA(nullptr , "初期化 失敗" , "" , MB_OK);
         break;
     }
 
@@ -73,47 +69,26 @@ void GameSystem::Initialize(HWND _hWnd) {
 }
 
 void GameSystem::Update() {
+
     GameInput::Update();
-    switch (m_rendererType) {
-    case GameLayerMgr::RendererType::DirectX11:
 
-        m_dx11Cube.Update();
+    // ↓に更新処理を入れる
 
-        break;
-    case GameLayerMgr::RendererType::DirectX12:
+    m_cube->Update(m_pGameDevice);
 
-        m_dx12Cube.Update(dynamic_cast<DX12Graphics*>( m_pGameDevice )->SystemGetFrameIndex());
+    // ↑に更新処理を入れる
 
-        break;
-
-    case GameLayerMgr::RendererType::OpenGL:
-        m_glCube.Update();
-        break;
-    }
 }
 
 void GameSystem::Draw() {
 
     m_pGameDevice->BeforeRender();
 
-    switch (m_rendererType) {
-    case GameLayerMgr::RendererType::DirectX11:
+    // ↓に描画処理を入れる
 
-        m_dx11Cube.Draw();
+    m_cube->Draw();
 
-        break;
-    case GameLayerMgr::RendererType::DirectX12:
-
-        m_dx12Cube.Draw();
-
-        break;
-
-    case GameLayerMgr::RendererType::OpenGL:
-
-        m_glCube.Draw();
-
-        break;
-    }
+    // ↑に描画処理を入れる
 
     m_pGameDevice->AfterRender();
 

@@ -7,28 +7,28 @@
 #include "DX11_Cube.h"
 #include "DX11_Graphics.h"
 
-bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , GameCube* _cube) {
+bool DX11Cube::Init(GameDevice* _pDevice) {
 
     HRESULT hr;
-    m_pDevice = _pDev;
-    m_pDeviceContext = _pDevContext;
-    m_cube = _cube;
+    InitCube();
+    m_pDevice = dynamic_cast<DX11Graphics*>( _pDevice )->GetDXDevice();
+    m_pDeviceContext = dynamic_cast<DX11Graphics*>( _pDevice )->GetDeviceContext();
 
     //-----------------------------
     // 頂点バッファ作成
     D3D11_BUFFER_DESC vbDesc = {};
     vbDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER; // デバイスにバインドするときの種類(頂点バッファ、インデックスバッファ、定数バッファなど)
-    vbDesc.ByteWidth = sizeof(m_cube->GetCubevertex()); // 作成するバッファのバイトサイズ
+    vbDesc.ByteWidth = sizeof(GetCubeVertex()); // 作成するバッファのバイトサイズ
     vbDesc.MiscFlags = 0; // その他のフラグ
     vbDesc.StructureByteStride = 0;	// 構造化バッファの場合、その構造体のサイズ
     vbDesc.Usage = D3D11_USAGE_DEFAULT;	// 作成するバッファの使用法
     vbDesc.CPUAccessFlags = 0;
 
-    D3D11_SUBRESOURCE_DATA initData = { &m_cube->GetCubevertex()[0] , sizeof(m_cube->GetCubevertex()) , 0 }; // 書き込むデータ
+    D3D11_SUBRESOURCE_DATA initData = { &GetCubeVertex()[0] , sizeof(GetCubeVertex()) , 0 }; // 書き込むデータ
     // 頂点バッファの作成
     hr = m_pDevice->CreateBuffer(&vbDesc , &initData , &m_pVertexBuffer);
     if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateBuffer" , "" , MB_OK);
+        MessageBoxA(nullptr , "CreateBuffer" , "" , MB_OK);
         return false;
     }
 
@@ -45,7 +45,7 @@ bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , Ga
         &compiledVS ,
         nullptr);
     if (FAILED(hr)) { // if
-        MessageBox(nullptr , "vs" , "" , MB_OK);
+        MessageBoxA(nullptr , "vs" , "" , MB_OK);
         return false;
     }
 
@@ -62,7 +62,7 @@ bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , Ga
         &compiledPS ,
         nullptr);
     if (FAILED(hr)) { // if
-        MessageBox(nullptr , "ps" , "" , MB_OK);
+        MessageBoxA(nullptr , "ps" , "" , MB_OK);
         return false;
     }
 
@@ -72,7 +72,7 @@ bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , Ga
         nullptr ,
         &m_pVertexShader);
     if (FAILED(hr)) { // if
-        MessageBox(nullptr , "vx create" , "" , MB_OK);
+        MessageBoxA(nullptr , "vx create" , "" , MB_OK);
         return false;
     }
 
@@ -82,7 +82,7 @@ bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , Ga
         nullptr ,
         &m_pPixelShader);
     if (FAILED(hr)) { // if
-        MessageBox(nullptr , "ps create" , "" , MB_OK);
+        MessageBoxA(nullptr , "ps create" , "" , MB_OK);
         return false;
     }
 
@@ -101,18 +101,15 @@ bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , Ga
 
     // 頂点インプットレイアウト作成
     if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateInputLayout" , "" , MB_OK);
+        MessageBoxA(nullptr , "CreateInputLayout" , "" , MB_OK);
         return false;
     }
 
     // テクスチャ作成
-
-    const int iPixSize = 32;// 縦横ピクセル数
-
     Microsoft::WRL::ComPtr<ID3D11Texture2D> D3DTexture;
     D3D11_TEXTURE2D_DESC td;
-    td.Width = iPixSize;
-    td.Height = iPixSize;
+    td.Width = TEXTURE_SIZE_X;
+    td.Height = TEXTURE_SIZE_Y;
     td.MipLevels = 1;
     td.ArraySize = 1;
     td.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -125,32 +122,26 @@ bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , Ga
 
     hr = m_pDevice->CreateTexture2D(&td , nullptr , &D3DTexture);
     if (FAILED(hr)) { // if
-        MessageBox(nullptr , "CreateTexture2D" , "" , MB_OK);
+        MessageBoxA(nullptr , "CreateTexture2D" , "" , MB_OK);
         return false;
     }
 
     //テクスチャ書き替え
     D3D11_MAPPED_SUBRESOURCE msr;
-    _pDevContext->Map(D3DTexture.Get() , 0 , D3D11_MAP_WRITE_DISCARD , 0 , &msr);
+    m_pDeviceContext->Map(D3DTexture.Get() , 0 , D3D11_MAP_WRITE_DISCARD , 0 , &msr);
 
-    byte srcData[iPixSize * iPixSize * 4] = { 0 };// ビットマップを黒で初期化
-    for (int i = 0; i < iPixSize * iPixSize * 4; i += 4) {
-        if (i % 32 >= 0 && i % 32 < 16) {
-            if (i % 8 == 0) { // if
-                srcData[i] = 255;// Red
-                srcData[i + 1] = 255;// Green
-                srcData[i + 2] = 255;// Blue
-            }
-        }
-        else if (i % 8 == 4) { // else if
-            srcData[i] = 255;// Red
-            srcData[i + 1] = 255;// Green
-            srcData[i + 2] = 255;// Blue
+    byte srcData[TEXTURE_SIZE_X * TEXTURE_SIZE_Y * 4] = { 0 };// ビットマップを黒で初期化
+    for (int y = 0; y < TEXTURE_SIZE_Y; y++) {
+        for (int x = 0; x < TEXTURE_SIZE_X; x++) {
+            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + 0] = GetColorMap(x , y , 0);
+            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + 1] = GetColorMap(x , y , 1);
+            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + 2] = GetColorMap(x , y , 2);
+            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + 3] = 255;
         }
     }
     memcpy(msr.pData , srcData , sizeof(srcData));
 
-    _pDevContext->Unmap(D3DTexture.Get() , 0);
+    m_pDeviceContext->Unmap(D3DTexture.Get() , 0);
 
     //シェーダリソースビューの作成
     D3D11_SHADER_RESOURCE_VIEW_DESC srv = {};
@@ -159,15 +150,15 @@ bool DX11Cube::Init(ID3D11Device* _pDev , ID3D11DeviceContext* _pDevContext , Ga
     srv.Texture2D.MipLevels = 1;
     hr = m_pDevice->CreateShaderResourceView(D3DTexture.Get() , &srv , &m_pShaderResourceView);
     if (FAILED(hr)) {
-        MessageBox(nullptr , "CreateShaderResourceView" , "" , MB_OK);
+        MessageBoxA(nullptr , "CreateShaderResourceView" , "" , MB_OK);
         return false;
     }
 
     return true;
 }
 
-void DX11Cube::Update() {
-    m_cube->Update();
+void DX11Cube::Update(GameDevice* _pDevice) {
+    RotateMatrix();
 }
 
 void DX11Cube::Draw() {
@@ -187,12 +178,12 @@ void DX11Cube::Draw() {
     hr = m_pDevice->CreateBuffer(&constantBufferDesc , nullptr , &cb);
 
     if (FAILED(hr)) {
-        MessageBox(nullptr , "CreateBuffer" , "" , MB_OK);
+        MessageBoxA(nullptr , "CreateBuffer" , "" , MB_OK);
     }
 
 
     DirectX::XMMATRIX worldMatlix = DirectX::XMMatrixIdentity();
-    DirectX::XMFLOAT4X4 mtx = m_cube->GetMatrix();
+    DirectX::XMFLOAT4X4 mtx = GetMatrix();
     worldMatlix = DirectX::XMLoadFloat4x4(&mtx);
 
     // 左手座標系で設定
@@ -239,7 +230,13 @@ void DX11Cube::Draw() {
         1.0f };
     m_pDeviceContext->RSSetViewports(1 , &m_viewport);
 
+    cb->Release();
+
     // 描画
-    m_pDeviceContext->Draw(m_cube->GetCubevertex().size() , 0);
+    m_pDeviceContext->Draw((unsigned int)GetCubeVertex().size() , 0);
+}
+
+void DX11Cube::Release() {
+
 }
 

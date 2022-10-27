@@ -3,7 +3,16 @@
 #include "framework.h"
 #include "Application.h"
 
+#include <stdio.h>
+
+#include <Windows.h>
+
+#include <timeapi.h>
+
 #include "code/Game_System.h"
+
+#pragma comment (lib,"winmm.lib")
+
 
 #define MAX_LOADSTRING 100
 
@@ -56,9 +65,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance ,
                 DispatchMessage(&msg);
             }
         }
+        unsigned long start = timeGetTime();
 
         GameSystem::GetInstance().Update();
         GameSystem::GetInstance().Draw();
+
+        unsigned long last = timeGetTime();
+        unsigned long sleeptime = 16 - (int)( last - start );
+        Sleep(16 - (int)( last - start ));
 
     }
 

@@ -10,6 +10,6 @@ public:
     virtual void BeforeRender() = 0;
     virtual void AfterRender() = 0;
 protected:
-    float m_backColor[4] = { 0.2f , 0.0f , 0.0f , 1.0f };
+    float m_backColor[4] = { 0.5f , 0.5f , 0.5f , 1.0f };
 };
 

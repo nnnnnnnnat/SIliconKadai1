@@ -53,7 +53,7 @@ struct Texture {
     ///<
 };
 
-class DX12Cube {
+class DX12Cube : public GameCube {
 public:
     //-----------------------------------------------------------------------------
     // public method
@@ -61,26 +61,21 @@ public:
     //-----------------------------------------------------------------------------
     /// 初期化
     /// 
-    /// \param [in] _pDev DX12デバイス
-    /// \param [in] _pCommandList DX12コマンドリスト
-    /// \param [in] _cube 描画するキューブのポインタ
+    /// \param [in] _pDevice 表示するAPIのポインタ
     /// 
     /// \return bool
     //-----------------------------------------------------------------------------
-    bool Init(
-        /*[in]*/ ID3D12Device* _pDev ,
-        /*[in]*/ ID3D12GraphicsCommandList* _pCommandList ,
-        /*[in]*/ GameCube* _cube);
+    bool Init(GameDevice* _pDevice);
 
     //-----------------------------------------------------------------------------
     /// 更新処理
     /// 
-    /// uint32_t [in] frameindex フレーム番号
+    /// \param [in] _pDevice 表示するAPIのポインタ
     /// 
     /// \return void
     //-----------------------------------------------------------------------------
     void Update(
-        /*[in]*/ const uint32_t frameindex);
+        /*[in]*/ GameDevice* _pDevice);
 
     //-----------------------------------------------------------------------------
     /// 描画
@@ -131,8 +126,6 @@ private:
     ConstantBufferView<Transform> m_constantBufferView[FRAME_COUNT];
     Texture m_texture;
 
-    GameCube* m_cube;
-
     ///<
     /// m_pHeapCBV ディスクリプタヒープ
     /// m_pIndexBuffer インデックスバッファ
@@ -149,8 +142,6 @@ private:
     /// m_scissor シザー矩形
     /// m_constantBufferView 定数バッファビュー
     /// m_texture テクスチャデータ
-    /// 
-    /// m_cube キューブの情報
     //-----------------------------------------------------------------------------
 
 };

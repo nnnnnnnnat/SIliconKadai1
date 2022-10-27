@@ -11,7 +11,6 @@ GameLayerMgr& GameLayerMgr::GetInstance() {
 
 bool GameLayerMgr::Init(HWND _hWnd) {
 
-
     // DX11Device çÏê¨
     {
         std::unique_ptr<GameDevice> p;
@@ -22,7 +21,7 @@ bool GameLayerMgr::Init(HWND _hWnd) {
 
         if (!sts) {
             if (!sts) {
-                MessageBox(NULL , "DX11Graphics Init" , "Error" , MB_OK);
+                MessageBoxA(NULL , "DX11Graphics Init" , "Error" , MB_OK);
             }
             return false;
         }
@@ -41,7 +40,7 @@ bool GameLayerMgr::Init(HWND _hWnd) {
 
         if (!sts) {
             if (!sts) {
-                MessageBox(NULL , "DX12Graphics Init" , "Error" , MB_OK);
+                MessageBoxA(NULL , "DX12Graphics Init" , "Error" , MB_OK);
             }
             return false;
         }
@@ -59,7 +58,7 @@ bool GameLayerMgr::Init(HWND _hWnd) {
 
         if (!sts) {
             if (!sts) {
-                MessageBox(NULL , "OpenGLGraphics Init" , "Error" , MB_OK);
+                MessageBoxA(NULL , "OpenGLGraphics Init" , "Error" , MB_OK);
             }
             return false;
         }

@@ -10,6 +10,7 @@
 
 #include "../../framework.h"
 #include "../Game/Game_Device.h"
+#include "DX11_Sampler.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")

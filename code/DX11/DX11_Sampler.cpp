@@ -31,7 +31,7 @@ void DX11Sampler::Init(ID3D11Device* _pDev) {
         // サンプラーステート生成
         HRESULT hr = _pDev->CreateSamplerState(&smpDesc , &m_samplerState[i]);
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateSamplerState" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateSamplerState" , "" , MB_OK);
         }
     }
 }

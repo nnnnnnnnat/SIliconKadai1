@@ -6,23 +6,34 @@
 
 #include "DX12_Cube.h"
 
+#include "../Game/Game_Device.h"
+
 #include <iostream>
 
 using namespace std;
 using namespace DirectX;
 
-bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandList , GameCube* _cube) {
+//-----------------------------------------------------------------------------
+/// 初期化
+/// 
+/// \param [in] _pDevice 表示するAPIのデバイスのポインタ
+/// 
+/// \return bool
+//-----------------------------------------------------------------------------
+bool DX12Cube::Init(
+    /*[in]*/ GameDevice* _pDevice) {
 
-    HRESULT hr;
-    m_cube = _cube;
-    m_pDevice = _pDev;
-    m_pCommandList = _pCommandList;
+    InitCube();
+
+    m_pDevice = dynamic_cast<DX12Graphics*>( _pDevice )->GetDevice();
+    m_pCommandList = dynamic_cast<DX12Graphics*>( _pDevice )->GetCommandList();
+
     // 頂点バッファの生成
     {
         // 頂点データ
-        Vertex vertices[36];
-        for (int i = 0; i < m_cube->GetCubevertex().size(); i++) {
-            vertices[i] = m_cube->GetCubevertex()[i];
+        Vertex vertices[36] = {};
+        for (int i = 0; i < GetCubeVertex().size(); i++) {
+            vertices[i] = GetCubeVertex()[i];
         }
 
         // ヒーププロパティ
@@ -59,7 +70,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
             IID_PPV_ARGS(&m_pVertexBuffer));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateCommittedResource" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateCommittedResource" , "" , MB_OK);
             return false;
         }
 
@@ -85,15 +96,6 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
 
     // インデックスバッファの生成
     {
-        //uint32_t indices[] =
-        //{
-        //    0 , 1 , 2 , 3 , 2 , 1 ,
-        //    4 , 5 , 6 , 7 , 6 , 5 ,
-        //    8 , 9 , 10 , 11 , 10 , 9 ,
-        //    12 , 13 , 14 , 15 , 14 , 13 ,
-        //    16 , 17 , 18 , 19 , 18 , 17 ,
-        //    20 , 21 , 22 , 23 , 22 , 21 ,
-        //};
         uint32_t indices[36];
         for (int i = 0; i < 36; i++) {
             indices[i] = i;
@@ -133,7 +135,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
             IID_PPV_ARGS(&m_pIndexBuffer));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateCommittedResource" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateCommittedResource" , "" , MB_OK);
             return false;
         }
 
@@ -142,7 +144,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
         hr = m_pIndexBuffer->Map(0 , nullptr , &ptr);
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "Map" , "" , MB_OK);
+            MessageBoxA(nullptr , "Map" , "" , MB_OK);
             return false;
         }
 
@@ -173,7 +175,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
             IID_PPV_ARGS(&m_pHeapCBV));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
             return false;
         }
     }
@@ -219,7 +221,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
                 IID_PPV_ARGS(&m_pConstantBuffer[i]));
 
             if (FAILED(hr)) {
-                MessageBox(nullptr , "CreateCommittedResource" , "" , MB_OK);
+                MessageBoxA(nullptr , "CreateCommittedResource" , "" , MB_OK);
                 return false;
             }
 
@@ -248,7 +250,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
                 reinterpret_cast<void**>( &m_constantBufferView[i].pBuffer ));
 
             if (FAILED(hr)) {
-                MessageBox(nullptr , "Map" , "" , MB_OK);
+                MessageBoxA(nullptr , "Map" , "" , MB_OK);
                 return false;
             }
 
@@ -322,7 +324,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
             &pErrorBlob);
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "D3D12SerializeRootSignature" , "" , MB_OK);
+            MessageBoxA(nullptr , "D3D12SerializeRootSignature" , "" , MB_OK);
             return false;
         }
 
@@ -334,7 +336,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
             IID_PPV_ARGS(&m_pRootSignature));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateRootSignature" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateRootSignature" , "" , MB_OK);
             return false;
         }
     }
@@ -397,7 +399,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
         auto hr = D3DReadFileToBlob(L"shader/SimpleTexVS.cso" , &pVSBlob);
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "D3DReadFileToBlob VS" , "" , MB_OK);
+            MessageBoxA(nullptr , "D3DReadFileToBlob VS" , "" , MB_OK);
             return false;
         }
 
@@ -405,7 +407,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
         hr = D3DReadFileToBlob(L"shader/SimpleTexPS.cso" , &pPSBlob);
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "D3DReadFileToBlob PS" , "" , MB_OK);
+            MessageBoxA(nullptr , "D3DReadFileToBlob PS" , "" , MB_OK);
             return false;
         }
 
@@ -433,7 +435,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
             IID_PPV_ARGS(&m_pPipelineState));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateGraphicsPipelineState" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateGraphicsPipelineState" , "" , MB_OK);
             return false;
         }
     }
@@ -488,7 +490,7 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
             IID_PPV_ARGS(&m_texture.pResource));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateCommittedResource" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateCommittedResource" , "" , MB_OK);
             return false;
         }
 
@@ -498,23 +500,31 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
         box.bottom = k_Width;
         box.back = 1;
         uint32_t* p = (uint32_t*)malloc(k_Width * k_Width * sizeof(uint32_t));
-
+        const uint32_t red = 0xFFFF0000;
+        const uint32_t green = 0xFF00FF00;
+        const uint32_t blue = 0xFF0000FF;
         for (int i = 0; i < k_Width * k_Width; i++) {
             if (i / k_Width % 32 == 1 ||
                 i / k_Width % 32 == 3 ||
                 i / k_Width % 32 == 28 ||
                 i / k_Width % 32 == 30) {
-                p[i] = 0xFFFFFFFF;
+                if (p) {
+                    p[i] = red;
+                }
             }
             else {
                 if (i % k_Width == 1 ||
                     i % k_Width == 3 ||
                     i % k_Width == 28 ||
                     i % k_Width == 30) {
-                    p[i] = 0xFFFFFFFF;
+                    if (p) {
+                        p[i] = green;
+                    }
                 }
                 else {
-                    p[i] = 0xFF000000;
+                    if (p) {
+                        p[i] = blue;
+                    }
                 }
             }
         }
@@ -556,11 +566,11 @@ bool DX12Cube::Init(ID3D12Device* _pDev , ID3D12GraphicsCommandList* _pCommandLi
     return true;
 }
 
-void DX12Cube::Update(const uint32_t frameindex) {
-    m_cube->Update();
-    m_frameIndex = frameindex;
+void DX12Cube::Update(GameDevice* _pDevice) {
+    RotateMatrix();
+    m_frameIndex = dynamic_cast<DX12Graphics*>( _pDevice )->GetFrameIndex();
     DirectX::XMMATRIX m_mat = XMMatrixIdentity();
-    DirectX::XMFLOAT4X4 m_mtx = m_cube->GetMatrix();
+    DirectX::XMFLOAT4X4 m_mtx = GetMatrix();
     m_mat = XMLoadFloat4x4(&m_mtx);
     m_constantBufferView[m_frameIndex].pBuffer->World = m_mat;
 

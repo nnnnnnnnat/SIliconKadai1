@@ -30,7 +30,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         IID_PPV_ARGS(&m_pDevice));
 
     if (FAILED(hr)) {
-        MessageBox(nullptr , "D3D12CreateDevice" , "" , MB_OK);
+        MessageBoxA(nullptr , "D3D12CreateDevice" , "" , MB_OK);
         return false;
     }
 
@@ -53,7 +53,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         hr = m_pDevice->CreateCommandQueue(&desc , IID_PPV_ARGS(&m_pQueue));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateCommandQueue" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateCommandQueue" , "" , MB_OK);
             return false;
         }
     }
@@ -66,7 +66,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         hr = CreateDXGIFactory1(IID_PPV_ARGS(&pFactory));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateDXGIFactory1" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateDXGIFactory1" , "" , MB_OK);
             return false;
         }
 
@@ -123,7 +123,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         hr = pFactory->CreateSwapChain(m_pQueue.Get() , &desc , &pSwapChain);
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateSwapChain" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateSwapChain" , "" , MB_OK);
             return false;
         }
 
@@ -131,7 +131,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         hr = pSwapChain->QueryInterface(IID_PPV_ARGS(&m_pSwapChain));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "QueryInterface" , "" , MB_OK);
+            MessageBoxA(nullptr , "QueryInterface" , "" , MB_OK);
             return false;
         }
 
@@ -148,7 +148,7 @@ bool DX12Graphics::Init(HWND hWnd) {
                 IID_PPV_ARGS(&m_pCmdAllocator[i]));
 
             if (FAILED(hr)) {
-                MessageBox(nullptr , "CreateCommandAllocator" , "" , MB_OK);
+                MessageBoxA(nullptr , "CreateCommandAllocator" , "" , MB_OK);
                 return false;
             }
         }
@@ -164,7 +164,7 @@ bool DX12Graphics::Init(HWND hWnd) {
             IID_PPV_ARGS(&m_pCmdList));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateCommandList" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateCommandList" , "" , MB_OK);
             return false;
         }
     }
@@ -190,7 +190,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         hr = m_pDevice->CreateDescriptorHeap(&desc , IID_PPV_ARGS(&m_pHeadRTV));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
             return false;
         }
 
@@ -201,7 +201,7 @@ bool DX12Graphics::Init(HWND hWnd) {
             hr = m_pSwapChain->GetBuffer(i , IID_PPV_ARGS(&m_pColorBuffer[i]));
 
             if (FAILED(hr)) {
-                MessageBox(nullptr , "GetBuffer" , "" , MB_OK);
+                MessageBoxA(nullptr , "GetBuffer" , "" , MB_OK);
                 return false;
             }
 
@@ -242,7 +242,7 @@ bool DX12Graphics::Init(HWND hWnd) {
             IID_PPV_ARGS(&m_pFence));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateFence" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateFence" , "" , MB_OK);
             return false;
         }
 
@@ -252,7 +252,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         m_FenceEvent = CreateEvent(nullptr , FALSE , FALSE , nullptr);
 
         if (m_FenceEvent == nullptr) {
-            MessageBox(nullptr , "m_FenceEvent" , "" , MB_OK);
+            MessageBoxA(nullptr , "m_FenceEvent" , "" , MB_OK);
             return false;
         }
     }
@@ -296,7 +296,7 @@ bool DX12Graphics::Init(HWND hWnd) {
             IID_PPV_ARGS(&m_pDepthBuffer));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateCommittedResource" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateCommittedResource" , "" , MB_OK);
             return false;
         }
 
@@ -313,7 +313,7 @@ bool DX12Graphics::Init(HWND hWnd) {
             IID_PPV_ARGS(&m_pHeapDSV));
 
         if (FAILED(hr)) {
-            MessageBox(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
+            MessageBoxA(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
             return false;
         }
 
@@ -426,7 +426,7 @@ ID3D12GraphicsCommandList* DX12Graphics::GetCommandList() {
     return m_pCmdList.Get();
 }
 
-uint32_t DX12Graphics::SystemGetFrameIndex() {
+uint32_t DX12Graphics::GetFrameIndex() {
     return m_FrameIndex;
 }
 
