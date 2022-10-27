@@ -1,7 +1,7 @@
 //==============================================================================
-// Filename: DX12_Cube.cpp
-// Description: DX12用 キューブ作成クラス
-// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+/// Filename: DX12_Cube.cpp
+/// Description: DX12用 キューブ作成クラス
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 #include "DX12_Cube.h"
@@ -13,15 +13,7 @@
 using namespace std;
 using namespace DirectX;
 
-//-----------------------------------------------------------------------------
-/// 初期化
-/// 
-/// \param [in] _pDevice 表示するAPIのデバイスのポインタ
-/// 
-/// \return bool
-//-----------------------------------------------------------------------------
-bool DX12Cube::Init(
-    /*[in]*/ GameDevice* _pDevice) {
+bool DX12Cube::Init(GameDevice* _pDevice) {
 
     InitCube();
 
@@ -32,7 +24,7 @@ bool DX12Cube::Init(
     {
         // 頂点データ
         Vertex vertices[36] = {};
-        for (int i = 0; i < GetCubeVertex().size(); i++) {
+        for (int i = 0; i < GetCubeVertex().size(); i++) { // for
             vertices[i] = GetCubeVertex()[i];
         }
 
@@ -69,7 +61,7 @@ bool DX12Cube::Init(
             nullptr ,
             IID_PPV_ARGS(&m_pVertexBuffer));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateCommittedResource" , "" , MB_OK);
             return false;
         }
@@ -78,7 +70,7 @@ bool DX12Cube::Init(
         void* ptr = nullptr;
         hr = m_pVertexBuffer->Map(0 , nullptr , &ptr);
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             return false;
         }
 
@@ -97,7 +89,7 @@ bool DX12Cube::Init(
     // インデックスバッファの生成
     {
         uint32_t indices[36];
-        for (int i = 0; i < 36; i++) {
+        for (int i = 0; i < 36; i++) { // for
             indices[i] = i;
         }
 
@@ -134,7 +126,7 @@ bool DX12Cube::Init(
             nullptr ,
             IID_PPV_ARGS(&m_pIndexBuffer));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateCommittedResource" , "" , MB_OK);
             return false;
         }
@@ -143,7 +135,7 @@ bool DX12Cube::Init(
         void* ptr = nullptr;
         hr = m_pIndexBuffer->Map(0 , nullptr , &ptr);
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "Map" , "" , MB_OK);
             return false;
         }
@@ -159,7 +151,6 @@ bool DX12Cube::Init(
         m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
         m_indexBufferView.SizeInBytes = sizeof(indices);
 
-
     }
 
     // 定数バッファ用ディスクリプタヒープの生成
@@ -174,7 +165,7 @@ bool DX12Cube::Init(
             &desc ,
             IID_PPV_ARGS(&m_pHeapCBV));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
             return false;
         }
@@ -210,7 +201,7 @@ bool DX12Cube::Init(
             D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
         );
 
-        for (auto i = 0; i < FRAME_COUNT; ++i) {
+        for (auto i = 0; i < FRAME_COUNT; ++i) { // for
             // リソースの生成
             auto hr = m_pDevice->CreateCommittedResource(
                 &prop ,
@@ -220,7 +211,7 @@ bool DX12Cube::Init(
                 nullptr ,
                 IID_PPV_ARGS(&m_pConstantBuffer[i]));
 
-            if (FAILED(hr)) {
+            if (FAILED(hr)) { // if
                 MessageBoxA(nullptr , "CreateCommittedResource" , "" , MB_OK);
                 return false;
             }
@@ -249,12 +240,10 @@ bool DX12Cube::Init(
                 nullptr ,
                 reinterpret_cast<void**>( &m_constantBufferView[i].pBuffer ));
 
-            if (FAILED(hr)) {
+            if (FAILED(hr)) { // if
                 MessageBoxA(nullptr , "Map" , "" , MB_OK);
                 return false;
             }
-
-
         }
     }
 
@@ -323,7 +312,7 @@ bool DX12Cube::Init(
             &pBlob ,
             &pErrorBlob);
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "D3D12SerializeRootSignature" , "" , MB_OK);
             return false;
         }
@@ -335,7 +324,7 @@ bool DX12Cube::Init(
             pBlob->GetBufferSize() ,
             IID_PPV_ARGS(&m_pRootSignature));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateRootSignature" , "" , MB_OK);
             return false;
         }
@@ -388,7 +377,7 @@ bool DX12Cube::Init(
         descBS.AlphaToCoverageEnable = FALSE;
         descBS.IndependentBlendEnable = FALSE;
 
-        for (UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i) {
+        for (UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i) { // for
             descBS.RenderTarget[i] = descRTBS;
         }
 
@@ -398,7 +387,7 @@ bool DX12Cube::Init(
         // 頂点シェーダ読み込み
         auto hr = D3DReadFileToBlob(L"shader/SimpleTexVS.cso" , &pVSBlob);
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "D3DReadFileToBlob VS" , "" , MB_OK);
             return false;
         }
@@ -406,7 +395,7 @@ bool DX12Cube::Init(
         // ピクセルシェーダ読み込み
         hr = D3DReadFileToBlob(L"shader/SimpleTexPS.cso" , &pPSBlob);
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "D3DReadFileToBlob PS" , "" , MB_OK);
             return false;
         }
@@ -434,7 +423,7 @@ bool DX12Cube::Init(
             &desc ,
             IID_PPV_ARGS(&m_pPipelineState));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateGraphicsPipelineState" , "" , MB_OK);
             return false;
         }
@@ -459,7 +448,6 @@ bool DX12Cube::Init(
     {
         D3D12_RESOURCE_DESC texDesc;
         D3D12_HEAP_PROPERTIES heapProp;
-        const UINT64 k_Width = 32;
 
         ZeroMemory(&texDesc , sizeof(texDesc));
         ZeroMemory(&heapProp , sizeof(heapProp));
@@ -472,8 +460,8 @@ bool DX12Cube::Init(
         heapProp.VisibleNodeMask = 0;
 
         texDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-        texDesc.Width = k_Width;
-        texDesc.Height = k_Width;
+        texDesc.Width = TEXTURE_SIZE_X;
+        texDesc.Height = TEXTURE_SIZE_Y;
         texDesc.DepthOrArraySize = 1;
         texDesc.MipLevels = 1;
         texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -489,48 +477,37 @@ bool DX12Cube::Init(
             nullptr ,
             IID_PPV_ARGS(&m_texture.pResource));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateCommittedResource" , "" , MB_OK);
             return false;
         }
 
         // テクスチャ更新
         D3D12_BOX box = { 0 };
-        box.right = k_Width;
-        box.bottom = k_Width;
+        box.right = TEXTURE_SIZE_X;
+        box.bottom = TEXTURE_SIZE_Y;
         box.back = 1;
-        uint32_t* p = (uint32_t*)malloc(k_Width * k_Width * sizeof(uint32_t));
-        const uint32_t red = 0xFFFF0000;
-        const uint32_t green = 0xFF00FF00;
-        const uint32_t blue = 0xFF0000FF;
-        for (int i = 0; i < k_Width * k_Width; i++) {
-            if (i / k_Width % 32 == 1 ||
-                i / k_Width % 32 == 3 ||
-                i / k_Width % 32 == 28 ||
-                i / k_Width % 32 == 30) {
-                if (p) {
-                    p[i] = red;
-                }
-            }
-            else {
-                if (i % k_Width == 1 ||
-                    i % k_Width == 3 ||
-                    i % k_Width == 28 ||
-                    i % k_Width == 30) {
-                    if (p) {
-                        p[i] = green;
-                    }
-                }
-                else {
-                    if (p) {
-                        p[i] = blue;
-                    }
+        uint32_t* p = (uint32_t*)malloc(TEXTURE_SIZE_X * TEXTURE_SIZE_Y * sizeof(uint32_t));
+
+        for (int y = 0; y < TEXTURE_SIZE_Y; y++) { // for
+            for (int x = 0; x < TEXTURE_SIZE_X; x++) { // for
+                uint32_t color = 0x00000000;
+
+                uint32_t a = ( (uint32_t)GetTexturePixelColor(x , y , 3) + 1 ) * 256 * 256 * 256 - ( 1 ) - ( 256 * 256 * 256 - 1 );
+                uint32_t r = ( (uint32_t)GetTexturePixelColor(x , y , 0) + 1 ) * 256 * 256 - ( 1 ) - ( 256 * 256 - 1 );
+                uint32_t g = ( (uint32_t)GetTexturePixelColor(x , y , 1) + 1 ) * 256 - ( 1 ) - ( 255 );
+                uint32_t b = ( (uint32_t)GetTexturePixelColor(x , y , 2) + 1 ) - ( 1 );
+
+                color += a + r + g + b;
+                if (p) { // if
+                    p[y * TEXTURE_SIZE_Y + x] = color;
                 }
             }
         }
 
-        m_texture.pResource->WriteToSubresource(0 , &box , p , 4 * k_Width , 4 * k_Width * k_Width);
-
+        if (p) {
+            m_texture.pResource->WriteToSubresource(0 , &box , p , 4 * TEXTURE_SIZE_X , 4 * TEXTURE_SIZE_X * TEXTURE_SIZE_Y);
+        }
         // インクリメントサイズを取得
         auto incrementSize = m_pDevice->GetDescriptorHandleIncrementSize(
             D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
@@ -607,10 +584,20 @@ void DX12Cube::Release() {
             memset(&m_constantBufferView[i] , 0 , sizeof(m_constantBufferView[i]));
         }
     }
+
+    m_pHeapCBV->Release();
+    m_pHeapCBV = nullptr;
+
+    m_pIndexBuffer->Release();
+    m_pIndexBuffer = nullptr;
+
+    m_pVertexBuffer->Release();
+    m_pVertexBuffer = nullptr;
+
     m_pRootSignature->Release();
     m_pRootSignature = nullptr;
-}
 
-void DX12Cube::SetPosition(const float x) {
-    m_constantBufferView->pBuffer->World = XMMatrixTranslation(x , 0 , 0);
+    m_pPipelineState->Release();
+    m_pPipelineState = nullptr;
+
 }

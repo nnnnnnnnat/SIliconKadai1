@@ -1,7 +1,7 @@
 //==============================================================================
 /// Filename: DX11_Sampler.h
 /// Description: サンプラー処理
-/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 #include "DX11_Sampler.h"
@@ -13,15 +13,15 @@ DX11Sampler* DX11Sampler::GetInstance() {
 
 void DX11Sampler::Init(ID3D11Device* _pDev) {
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++) { // for
         // 変数宣言してゼロメモリーする
         D3D11_SAMPLER_DESC smpDesc;
         ZeroMemory(&smpDesc , sizeof(smpDesc));
 
-        if (i % 2) {
+        if (i % 2) { // if
             smpDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
         }
-        else {
+        else { // else
             smpDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
         }
         smpDesc.AddressU = m_rappingMode[i];
@@ -30,7 +30,7 @@ void DX11Sampler::Init(ID3D11Device* _pDev) {
 
         // サンプラーステート生成
         HRESULT hr = _pDev->CreateSamplerState(&smpDesc , &m_samplerState[i]);
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateSamplerState" , "" , MB_OK);
         }
     }

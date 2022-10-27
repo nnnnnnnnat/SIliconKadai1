@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: Game_LayerMgr.h
+/// Description: 各APIの描画に必要なものを集めたクラス
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #pragma once
 
 #include <string>

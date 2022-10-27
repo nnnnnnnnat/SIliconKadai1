@@ -1,7 +1,7 @@
 //==============================================================================
 /// Filename: DX11_Cube.h
 /// Description: ボックス表示するクラス
-/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 #pragma once

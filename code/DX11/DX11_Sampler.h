@@ -1,7 +1,7 @@
 //==============================================================================
 /// Filename: DX11_Sampler.h
 /// Description: ƒTƒ“ƒvƒ‰[ˆ—
-/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 #pragma once

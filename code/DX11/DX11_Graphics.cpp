@@ -1,7 +1,7 @@
 //==============================================================================
 /// Filename: DX11_Graphics.cpp
 /// Description: DX11èâä˙âª
-/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 #include "DX11_Graphics.h"

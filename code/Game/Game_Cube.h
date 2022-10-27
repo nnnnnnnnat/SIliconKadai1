@@ -1,7 +1,7 @@
 //==============================================================================
-// Filename: GameCube.h
-// Description: キューブの普遍的なクラス
-// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+/// Filename: GameCube.h
+/// Description: キューブの抽象化クラス
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 #pragma once
@@ -105,7 +105,7 @@ public:
     /// 
     /// \return int
     //-----------------------------------------------------------------------------
-    unsigned char GetColorMap(
+    unsigned char GetTexturePixelColor(
         /*[in]*/ const int _x ,
         /*[in]*/ const int _y ,
         /*[in]*/ const int _color);
@@ -148,13 +148,14 @@ private:
     DirectX::XMFLOAT4X4 m_mtx;
     float m_angle[3];
     DirectX::XMFLOAT3 m_pos;
-    unsigned char m_textureColor[32][32][3];
+    unsigned char m_textureColor[32][32][4];
 
     ///<
     /// m_cubeVertex キューブの頂点座標を保持
     /// m_mtx 姿勢
     /// m_angle 回転
     /// m_pos 座標
+    /// m_textureColor テクスチャのピクセルごとの色情報
     ///<
 
     //-----------------------------------------------------------------------------

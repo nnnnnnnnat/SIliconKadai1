@@ -1,7 +1,7 @@
 //==============================================================================
-// Filename: DX12_Graphics.cpp
-// Description: DirectX12 クラス
-// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+/// Filename: DX12_Graphics.cpp
+/// Description: DirectX12 クラス
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 #include "DX12_Graphics.h"
@@ -29,7 +29,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         D3D_FEATURE_LEVEL_11_0 ,
         IID_PPV_ARGS(&m_pDevice));
 
-    if (FAILED(hr)) {
+    if (FAILED(hr)) { // if
         MessageBoxA(nullptr , "D3D12CreateDevice" , "" , MB_OK);
         return false;
     }
@@ -52,7 +52,7 @@ bool DX12Graphics::Init(HWND hWnd) {
 
         hr = m_pDevice->CreateCommandQueue(&desc , IID_PPV_ARGS(&m_pQueue));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateCommandQueue" , "" , MB_OK);
             return false;
         }
@@ -65,7 +65,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         ComPtr<IDXGIFactory4> pFactory = nullptr;
         hr = CreateDXGIFactory1(IID_PPV_ARGS(&pFactory));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateDXGIFactory1" , "" , MB_OK);
             return false;
         }
@@ -122,7 +122,7 @@ bool DX12Graphics::Init(HWND hWnd) {
 
         hr = pFactory->CreateSwapChain(m_pQueue.Get() , &desc , &pSwapChain);
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateSwapChain" , "" , MB_OK);
             return false;
         }
@@ -130,7 +130,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         //IDXGISwapChain3を取得
         hr = pSwapChain->QueryInterface(IID_PPV_ARGS(&m_pSwapChain));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "QueryInterface" , "" , MB_OK);
             return false;
         }
@@ -142,12 +142,12 @@ bool DX12Graphics::Init(HWND hWnd) {
 
     // コマンドアロケータの生成
     {
-        for (auto i = 0u; i < FRAME_COUNT; i++) {
+        for (auto i = 0u; i < FRAME_COUNT; i++) { // for
             hr = m_pDevice->CreateCommandAllocator(
                 D3D12_COMMAND_LIST_TYPE_DIRECT ,
                 IID_PPV_ARGS(&m_pCmdAllocator[i]));
 
-            if (FAILED(hr)) {
+            if (FAILED(hr)) { // if
                 MessageBoxA(nullptr , "CreateCommandAllocator" , "" , MB_OK);
                 return false;
             }
@@ -163,7 +163,7 @@ bool DX12Graphics::Init(HWND hWnd) {
             nullptr ,
             IID_PPV_ARGS(&m_pCmdList));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateCommandList" , "" , MB_OK);
             return false;
         }
@@ -189,7 +189,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         // ディスクリプタヒープの生成
         hr = m_pDevice->CreateDescriptorHeap(&desc , IID_PPV_ARGS(&m_pHeadRTV));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
             return false;
         }
@@ -197,10 +197,10 @@ bool DX12Graphics::Init(HWND hWnd) {
         auto handle = m_pHeadRTV->GetCPUDescriptorHandleForHeapStart();
         auto incrementSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
-        for (auto i = 0u; i < FRAME_COUNT; i++) {
+        for (auto i = 0u; i < FRAME_COUNT; i++) { // for
             hr = m_pSwapChain->GetBuffer(i , IID_PPV_ARGS(&m_pColorBuffer[i]));
 
-            if (FAILED(hr)) {
+            if (FAILED(hr)) { // if
                 MessageBoxA(nullptr , "GetBuffer" , "" , MB_OK);
                 return false;
             }
@@ -227,11 +227,10 @@ bool DX12Graphics::Init(HWND hWnd) {
         }
     }
 
-
     // フェンスの生成
     {
         // フェンスカウンターをリセット
-        for (auto i = 0u; i < FRAME_COUNT; i++) {
+        for (auto i = 0u; i < FRAME_COUNT; i++) { // for
             m_FenceCounter[i] = 0;
         }
 
@@ -241,7 +240,7 @@ bool DX12Graphics::Init(HWND hWnd) {
             D3D12_FENCE_FLAG_NONE ,
             IID_PPV_ARGS(&m_pFence));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateFence" , "" , MB_OK);
             return false;
         }
@@ -251,7 +250,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         // イベントの生成
         m_FenceEvent = CreateEvent(nullptr , FALSE , FALSE , nullptr);
 
-        if (m_FenceEvent == nullptr) {
+        if (m_FenceEvent == nullptr) { // if
             MessageBoxA(nullptr , "m_FenceEvent" , "" , MB_OK);
             return false;
         }
@@ -295,7 +294,7 @@ bool DX12Graphics::Init(HWND hWnd) {
             &clearValue ,
             IID_PPV_ARGS(&m_pDepthBuffer));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateCommittedResource" , "" , MB_OK);
             return false;
         }
@@ -312,7 +311,7 @@ bool DX12Graphics::Init(HWND hWnd) {
             &heapDesc ,
             IID_PPV_ARGS(&m_pHeapDSV));
 
-        if (FAILED(hr)) {
+        if (FAILED(hr)) { // if
             MessageBoxA(nullptr , "CreateDescriptorHeap" , "" , MB_OK);
             return false;
         }
@@ -343,7 +342,7 @@ void DX12Graphics::Release() {
     SystemWaitGPU();
 
     // イベント破棄
-    if (m_FenceEvent != nullptr) {
+    if (m_FenceEvent != nullptr) { // if
         CloseHandle(m_FenceEvent);
         m_FenceEvent = nullptr;
     }
@@ -457,7 +456,7 @@ void DX12Graphics::SystemPresent(uint32_t _interval) {
     m_FrameIndex = m_pSwapChain->GetCurrentBackBufferIndex();
 
     // 次のフレームの描画準備がまだであれば待機する
-    if (m_pFence->GetCompletedValue() < m_FenceCounter[m_FrameIndex]) {
+    if (m_pFence->GetCompletedValue() < m_FenceCounter[m_FrameIndex]) { // if
         m_pFence->SetEventOnCompletion(m_FenceCounter[m_FrameIndex] , m_FenceEvent);
         WaitForSingleObjectEx(m_FenceEvent , INFINITE , FALSE);
     }

@@ -10,10 +10,10 @@ bool OpenGLCube::Init(GameDevice* _pDevice) {
 
     for (int y = 0; y < TEXTURE_SIZE_Y; y++) {
         for (int x = 0; x < TEXTURE_SIZE_X; x++) {
-            tex[y * TEXTURE_SIZE_Y * 4 + x * 4 + 0] = GetColorMap(x , y , 0);
-            tex[y * TEXTURE_SIZE_Y * 4 + x * 4 + 1] = GetColorMap(x , y , 1);
-            tex[y * TEXTURE_SIZE_Y * 4 + x * 4 + 2] = GetColorMap(x , y , 2);
-            tex[y * TEXTURE_SIZE_Y * 4 + x * 4 + 3] = 255;
+            tex[y * TEXTURE_SIZE_Y * 4 + x * 4 + 0] = GetTexturePixelColor(x , y , 0);
+            tex[y * TEXTURE_SIZE_Y * 4 + x * 4 + 1] = GetTexturePixelColor(x , y , 1);
+            tex[y * TEXTURE_SIZE_Y * 4 + x * 4 + 2] = GetTexturePixelColor(x , y , 2);
+            tex[y * TEXTURE_SIZE_Y * 4 + x * 4 + 3] = GetTexturePixelColor(x , y , 3);
         }
     }
 

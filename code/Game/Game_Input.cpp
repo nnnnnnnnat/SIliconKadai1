@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: Game_Input.cpp
+/// Description: キーボードの情報を扱うクラス
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #include "Game_Input.h"
 
 BYTE GameInput::mKeyState[256];

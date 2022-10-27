@@ -1,7 +1,7 @@
 //==============================================================================
 /// Filename: DX11_Cube.cpp
 /// Description: ボックス表示するクラス
-/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 #include "DX11_Cube.h"
@@ -131,12 +131,18 @@ bool DX11Cube::Init(GameDevice* _pDevice) {
     m_pDeviceContext->Map(D3DTexture.Get() , 0 , D3D11_MAP_WRITE_DISCARD , 0 , &msr);
 
     byte srcData[TEXTURE_SIZE_X * TEXTURE_SIZE_Y * 4] = { 0 };// ビットマップを黒で初期化
-    for (int y = 0; y < TEXTURE_SIZE_Y; y++) {
-        for (int x = 0; x < TEXTURE_SIZE_X; x++) {
-            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + 0] = GetColorMap(x , y , 0);
-            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + 1] = GetColorMap(x , y , 1);
-            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + 2] = GetColorMap(x , y , 2);
-            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + 3] = 255;
+    enum {
+        R ,
+        G ,
+        B ,
+        A ,
+    };
+    for (int y = 0; y < TEXTURE_SIZE_Y; y++) { // for
+        for (int x = 0; x < TEXTURE_SIZE_X; x++) { // for
+            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + R] = GetTexturePixelColor(x , y , R);
+            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + G] = GetTexturePixelColor(x , y , G);
+            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + B] = GetTexturePixelColor(x , y , B);
+            srcData[y * TEXTURE_SIZE_Y * 4 + x * 4 + A] = GetTexturePixelColor(x , y , A);
         }
     }
     memcpy(msr.pData , srcData , sizeof(srcData));
@@ -149,7 +155,7 @@ bool DX11Cube::Init(GameDevice* _pDevice) {
     srv.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     srv.Texture2D.MipLevels = 1;
     hr = m_pDevice->CreateShaderResourceView(D3DTexture.Get() , &srv , &m_pShaderResourceView);
-    if (FAILED(hr)) {
+    if (FAILED(hr)) { // if
         MessageBoxA(nullptr , "CreateShaderResourceView" , "" , MB_OK);
         return false;
     }
@@ -177,21 +183,23 @@ void DX11Cube::Draw() {
 
     hr = m_pDevice->CreateBuffer(&constantBufferDesc , nullptr , &cb);
 
-    if (FAILED(hr)) {
+    if (FAILED(hr)) { // if
         MessageBoxA(nullptr , "CreateBuffer" , "" , MB_OK);
     }
 
-
+    // ワールド変換行列
     DirectX::XMMATRIX worldMatlix = DirectX::XMMatrixIdentity();
     DirectX::XMFLOAT4X4 mtx = GetMatrix();
     worldMatlix = DirectX::XMLoadFloat4x4(&mtx);
 
-    // 左手座標系で設定
+    // ビュー変換行列
     DirectX::XMMATRIX viewMatrix = GameCamera::GetInstance().GetViewMatrix();
 
+    // プロジェクション変換行列
     DirectX::XMMATRIX projectionMatrix =
         GameCamera::GetInstance().GetProjectionMatrix();
 
+    // 定数バッファ設定
     ConstantBuffer constBuffer;
 
     DirectX::XMStoreFloat4x4(&constBuffer.m_world ,
@@ -201,7 +209,9 @@ void DX11Cube::Draw() {
     DirectX::XMStoreFloat4x4(&constBuffer.m_projection ,
         DirectX::XMMatrixTranspose(projectionMatrix));
 
-    m_pDeviceContext->UpdateSubresource(cb , 0 , nullptr , &constBuffer , 0 , 0);
+    if (cb) {
+        m_pDeviceContext->UpdateSubresource(cb , 0 , nullptr , &constBuffer , 0 , 0);
+    }
 
     // 頂点バッファを描画で使えるようにセットする
     UINT stride = sizeof(Vertex);
@@ -212,16 +222,23 @@ void DX11Cube::Draw() {
         &stride ,
         &offset);
 
-    // プロミティブ・トポロジーをセット
+    //トポロジー セット
     m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    // 定数バッファセット
+    // 定数バッファ セット
     m_pDeviceContext->VSSetConstantBuffers(0 , 1 , &cb);
 
+    // シェーダー セット
     m_pDeviceContext->VSSetShader(m_pVertexShader.Get() , 0 , 0);
     m_pDeviceContext->PSSetShader(m_pPixelShader.Get() , 0 , 0);
+
+    // インプットレイアウト セット
     m_pDeviceContext->IASetInputLayout(m_pInputLayout.Get());
+
+    // シェーダーリソースビュー セット
     m_pDeviceContext->PSSetShaderResources(0 , 1 , m_pShaderResourceView.GetAddressOf());
+
+    // ビューポート設定
     D3D11_VIEWPORT m_viewport = { 0.0f ,
         0.0f ,
         (float)SCREEN_WIDTH ,
@@ -230,6 +247,7 @@ void DX11Cube::Draw() {
         1.0f };
     m_pDeviceContext->RSSetViewports(1 , &m_viewport);
 
+    // 定数バッファ 解放
     cb->Release();
 
     // 描画

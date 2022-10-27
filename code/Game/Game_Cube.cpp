@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: GameCube.cpp
+/// Description: キューブの抽象化クラス
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #include "Game_Cube.h"
 
 #include "Game_Input.h"
@@ -56,13 +62,6 @@ void GameCube::RotateMatrix() {
     }
 }
 
-//-----------------------------------------------------------------------------
-/// 回転 取得
-/// 
-/// \param [in] _axis 取得する軸 0ならX軸 1ならY軸 2ならZ軸
-/// 
-/// \return float
-//-----------------------------------------------------------------------------
 float GameCube::GetRotateAngle(int _axis) {
     switch (_axis) { // switch
     case 0: // X
@@ -78,8 +77,8 @@ float GameCube::GetRotateAngle(int _axis) {
     return 0.0f;
 }
 
-unsigned char GameCube::GetColorMap(int _x , int _y , int _color) {
-    if (_color >= 0 && _color <= 2) {
+unsigned char GameCube::GetTexturePixelColor(int _x , int _y , int _color) {
+    if (_color >= 0 && _color <= 3) {
         return m_textureColor[_y][_x][_color];
     }
     return 0;
@@ -92,6 +91,8 @@ void GameCube::ResetAngle() {
 }
 
 void GameCube::InitTextureColor() {
+
+    // 日の丸のテクスチャを作る
 
     const int table[32][2] = {
         { -1 , -1 } ,
@@ -134,14 +135,14 @@ void GameCube::InitTextureColor() {
                 m_textureColor[y][x][0] = 255;
                 m_textureColor[y][x][1] = 0;
                 m_textureColor[y][x][2] = 0;
+                m_textureColor[y][x][3] = 255;
             }
             else { // else
                 m_textureColor[y][x][0] = 255;
                 m_textureColor[y][x][1] = 255;
                 m_textureColor[y][x][2] = 255;
+                m_textureColor[y][x][3] = 255;
             }
         }
     }
-
-    int a;
 }
