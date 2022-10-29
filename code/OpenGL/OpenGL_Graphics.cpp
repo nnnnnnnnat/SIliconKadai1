@@ -7,7 +7,6 @@ OpenGLGraphics& GetInstance() {
 
 bool OpenGLGraphics::Init(HWND _hWnd) {
 
-
     m_hdc = GetDC(_hWnd);
 
     PIXELFORMATDESCRIPTOR pfd = { sizeof(PIXELFORMATDESCRIPTOR) ,
@@ -55,7 +54,7 @@ bool OpenGLGraphics::Init(HWND _hWnd) {
     DirectX::XMFLOAT4 pos = GameCamera::GetInstance().GetPos();
     DirectX::XMFLOAT4 lookat = GameCamera::GetInstance().GetLookAt();
     DirectX::XMFLOAT4 up = GameCamera::GetInstance().GetUpVector();
-    gluLookAt(pos.x , pos.y , pos.z ,
+    gluLookAt(pos.x , pos.y , -pos.z ,
         lookat.x , lookat.y , lookat.z ,
         up.x , up.y , up.z);
 

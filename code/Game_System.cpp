@@ -22,6 +22,7 @@ GameSystem& GameSystem::GetInstance() {
 
 void GameSystem::Initialize(HWND _hWnd) {
 
+    // カメラ情報 初期化
     GameCamera::GetInstance().Init(
         1.0f ,
         1000.0f ,
@@ -33,44 +34,46 @@ void GameSystem::Initialize(HWND _hWnd) {
         XMFLOAT4(0.0f , 1.0f , 0.0f , 0.0f)
     );
 
-    GameLayerMgr::GetInstance().Init(_hWnd);
+    // キーボードクラス初期化 ( Windows のみ対応)
+    GameInput::GetInstance().Init();
 
+    // 指定されたデバイスの初期化
+    m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(_hWnd , m_rendererType);
+
+    // デバイスに応じた各々の初期化
     switch (m_rendererType) { // switch
     case GameLayerMgr::RendererType::DirectX11:
 
-        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(m_rendererType);
         m_cube = new DX11Cube();
         m_cube->Init(m_pGameDevice);
-        SetWindowTextA(_hWnd , "DirectX11");
+        SetWindowTextA(_hWnd , "DirectX11で描画中");
 
         break;
     case GameLayerMgr::RendererType::DirectX12:
 
-        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(m_rendererType);
         m_cube = new DX12Cube();
         m_cube->Init(m_pGameDevice);
-        SetWindowTextA(_hWnd , "DirectX12");
+        SetWindowTextA(_hWnd , "DirectX12で描画中");
 
         break;
     case GameLayerMgr::RendererType::OpenGL:
 
-        m_pGameDevice = GameLayerMgr::GetInstance().GetDevicePtr(m_rendererType);
         m_cube = new OpenGLCube();
         m_cube->Init(m_pGameDevice);
-        SetWindowTextA(_hWnd , "OpenGL");
+        SetWindowTextA(_hWnd , "OpenGLで描画中");
 
         break;
     default:
-        MessageBoxA(nullptr , "初期化 失敗" , "" , MB_OK);
+
         break;
     }
 
-    GameInput::Init();
 }
 
 void GameSystem::Update() {
 
-    GameInput::Update();
+    // キーボードの更新
+    GameInput::GetInstance().Update();
 
     // ↓に更新処理を入れる
 
@@ -96,6 +99,13 @@ void GameSystem::Draw() {
 
 void GameSystem::Exit() {
 
-    GameLayerMgr::GetInstance().Release();
+    // デバイスの解放処理
+    m_pGameDevice->Release();
+
+    // ↓に解放処理を入れる
+
+    m_cube->Release();
+
+    // ↑に解放処理を入れる
 
 }

@@ -10,7 +10,7 @@
 
 using namespace std;
 
-bool DX12Graphics::Init(HWND hWnd) {
+bool DX12Graphics::Init(HWND _hWnd) {
 
 #if defined(DEBUG) || defined(_DEBUG)
     ID3D12Debug* debug;
@@ -106,7 +106,7 @@ bool DX12Graphics::Init(HWND hWnd) {
         desc.BufferCount = FRAME_COUNT;
 
         // 出力するウィンドウのウィンドウハンドル
-        desc.OutputWindow = hWnd;
+        desc.OutputWindow = _hWnd;
 
         // フルスクリーン指定
         desc.Windowed = TRUE;

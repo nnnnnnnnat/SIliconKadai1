@@ -17,14 +17,14 @@ public:
     //==============================================================================
     /// 行列の回転をクォータニオンで行う
     /// 
-    /// _mtx [out] 回転させたい行列
-    /// _angle [in] ３軸の回転角
+    /// \param  [out]   _mtx    回転させたい行列
+    /// \param  [in]    _angle  ３軸の回転角
     /// 
     /// \return void 
     //==============================================================================
     static void Calcurate(
-        /*[out]*/ DirectX::XMFLOAT4X4& _mtx ,
-        /*[in]*/const DirectX::XMFLOAT3& _angle);
+        /*[out]*/   DirectX::XMFLOAT4X4& _mtx ,
+        /*[in]*/    const DirectX::XMFLOAT3& _angle);
 
     //==============================================================================
 
@@ -32,66 +32,66 @@ private:
     //==============================================================================
     /// 行列からクォータニオンを作成
     /// 
-    /// _mtx [out] 行列
-    /// _qt [in] クオータニオン
+    /// \param  [in]    _mtx    行列
+    /// \param  [out]   _qt     クオータニオン
     /// 
     /// return void
     //==============================================================================
     static void GetQuartanionFromMatrix(
-        /*[out]*/ const DirectX::XMFLOAT4X4& _mtx ,
-        /*[in]*/ DirectX::XMFLOAT4& _qt);
+        /*[in]*/    const DirectX::XMFLOAT4X4& _mtx ,
+        /*[out]*/   DirectX::XMFLOAT4& _qt);
 
     //==============================================================================
     /// クォータニオンから行列を作成
     /// 
-    /// _mtx [in] 行列
-    /// _qt [out] クオータニオン
+    /// \param  [in]    _mtx    行列
+    /// \param  [out]   _qt     クオータニオン
     /// 
     /// return void
     //==============================================================================
     static void GetMatrixFromQuartanion(
-        /*[out]*/ DirectX::XMFLOAT4X4& _mtx ,
-        /*[]in*/ const DirectX::XMFLOAT4& _qt);
+        /*[out]*/   DirectX::XMFLOAT4X4& _mtx ,
+        /*[in]*/    const DirectX::XMFLOAT4& _qt);
 
     //==============================================================================
     /// 指定軸に回転したクォータニオンを作成
     /// 
-    /// _qt [out] クオータニオン
-    /// _axis [in] 回転角
-    /// _angle [in] 角度
+    /// \param  [out]   _qt     クオータニオン
+    /// \param  [in]    _axis   回転角
+    /// \param  [in]    _angle  角度
     /// 
     /// return void
     //==============================================================================
     static void RotationAxis(
-        /*[out]*/ DirectX::XMFLOAT4& _qt ,
-        /*[in]*/ const DirectX::XMFLOAT4& _axis ,
-        /*[in]*/ const float _angle);
+        /*[out]*/   DirectX::XMFLOAT4& _qt ,
+        /*[in]*/    const DirectX::XMFLOAT4& _axis ,
+        /*[in]*/    const float _angle);
 
     //==============================================================================
     /// クォータニオンの乗算
     /// 
-    /// _outqt [out] 積
-    /// _qt1 [in] かける数１
-    /// _qt2 [in] かける数２
+    /// \param  [out]   _outqt  積
+    /// \param  [in]    _qt1    かける数１
+    /// \param  [in]    _qt2    かける数２
     /// 
     /// return void
     //==============================================================================
     static void Multiplication(
-        /*[out]*/ DirectX::XMFLOAT4& _outqt ,
-        /*[in]*/ const DirectX::XMFLOAT4& _qt1 ,
-        /*[in]*/ const DirectX::XMFLOAT4& _qt2);
+        /*[out]*/   DirectX::XMFLOAT4& _outqt ,
+        /*[in]*/    const DirectX::XMFLOAT4& _qt1 ,
+        /*[in]*/    const DirectX::XMFLOAT4& _qt2);
 
     //==============================================================================
     /// クォータニオンのの正規化
     /// 
-    /// _inqt [in] 正規化前
-    /// _outqt [out] 正規化後
+    /// \param  [in]    _inqt   正規化前
+    /// \param  [out]   _outqt  正規化後
     /// 
     /// return void
     //==============================================================================    
     static void Normalise(
-        /*[in]*/ const DirectX::XMFLOAT4& _inqt ,
-        /*[out]*/ DirectX::XMFLOAT4& _outqt);
+        /*[in]*/    const DirectX::XMFLOAT4& _inqt ,
+        /*[out]*/   DirectX::XMFLOAT4& _outqt);
 
 };
 

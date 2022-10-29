@@ -6,10 +6,12 @@
 
 #include "Game_Input.h"
 
-BYTE GameInput::mKeyState[256];
-BYTE GameInput::mOldKeyState[256];
+GameInput& GameInput::GetInstance() {
+    static GameInput instance;
+    return instance;
+}
 
-void GameInput::Init() {
+bool GameInput::Init() {
 
 }
 
@@ -20,14 +22,14 @@ void GameInput::Update() {
     bool sts = GetKeyboardState(mKeyState);
 }
 
-bool GameInput::GetKeyPress(int vkey) {
-    return mKeyState[vkey] & 0x80;
+bool GameInput::GetKeyPress(const int _vkey) {
+    return mKeyState[_vkey] & 0x80;
 }
 
-bool GameInput::GetKeyTrigger(int vkey) {
-    return ( mKeyState[vkey] & 0x80 ) != 0 && ( mOldKeyState[vkey] & 0x80 ) == 0;
+bool GameInput::GetKeyTrigger(const int _vkey) {
+    return ( mKeyState[_vkey] & 0x80 ) != 0 && ( mOldKeyState[_vkey] & 0x80 ) == 0;
 }
 
-bool GameInput::GetKeyRelease(int vkey) {
-    return ( mKeyState[vkey] & 0x80 ) == 0 && ( mOldKeyState[vkey] & 0x80 ) != 0;
+bool GameInput::GetKeyRelease(const int _vkey) {
+    return ( mKeyState[_vkey] & 0x80 ) == 0 && ( mOldKeyState[_vkey] & 0x80 ) != 0;
 }

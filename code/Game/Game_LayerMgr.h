@@ -25,16 +25,6 @@ public:
     };
 
     static GameLayerMgr& GetInstance();
-    bool Init(HWND);
-    void Release();
-    GameDevice* GetDevicePtr(RendererType);
+    GameDevice* GetDevicePtr(HWND , RendererType);
 private:
-
-    std::string m_renderName[(int)RendererType::max] = {
-        "DirectX11" ,
-        "DirectX12" ,
-        "OpenGL" ,
-    };
-
-    std::unordered_map<std::string , std::unique_ptr<GameDevice>> m_deviceHashMap;
 };

@@ -93,9 +93,6 @@
     <ClInclude Include="code\OpenGL\OpenGL_Cube.h">
       <Filter>OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="resource1.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -158,9 +155,6 @@
   <ItemGroup>
     <ResourceCompile Include="SIliconKadai1.rc">
       <Filter>Application</Filter>
-    </ResourceCompile>
-    <ResourceCompile Include="Resource.rc">
-      <Filter>リソース ファイル</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>

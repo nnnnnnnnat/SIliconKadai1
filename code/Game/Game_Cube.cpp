@@ -36,22 +36,22 @@ void GameCube::RotateMatrix() {
     DirectX::XMFLOAT3 angle = { 0.0f , 0.0f , 0.0f };
     ResetAngle();
     bool keyflg = false;
-    if (GameInput::GetKeyPress(VK_UP)) {
+    if (GameInput::GetInstance().GetKeyPress(VK_UP)) {
         angle.x = 9.0f;
         m_angle[0] += 9.0f;
         keyflg = true;
     }
-    if (GameInput::GetKeyPress(VK_DOWN)) {
+    if (GameInput::GetInstance().GetKeyPress(VK_DOWN)) {
         angle.x = -9.0f;
         m_angle[0] -= 9.0f;
         keyflg = true;
     }
-    if (GameInput::GetKeyPress(VK_RIGHT)) {
+    if (GameInput::GetInstance().GetKeyPress(VK_RIGHT)) {
         angle.y = -9.0f;
         m_angle[1] -= 9.0f;
         keyflg = true;
     }
-    if (GameInput::GetKeyPress(VK_LEFT)) {
+    if (GameInput::GetInstance().GetKeyPress(VK_LEFT)) {
         angle.y = 9.0f;
         m_angle[1] += 9.0f;
         keyflg = true;

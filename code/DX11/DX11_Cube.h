@@ -27,22 +27,22 @@ public:
     //-----------------------------------------------------------------------------
     /// 初期化
     /// 
-    /// \param [in] _pDevice 表示するAPIのデバイスのポインタ
+    /// \param  [in]    _pDevice    表示するAPIのデバイスのポインタ
     /// 
     /// \return bool
     //-----------------------------------------------------------------------------
     bool Init(
-        /*[in]*/ GameDevice* _pDevice);
+        /*[in]*/    GameDevice* _pDevice);
 
     //-----------------------------------------------------------------------------
     /// 更新処理
     /// 
-    /// \param [in] _pDevice 表示するAPIのデバイスのポインタ
+    /// \param  [in]    _pDevice    表示するAPIのデバイスのポインタ
     /// 
     /// \return void
     //-----------------------------------------------------------------------------
     void Update(
-        /*[in]*/ GameDevice* _pDevice);
+        /*[in]*/    GameDevice* _pDevice);
 
     //-----------------------------------------------------------------------------
     /// 描画
@@ -62,12 +62,12 @@ public:
 
 private:
     //-----------------------------------------------------------------------------
-    // private methods
+    // private method
 
     //-----------------------------------------------------------------------------
-    ComPtr<ID3D11VertexShader>	m_pVertexShader = nullptr;
-    ComPtr<ID3D11PixelShader>	m_pPixelShader = nullptr;
-    ComPtr<ID3D11InputLayout>	m_pInputLayout = nullptr;
+    ComPtr<ID3D11VertexShader> m_pVertexShader = nullptr;
+    ComPtr<ID3D11PixelShader> m_pPixelShader = nullptr;
+    ComPtr<ID3D11InputLayout> m_pInputLayout = nullptr;
     ComPtr<ID3D11Buffer> m_pVertexBuffer = nullptr;
     ComPtr<ID3D11ShaderResourceView> m_pShaderResourceView = nullptr;
 
@@ -76,14 +76,14 @@ private:
     //-----------------------------------------------------------------------------
 
     ///<
-    /// m_pVertexShader 頂点シェーダー
-    /// m_pPixelShader ピクセルシェーダー
-    /// m_pInputLayout 入力レイアウト
-    /// m_pVertexBuffer 頂点バッファ
-    /// m_pShaderResourceView シェーダーリソースビュー
+    /// m_pVertexShader         頂点シェーダー
+    /// m_pPixelShader          ピクセルシェーダー
+    /// m_pInputLayout          入力レイアウト
+    /// m_pVertexBuffer         頂点バッファ
+    /// m_pShaderResourceView   シェーダーリソースビュー
     /// 
-    /// m_pDevice　DirectX11のデバイス
-    /// m_pDeviceContext DirectX11のデバイスコンテキスト
+    /// m_pDevict               DirectX11のデバイス
+    /// m_pDeviceContext        DirectX11のデバイスコンテキスト
     ///<
 
     //-----------------------------------------------------------------------------

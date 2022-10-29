@@ -22,10 +22,10 @@ struct ConstantBufferView {
     T* pBuffer;
 
     ///<
-    /// Desc 定数バッファの構成設定
-    /// HandleCPU CPUディスクリプタハンドル
-    /// HandleGPU GPUディスクリプタハンドル
-    /// pBuffer バッファ先頭へのポインタ
+    /// Desc        定数バッファの構成設定
+    /// HandleCPU   CPUディスクリプタハンドル
+    /// HandleGPU   GPUディスクリプタハンドル
+    /// pBuffer     バッファ先頭へのポインタ
     ///<
 };
 
@@ -35,9 +35,9 @@ struct alignas( 256 ) Transform {
     DirectX::XMMATRIX Proj;
 
     ///<
-    /// World ワールド行列
-    /// View ビュー行列
-    /// Proj プロジェクション行列
+    /// World   ワールド行列
+    /// View    ビュー行列
+    /// Proj    プロジェクション行列
     ///<
 };
 
@@ -47,9 +47,9 @@ struct Texture {
     D3D12_GPU_DESCRIPTOR_HANDLE HandleGPU;
 
     ///<
-    /// pResource リソース
-    /// HandleCPU CPUディスクリプタハンドル
-    /// HandleGPU GPUディスクリプタハンドル
+    /// pResource   リソース
+    /// HandleCPU   CPUディスクリプタハンドル
+    /// HandleGPU   GPUディスクリプタハンドル
     ///<
 };
 
@@ -61,16 +61,17 @@ public:
     //-----------------------------------------------------------------------------
     /// 初期化
     /// 
-    /// \param [in] _pDevice 表示するAPIのポインタ
+    /// \param  [in]    _pDevice    表示するAPIのポインタ
     /// 
     /// \return bool
     //-----------------------------------------------------------------------------
-    bool Init(GameDevice* _pDevice);
+    bool Init(
+        /*[in]*/ GameDevice* _pDevice);
 
     //-----------------------------------------------------------------------------
     /// 更新処理
     /// 
-    /// \param [in] _pDevice 表示するAPIのポインタ
+    /// \param  [in]    _pDevice    表示するAPIのポインタ
     /// 
     /// \return void
     //-----------------------------------------------------------------------------
@@ -79,8 +80,6 @@ public:
 
     //-----------------------------------------------------------------------------
     /// 描画
-    /// 
-    /// _camera [in] カメラの情報
     /// 
     /// \return void
     //-----------------------------------------------------------------------------
@@ -118,21 +117,26 @@ private:
     Texture m_texture;
 
     ///<
-    /// m_pHeapCBV ディスクリプタヒープ
-    /// m_pIndexBuffer インデックスバッファ
-    /// m_pVertexBuffer 頂点バッファ
-    /// m_pConstantBuffer 定数バッファ
-    /// m_pRootSignature ルートシグネイチャ
-    /// m_pPipelineState パイプラインステート
+    /// m_pHeapCBV              ディスクリプタヒープ
+    /// m_pIndexBuffer          インデックスバッファ
+    /// m_pVertexBuffer         頂点バッファ
+    /// m_pConstantBuffer       定数バッファ
+    /// m_pRootSignature        ルートシグネイチャ
+    /// m_pPipelineState        パイプラインステート
     /// 
-    /// m_frameIndex フレーム番号
+    /// m_pDevice               DirectX12のデバイスのポインタ
+    /// m_pCommandList          DirectX12のコマンドリスト
     /// 
-    /// m_indexBufferView インデックスバッファビュー
-    /// m_vertexBufferView 頂点バッファビュー
-    /// m_viewport ビューポート
-    /// m_scissor シザー矩形
-    /// m_constantBufferView 定数バッファビュー
-    /// m_texture テクスチャデータ
+    /// m_frameIndex            フレーム番号
+    /// 
+    /// m_indexBufferView       インデックスバッファビュー
+    /// m_vertexBufferView      頂点バッファビュー
+    /// m_viewport              ビューポート
+    /// m_scissor               シザー矩形
+    /// m_constantBufferView    定数バッファビュー
+    /// m_texture               テクスチャデータ
+    ///<
+
     //-----------------------------------------------------------------------------
 
 };
