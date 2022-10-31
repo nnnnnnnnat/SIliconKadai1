@@ -14,7 +14,7 @@ SamplerState ColorSmp : register(s0);
 Texture2D	 ColorMap : register(t0);
 
 // ピクセルシェーダーのメインエントリーポイント
-PSOutput main(VSOutput Input)
+PSOutput main(VSOutput Input) 
 {
 	PSOutput output = (PSOutput)0;
 

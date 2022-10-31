@@ -80,7 +80,7 @@ private:
     //-----------------------------------------------------------------------------
     GameDevice* m_pGameDevice = nullptr;
     GameObject* m_pCube = nullptr;
-    GameLayerMgr::RendererType m_rendererType = GameLayerMgr::RendererType::OpenGL;
+    GameLayerMgr::RendererType m_rendererType = GameLayerMgr::RendererType::DirectX11;
     //-----------------------------------------------------------------------------
 
     ///< 
