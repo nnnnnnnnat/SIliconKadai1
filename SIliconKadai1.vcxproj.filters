@@ -34,26 +34,11 @@
     <Filter Include="Math">
       <UniqueIdentifier>{88c6f8dc-4158-4c24-9ab5-fcdf8efb72e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{b5b7fca3-2743-411a-b146-584b26e12705}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Application.h">
-      <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Utilities.h">
-      <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Game_System.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="code\DX12\DX12_Graphics.h">
       <Filter>DX12</Filter>
     </ClInclude>
@@ -63,13 +48,13 @@
     <ClInclude Include="code\DX11\DX11_Sampler.h">
       <Filter>DX11</Filter>
     </ClInclude>
-    <ClInclude Include="code\DX11\DX11_Cube.h">
+    <ClInclude Include="code\DX11\DX11_Object.h">
       <Filter>DX11</Filter>
     </ClInclude>
-    <ClInclude Include="code\DX12\DX12_Cube.h">
+    <ClInclude Include="code\DX12\DX12_Object.h">
       <Filter>DX12</Filter>
     </ClInclude>
-    <ClInclude Include="code\Game\Game_Cube.h">
+    <ClInclude Include="code\Game\Game_Object.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="code\Game\Game_LayerMgr.h">
@@ -90,36 +75,45 @@
     <ClInclude Include="code\Math\Math_Quartanion.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="code\OpenGL\OpenGL_Cube.h">
+    <ClInclude Include="code\OpenGL\OpenGL_Object.h">
       <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Game\Game_Main.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Utilities\Utilities.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Application\Win_Main.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Application\resource.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Application\targetver.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Application\Win_Framework.h">
+      <Filter>Application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Application.cpp">
-      <Filter>Application</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Game_System.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="code\DX12\DX12_Graphics.cpp">
       <Filter>DX12</Filter>
     </ClCompile>
     <ClCompile Include="code\DX11\DX11_Sampler.cpp">
       <Filter>DX11</Filter>
     </ClCompile>
-    <ClCompile Include="code\DX11\DX11_Cube.cpp">
+    <ClCompile Include="code\DX11\DX11_Object.cpp">
       <Filter>DX11</Filter>
     </ClCompile>
     <ClCompile Include="code\DX11\DX11_Graphics.cpp">
       <Filter>DX11</Filter>
     </ClCompile>
-    <ClCompile Include="code\DX12\DX12_Cube.cpp">
+    <ClCompile Include="code\DX12\DX12_Object.cpp">
       <Filter>DX12</Filter>
     </ClCompile>
-    <ClCompile Include="code\Utilities.cpp">
-      <Filter>Application</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Game\Game_Cube.cpp">
+    <ClCompile Include="code\Game\Game_Object.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="code\Game\Game_Device.cpp">
@@ -140,8 +134,17 @@
     <ClCompile Include="code\Game\Game_Camera.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="code\OpenGL\OpenGL_Cube.cpp">
+    <ClCompile Include="code\OpenGL\OpenGL_Object.cpp">
       <Filter>OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Game\Game_Main.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Utilities\Utilities.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Application\Win_Main.cpp">
+      <Filter>Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@
 
 #include <d3d11.h>
 
-#include "../../framework.h"
+#include "../Application/Win_Framework.h"
 #include "../Game/Game_Device.h"
 #include "DX11_Sampler.h"
 
@@ -100,14 +100,20 @@ private:
     ComPtr<ID3D11DeviceContext> m_pDeviceContext;
     ComPtr<IDXGISwapChain> m_pSwapChain;
     ComPtr<ID3D11RenderTargetView> m_pBackBufferView;
+    ComPtr<ID3D11Texture2D> m_pDepthStencilBuffer;
+    ComPtr<ID3D11DepthStencilState> m_pDepthStencilState;
+    ComPtr<ID3D11DepthStencilView> m_pDepthStencilView;
     D3D11_VIEWPORT m_viewport;
 
     ///<
-    /// m_pDevice           デバイス
-    /// m_pDeviceContext    デバイスコンテキスト
-    /// m_pSwapChain        スワップチェイン
-    /// m_pBackBufferView   レンダーターゲットビュー
-    /// m_viewport          ビューポート
+    /// m_pDevice               デバイス
+    /// m_pDeviceContext        デバイスコンテキスト
+    /// m_pSwapChain            スワップチェイン
+    /// m_pBackBufferView       レンダーターゲットビュー
+    /// m_pDepthStencilBuffer    ステンシルバッファ
+    /// m_pDepthStencilState    ステンシルステート
+    /// m_pDepthStencilView     ステンシルビュー
+    /// m_viewport              ビューポート
     ///
 
     //-----------------------------------------------------------------------------

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "../../framework.h"
+#include "../Application/Win_Framework.h"
 #include "../Game/Game_Device.h"
 
 #include <cstdint>
@@ -130,23 +130,23 @@ private:
     D3D12_CPU_DESCRIPTOR_HANDLE	m_HandleDSV;
 
     ///<
-    /// m_pDevice デバイス
-    /// m_pQueue コマンドキュー
-    /// m_pSwapChain スワップチェイン
-    /// m_pColorBuffer カラーバッファ
+    /// m_pDevice       デバイス
+    /// m_pQueue        コマンドキュー
+    /// m_pSwapChain    スワップチェイン
+    /// m_pColorBuffer  カラーバッファ
     /// m_pCmdAllocator コマンドアロケータ
-    /// m_pCmdList コマンドリスト
-    /// m_pHeadRTV レンダーターゲットビュー用ヒープ
-    /// m_pFence フェンス
-    /// m_pDepthBuffer ステンシルバッファ
-    /// m_pHeapDSV デプスステンシルビュー用ヒープ
+    /// m_pCmdList      コマンドリスト
+    /// m_pHeadRTV      レンダーターゲットビュー用ヒープ
+    /// m_pFence        フェンス
+    /// m_pDepthBuffer  ステンシルバッファ
+    /// m_pHeapDSV      デプスステンシルビュー用ヒープ
     /// 
-    /// m_FenceEvent フェンスイベント
-    /// m_FenceCounter フェンスカウンター
-    /// m_FrameIndex フレーム番号
+    /// m_FenceEvent    フェンスイベント
+    /// m_FenceCounter  フェンスカウンター
+    /// m_FrameIndex    フレーム番号
     /// 
-    /// m_HandleRTV レンダーターゲットビュー用ハンドル
-    /// m_HandleDSV デプスステンシルビュー用ハンドル
+    /// m_HandleRTV     レンダーターゲットビュー用ハンドル
+    /// m_HandleDSV     デプスステンシルビュー用ハンドル
     ///<
     //-----------------------------------------------------------------------------
 };

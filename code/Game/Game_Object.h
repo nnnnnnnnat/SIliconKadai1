@@ -8,12 +8,23 @@
 
 #include "Game_Device.h"
 
-#include "../Utilities.h"
+#include "../Application/Win_Framework.h"
+#include "Game_LayerMgr.h"
 
-class GameCube {
+class GameObject {
 public:
     //-----------------------------------------------------------------------------
     // public method
+
+    //-----------------------------------------------------------------------------
+    /// 指定されたAPIでの初期化
+    /// 
+    /// \param  [in]    _type       使用するAPIの種類
+    /// 
+    /// \return GameObject*
+    //-----------------------------------------------------------------------------
+
+    static GameObject* GetObjectPtr(GameLayerMgr::RendererType _type);
 
     //-----------------------------------------------------------------------------
     /// 初期化
@@ -155,7 +166,7 @@ private:
     /// m_mtx           姿勢
     /// m_angle         回転
     /// m_pos           座標
-    /// m_textureColor  テクスチャのピクセルごとの色情報
+    /// m_textureColor  テクスチャの１ドットごとの色情報
     ///<
 
     //-----------------------------------------------------------------------------

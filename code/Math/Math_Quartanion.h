@@ -7,7 +7,8 @@
 #pragma once 
 
 #include <DirectXMath.h>
-#include "../../framework.h"
+
+#include "../Utilities/Utilities.h"
 
 class Quartanion {
 public:

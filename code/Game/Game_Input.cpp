@@ -12,7 +12,7 @@ GameInput& GameInput::GetInstance() {
 }
 
 bool GameInput::Init() {
-
+    return true;
 }
 
 void GameInput::Update() {

@@ -6,13 +6,9 @@
 
 #pragma once
 
-#include <string>
-#include <unordered_map>
-#include <memory>
-
 #include "Game_Device.h"
 
-#include "../Utilities.h"
+#include "../Application/Win_Framework.h"
 
 class GameLayerMgr : private NonCopyable {
 public:
@@ -24,7 +20,27 @@ public:
         max ,
     };
 
+    //-----------------------------------------------------------------------------
+    // public method
+
+    //-----------------------------------------------------------------------------
+    /// インスタンス取得
+    /// 
+    /// \return GameLayerMgr&
+    //-----------------------------------------------------------------------------
     static GameLayerMgr& GetInstance();
-    GameDevice* GetDevicePtr(HWND , RendererType);
-private:
+
+    //-----------------------------------------------------------------------------
+    /// 指定したAPIのデバイスを取得
+    /// 
+    /// \param  [in]    _hWnd   ウィンドウハンドル
+    /// \param  [in]    _type   使用するAPIの種類
+    /// 
+    /// \return GameDevice*
+    //-----------------------------------------------------------------------------
+    GameDevice* GetDevicePtr(
+        /*[in]*/ HWND _hWnd ,
+        /*[in]*/ RendererType _type);
+
+    //-----------------------------------------------------------------------------
 };

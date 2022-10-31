@@ -12,7 +12,7 @@
 #include "DX12_Graphics.h"
 
 #include "../Game/Game_Camera.h"
-#include "../Game/Game_Cube.h"
+#include "../Game/Game_Object.h"
 
 template<typename T>
 struct ConstantBufferView {
@@ -53,7 +53,7 @@ struct Texture {
     ///<
 };
 
-class DX12Cube : public GameCube {
+class DX12Object : public GameObject {
 public:
     //-----------------------------------------------------------------------------
     // public method

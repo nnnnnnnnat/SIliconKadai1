@@ -4,7 +4,7 @@
 /// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
-#include "DX12_Cube.h"
+#include "DX12_Object.h"
 
 #include "../Game/Game_Device.h"
 
@@ -13,7 +13,7 @@
 using namespace std;
 using namespace DirectX;
 
-bool DX12Cube::Init(GameDevice* _pDevice) {
+bool DX12Object::Init(GameDevice* _pDevice) {
 
     InitCube();
 
@@ -543,7 +543,7 @@ bool DX12Cube::Init(GameDevice* _pDevice) {
     return true;
 }
 
-void DX12Cube::Update(GameDevice* _pDevice) {
+void DX12Object::Update(GameDevice* _pDevice) {
     RotateMatrix();
     m_frameIndex = dynamic_cast<DX12Graphics*>( _pDevice )->GetFrameIndex();
     DirectX::XMMATRIX m_mat = XMMatrixIdentity();
@@ -553,7 +553,7 @@ void DX12Cube::Update(GameDevice* _pDevice) {
 
 }
 
-void DX12Cube::Draw() {
+void DX12Object::Draw() {
 
     for (auto i = 0; i < FRAME_COUNT; ++i) {
 
@@ -577,7 +577,7 @@ void DX12Cube::Draw() {
     m_pCommandList->DrawIndexedInstanced(36 , 1 , 0 , 0 , 0);
 }
 
-void DX12Cube::Release() {
+void DX12Object::Release() {
     for (auto i = 0; i < FRAME_COUNT; ++i) {
         if (m_pConstantBuffer[i] != nullptr) {
             m_pConstantBuffer[i]->Unmap(0 , nullptr);

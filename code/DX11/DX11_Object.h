@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include "../../framework.h"
+#include "../Application/Win_Framework.h"
 
 #include "../Game/Game_Camera.h"
 
-#include "../Game/Game_Cube.h"
+#include "../Game/Game_Object.h"
 
 #include <d3d11.h>
 #include <d3dcompiler.h>
@@ -19,7 +19,7 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-class DX11Cube :public GameCube {
+class DX11Object :public GameObject {
 public:
     //-----------------------------------------------------------------------------
     // public methods

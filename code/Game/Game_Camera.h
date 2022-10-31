@@ -8,7 +8,7 @@
 
 #include <directXMath.h>
 
-#include "../Utilities.h"
+#include "../Application/Win_Framework.h"
 
 using namespace DirectX;
 

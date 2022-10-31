@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: Game_LayerMgr.cpp
+/// Description: 各APIの描画に必要なものを集めたクラス
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #include "Game_LayerMgr.h"
 #include "../DX11/DX11_Graphics.h"
 #include "../DX12/DX12_Graphics.h"

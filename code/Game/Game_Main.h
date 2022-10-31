@@ -6,16 +6,16 @@
 
 #pragma once
 
-#include "../framework.h"
+#include "../Application/Win_Framework.h"
 
-#include "DX11/DX11_Cube.h"
-#include "DX12/DX12_Cube.h"
-#include "OpenGL/OpenGL_Cube.h"
+#include "../DX11/DX11_Object.h"
+#include "../DX12/DX12_Object.h"
+#include "../OpenGL/OpenGL_Object.h"
 
-#include "Game/Game_Device.h"
-#include "Game/Game_LayerMgr.h"
+#include "Game_Device.h"
+#include "Game_LayerMgr.h"
 
-class GameSystem {
+class GameMain {
 public:
     //-----------------------------------------------------------------------------
     // public methods
@@ -25,7 +25,7 @@ public:
     ///
     /// \return GameSystem&
     //-----------------------------------------------------------------------------
-    static GameSystem& GetInstance();
+    static GameMain& GetInstance();
 
     //-----------------------------------------------------------------------------
     /// 初期化
@@ -55,23 +55,38 @@ public:
     ///
     /// \return void
     //-----------------------------------------------------------------------------
-    void Exit();
+    void Release();
 
     //-----------------------------------------------------------------------------
 private:
     //-----------------------------------------------------------------------------
-    // private methods
+    // private method
 
     //-----------------------------------------------------------------------------
-    GameCube* m_cube = nullptr;
+    /// ウィンドウのタイトルを使用しているAPIの名前に変える
+    /// 
+    /// \param  [in]    _hWnd   ウィンドウハンドル
+    /// \param  [in]    _type   使用するAPIの種類
+    /// 
+    /// \return void
+    //-----------------------------------------------------------------------------
+    void SetWindowTitle(HWND _hWnd , GameLayerMgr::RendererType _type);
+
+    //-----------------------------------------------------------------------------
+
+    //-----------------------------------------------------------------------------
+    // private variable
+
+    //-----------------------------------------------------------------------------
     GameDevice* m_pGameDevice = nullptr;
+    GameObject* m_pCube = nullptr;
     GameLayerMgr::RendererType m_rendererType = GameLayerMgr::RendererType::OpenGL;
     //-----------------------------------------------------------------------------
 
     ///< 
-    /// m_dx11Cube DirectX11のキューブを描画する変数
-    /// m_dx12Cube DirectX12のキューブを描画する変数
-    /// m_rendererType 描画処理のパターン
+    /// m_pGameDevice   APIのデバイス
+    /// m_cube          描画するオブジェクト
+    /// m_rendererType  描画処理のAPI
     ///<
 
     //-----------------------------------------------------------------------------

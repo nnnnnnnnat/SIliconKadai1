@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: OpenGL_Object.h
+/// Description: OpenGL用オブジェクトクラス
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #pragma once
 
 #pragma comment(lib, "opengl32.lib")
@@ -7,10 +13,10 @@
 #include <gl/gl.h>
 #include <gl/glu.h>
 
-#include "../../framework.h"
-#include "../Game/Game_Cube.h"
+#include "../Application/Win_Framework.h"
+#include "../Game/Game_Object.h"
 
-class OpenGLCube : public GameCube {
+class OpenGLObject : public GameObject {
 public:
     //-----------------------------------------------------------------------------
     // public method
@@ -48,19 +54,6 @@ public:
     /// \return void
     //-----------------------------------------------------------------------------
     void Release();
-
-    //-----------------------------------------------------------------------------
-private:
-    //-----------------------------------------------------------------------------
-    // private variable
-
-    GLuint m_texture;
-    GLubyte m_textureBit[4][4][3];
-
-    ///<
-    /// m_texture テクスチャデータ
-    /// m_textureBit テクスチャのメモリ配列
-    ///<
 
     //-----------------------------------------------------------------------------
 };

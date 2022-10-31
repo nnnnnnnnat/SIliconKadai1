@@ -4,10 +4,10 @@
 /// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
-#include "DX11_Cube.h"
+#include "DX11_Object.h"
 #include "DX11_Graphics.h"
 
-bool DX11Cube::Init(GameDevice* _pDevice) {
+bool DX11Object::Init(GameDevice* _pDevice) {
 
     HRESULT hr;
     InitCube();
@@ -163,11 +163,11 @@ bool DX11Cube::Init(GameDevice* _pDevice) {
     return true;
 }
 
-void DX11Cube::Update(GameDevice* _pDevice) {
+void DX11Object::Update(GameDevice* _pDevice) {
     RotateMatrix();
 }
 
-void DX11Cube::Draw() {
+void DX11Object::Draw() {
 
     HRESULT hr;
 
@@ -254,7 +254,7 @@ void DX11Cube::Draw() {
     m_pDeviceContext->Draw((unsigned int)GetCubeVertex().size() , 0);
 }
 
-void DX11Cube::Release() {
+void DX11Object::Release() {
 
 }
 

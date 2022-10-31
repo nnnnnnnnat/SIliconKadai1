@@ -140,43 +140,43 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="code\DX11\DX11_Cube.h" />
+    <ClInclude Include="code\Application\resource.h" />
+    <ClInclude Include="code\Application\targetver.h" />
+    <ClInclude Include="code\Application\Win_Framework.h" />
+    <ClInclude Include="code\Application\Win_Main.h" />
+    <ClInclude Include="code\DX11\DX11_Object.h" />
     <ClInclude Include="code\DX11\DX11_Graphics.h" />
     <ClInclude Include="code\DX11\DX11_Sampler.h" />
-    <ClInclude Include="code\DX12\DX12_Cube.h" />
+    <ClInclude Include="code\DX12\DX12_Object.h" />
     <ClInclude Include="code\DX12\DX12_Graphics.h" />
     <ClInclude Include="code\Game\Game_Camera.h" />
     <ClInclude Include="code\Game\Game_Input.h" />
-    <ClInclude Include="code\Game\Game_Cube.h" />
+    <ClInclude Include="code\Game\Game_Object.h" />
     <ClInclude Include="code\Game\Game_Device.h" />
     <ClInclude Include="code\Game\Game_LayerMgr.h" />
-    <ClInclude Include="code\Game_System.h" />
+    <ClInclude Include="code\Game\Game_Main.h" />
     <ClInclude Include="code\Math\Math_Quartanion.h" />
-    <ClInclude Include="code\OpenGL\OpenGL_Cube.h" />
+    <ClInclude Include="code\OpenGL\OpenGL_Object.h" />
     <ClInclude Include="code\OpenGL\OpenGL_Graphics.h" />
-    <ClInclude Include="code\Utilities.h" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="Application.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="code\Utilities\Utilities.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\DX11\DX11_Cube.cpp" />
+    <ClCompile Include="code\Application\Win_Main.cpp" />
+    <ClCompile Include="code\DX11\DX11_Object.cpp" />
     <ClCompile Include="code\DX11\DX11_Graphics.cpp" />
     <ClCompile Include="code\DX11\DX11_Sampler.cpp" />
-    <ClCompile Include="code\DX12\DX12_Cube.cpp" />
+    <ClCompile Include="code\DX12\DX12_Object.cpp" />
     <ClCompile Include="code\DX12\DX12_Graphics.cpp" />
     <ClCompile Include="code\Game\Game_Camera.cpp" />
-    <ClCompile Include="code\Game\Game_Cube.cpp" />
+    <ClCompile Include="code\Game\Game_Object.cpp" />
     <ClCompile Include="code\Game\Game_Device.cpp" />
     <ClCompile Include="code\Game\Game_Input.cpp" />
     <ClCompile Include="code\Game\Game_LayerMgr.cpp" />
-    <ClCompile Include="code\Game_System.cpp" />
-    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="code\Game\Game_Main.cpp" />
+    <ClCompile Include="code\Utilities\Utilities.cpp" />
     <ClCompile Include="code\Math\Math_Quartanion.cpp" />
-    <ClCompile Include="code\OpenGL\OpenGL_Cube.cpp" />
+    <ClCompile Include="code\OpenGL\OpenGL_Object.cpp" />
     <ClCompile Include="code\OpenGL\OpenGL_Graphics.cpp" />
-    <ClCompile Include="code\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SIliconKadai1.rc" />

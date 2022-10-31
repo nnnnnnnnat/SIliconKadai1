@@ -8,7 +8,7 @@
 
 #include <Windows.h>
 
-#include "../Utilities.h"
+#include "../Application/Win_Framework.h"
 
 class GameInput : public NonCopyable {
 public:

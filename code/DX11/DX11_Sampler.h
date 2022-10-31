@@ -7,7 +7,7 @@
 #pragma once
 
 #include "DX11_Graphics.h"
-#include "../Utilities.h"
+#include "../Application/Win_Framework.h"
 
 class DX11Sampler : private NonCopyable {
 public:

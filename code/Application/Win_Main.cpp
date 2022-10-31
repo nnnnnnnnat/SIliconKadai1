@@ -1,25 +1,23 @@
 ﻿// SIliconKadai1.cpp : アプリケーションのエントリ ポイントを定義します。
 
-#include "framework.h"
-#include "Application.h"
+#include "Win_Framework.h"
+#include "Win_Main.h"
 
 #include <stdio.h>
-
 #include <Windows.h>
-
 #include <timeapi.h>
+#include <windowsx.h>
 
-#include "code/Game_System.h"
+#include "../Game/Game_Main.h"
 
 #pragma comment (lib,"winmm.lib")
-
 
 #define MAX_LOADSTRING 100
 
 // グローバル変数:
-HINSTANCE hInst;                                // 現在のインターフェイス
-WCHAR szTitle[MAX_LOADSTRING];                  // タイトル バーのテキスト
-WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ クラス名
+HINSTANCE   gInstance;                      // 現在のインターフェイス
+WCHAR       gTitle[MAX_LOADSTRING];         // タイトル バーのテキスト
+WCHAR       gWindowClass[MAX_LOADSTRING];   // メイン ウィンドウ クラス名
 
 // このコード モジュールに含まれる関数の宣言を転送します:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -34,11 +32,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance ,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: ここにコードを挿入してください。
-
     // グローバル文字列を初期化する
-    LoadStringW(hInstance , IDS_APP_TITLE , szTitle , MAX_LOADSTRING);
-    LoadStringW(hInstance , IDC_SILICONKADAI1 , szWindowClass , MAX_LOADSTRING);
+    LoadStringW(hInstance , IDS_APP_TITLE , gTitle , MAX_LOADSTRING);
+    LoadStringW(hInstance , IDC_SILICONKADAI1 , gWindowClass , MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
     // アプリケーション初期化の実行:
@@ -50,8 +46,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance ,
 
     MSG msg;
 
-    uint64_t current_time = 0;
-    uint64_t last_time = 0;
+    uint64_t currentTime = 0;
+    uint64_t lastTime = 0;
 
     // ゲームループ
     while (1) {
@@ -67,25 +63,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance ,
         }
         unsigned long start = timeGetTime();
 
-        GameSystem::GetInstance().Update();
-        GameSystem::GetInstance().Draw();
+        GameMain::GetInstance().Update();
+        GameMain::GetInstance().Draw();
 
         unsigned long last = timeGetTime();
         unsigned long sleeptime = 16 - (int)( last - start );
-        Sleep(16 - (int)( last - start ));
+
+        // フレームレート固定 
+        Sleep(( 1000 / FLAME_LATE ) - (int)( last - start ));
 
     }
 
-    GameSystem::GetInstance().Exit();
+    GameMain::GetInstance().Release();
 
     return (int)msg.wParam;
 }
 
-//
-//  関数: MyRegisterClass()
-//
-//  目的: ウィンドウ クラスを登録します。
-//
 ATOM MyRegisterClass(HINSTANCE hInstance) {
     WNDCLASSEXW wcex;
 
@@ -100,26 +93,16 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
     wcex.hCursor = LoadCursor(nullptr , IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)( COLOR_WINDOW + 1 );
     wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_SILICONKADAI1);
-    wcex.lpszClassName = szWindowClass;
+    wcex.lpszClassName = gWindowClass;
     wcex.hIconSm = LoadIcon(wcex.hInstance , MAKEINTRESOURCE(IDI_SMALL));
 
     return RegisterClassExW(&wcex);
 }
 
-//
-//   関数: InitInstance(HINSTANCE, int)
-//
-//   目的: インスタンス ハンドルを保存して、メイン ウィンドウを作成します
-//
-//   コメント:
-//
-//        この関数で、グローバル変数でインスタンス ハンドルを保存し、
-//        メイン プログラム ウィンドウを作成および表示します。
-//
 BOOL InitInstance(HINSTANCE hInstance , int nCmdShow) {
-    hInst = hInstance; // グローバル変数にインスタンス ハンドルを格納する
+    gInstance = hInstance; // グローバル変数にインスタンス ハンドルを格納する
 
-    HWND hWnd = CreateWindowW(szWindowClass , szTitle , WS_OVERLAPPEDWINDOW ,
+    HWND hWnd = CreateWindowW(gWindowClass , gTitle , WS_OVERLAPPEDWINDOW ,
         CW_USEDEFAULT , 0 , CW_USEDEFAULT , 0 , nullptr , nullptr , hInstance , nullptr);
 
     if (!hWnd) {
@@ -130,21 +113,11 @@ BOOL InitInstance(HINSTANCE hInstance , int nCmdShow) {
     ShowWindow(hWnd , nCmdShow);
     UpdateWindow(hWnd);
 
-    GameSystem::GetInstance().Initialize(hWnd);
+    GameMain::GetInstance().Initialize(hWnd);
 
     return TRUE;
 }
 
-//
-//  関数: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  目的: メイン ウィンドウのメッセージを処理します。
-//
-//  WM_COMMAND  - アプリケーション メニューの処理
-//  WM_PAINT    - メイン ウィンドウを描画する
-//  WM_DESTROY  - 中止メッセージを表示して戻る
-//
-//
 LRESULT CALLBACK WndProc(HWND hWnd , UINT message , WPARAM wParam , LPARAM lParam) {
     switch (message) {
     case WM_COMMAND:
@@ -153,7 +126,7 @@ LRESULT CALLBACK WndProc(HWND hWnd , UINT message , WPARAM wParam , LPARAM lPara
         // 選択されたメニューの解析:
         switch (wmId) {
         case IDM_ABOUT:
-            DialogBox(hInst , MAKEINTRESOURCE(IDD_ABOUTBOX) , hWnd , About);
+            DialogBox(gInstance , MAKEINTRESOURCE(IDD_ABOUTBOX) , hWnd , About);
             break;
         case IDM_EXIT:
             DestroyWindow(hWnd);
@@ -180,7 +153,6 @@ LRESULT CALLBACK WndProc(HWND hWnd , UINT message , WPARAM wParam , LPARAM lPara
     return 0;
 }
 
-// バージョン情報ボックスのメッセージ ハンドラーです。
 INT_PTR CALLBACK About(HWND hDlg , UINT message , WPARAM wParam , LPARAM lParam) {
     UNREFERENCED_PARAMETER(lParam);
     switch (message) {

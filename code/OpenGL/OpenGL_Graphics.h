@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: OpenGL_Graphics.h
+/// Description: OpenGL初期化
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #pragma once
 
 #pragma comment(lib, "opengl32.lib")
@@ -10,7 +16,7 @@
 #include "../Game/Game_Camera.h"
 #include "../Game/Game_Device.h"
 
-#include "../../framework.h"
+#include "../Application/Win_Framework.h"
 
 class OpenGLGraphics : public GameDevice {
 public:
@@ -63,7 +69,7 @@ private:
     HDC m_hdc;
 
     ///<
-    /// m_hdc
+    /// m_hdc デバイスコンテキスト
     ///<
     //-----------------------------------------------------------------------------
 };

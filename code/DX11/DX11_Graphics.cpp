@@ -18,6 +18,7 @@ bool DX11Graphics::Init(HWND _hWnd) {
 
     hr = CreateDXGIFactory1(IID_PPV_ARGS(&factory));
     if (FAILED(hr)) { // if
+        MessageBoxA(nullptr , "CreateDXGIFactory1" , "" , MB_OK);
         return false;
     }
 
@@ -53,6 +54,7 @@ bool DX11Graphics::Init(HWND _hWnd) {
         &featureLevel ,
         &m_pDeviceContext);
     if (FAILED(hr)) { // if
+        MessageBoxA(nullptr , "D3D11CreateDevice" , "" , MB_OK);
         return false;
     }
 
@@ -79,6 +81,7 @@ bool DX11Graphics::Init(HWND _hWnd) {
         &scDesc ,
         &m_pSwapChain);
     if (FAILED(hr)) { // if
+        MessageBoxA(nullptr , "CreateSwapChain" , "" , MB_OK);
         return false;
     }
 
@@ -88,6 +91,7 @@ bool DX11Graphics::Init(HWND _hWnd) {
     hr = m_pSwapChain->GetBuffer(0 ,
         IID_PPV_ARGS(&p_BackBuffer));
     if (FAILED(hr)) { // if
+        MessageBoxA(nullptr , "GetBuffer" , "" , MB_OK);
         return false;
     }
 
@@ -100,6 +104,7 @@ bool DX11Graphics::Init(HWND _hWnd) {
         &rtvDesc ,
         &m_pBackBufferView);
     if (FAILED(hr)) { // if
+        MessageBoxA(nullptr , "CreateRenderTargetView" , "" , MB_OK);
         return false;
     }
 
@@ -107,6 +112,82 @@ bool DX11Graphics::Init(HWND _hWnd) {
     m_pDeviceContext->OMSetRenderTargets(1 ,
         m_pBackBufferView.GetAddressOf() ,
         nullptr);
+
+    {
+        // Zバッファ
+        D3D11_TEXTURE2D_DESC depthBufferDesc;
+        D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+        D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+        D3D11_RASTERIZER_DESC rasterDesc;
+
+        ZeroMemory(&depthBufferDesc , sizeof(depthBufferDesc));
+
+        depthBufferDesc.Width = SCREEN_WIDTH;
+        depthBufferDesc.Height = SCREEN_HEIGHT;
+        depthBufferDesc.MipLevels = 1;
+        depthBufferDesc.ArraySize = 1;
+        depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+        depthBufferDesc.SampleDesc.Count = 1;
+        depthBufferDesc.SampleDesc.Quality = 0;
+        depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+        depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+        depthBufferDesc.CPUAccessFlags = 0;
+        depthBufferDesc.MiscFlags = 0;
+
+        hr = m_pDevice->CreateTexture2D(&depthBufferDesc , NULL , &m_pDepthStencilBuffer);
+        if (FAILED(hr)) { // if
+            MessageBoxA(nullptr , "CreateTexture2D" , "" , MB_OK);
+            return false;
+        }
+
+        // ステンシルステート作成
+        // ステンシル設定構造体初期化
+        ZeroMemory(&depthStencilDesc , sizeof(depthStencilDesc));
+        depthStencilDesc.DepthEnable = true;
+        depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+        depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+        // set up the description of the stencl state
+        depthStencilDesc.StencilEnable = true;
+        depthStencilDesc.StencilReadMask = 0xFF;
+        depthStencilDesc.StencilWriteMask = 0xFF;
+
+        // stencil operation if pixel is front-facing
+        depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+        depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+        depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+        depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+        // stencil operation if pixel is　back-facing
+        depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+        depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+        depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+        depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+        // create the depth stencil state
+        hr = m_pDevice->CreateDepthStencilState(&depthStencilDesc , &m_pDepthStencilState);
+        if (FAILED(hr)) { // if
+            MessageBoxA(nullptr , "CreateDepthStencilState" , "" , MB_OK);
+            return false;
+        }
+
+        // デバイスコンテキストへセット
+        m_pDeviceContext->OMSetDepthStencilState(m_pDepthStencilState.Get() , 1);
+
+        // depthstencilview 初期化
+        ZeroMemory(&depthStencilViewDesc , sizeof(depthStencilViewDesc));
+        // set up the depth stencil view description
+        depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+        depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+        depthStencilViewDesc.Texture2D.MipSlice = 0;
+
+        // create the depth stencil view
+        hr = m_pDevice->CreateDepthStencilView(m_pDepthStencilBuffer.Get() , &depthStencilViewDesc , &m_pDepthStencilView);
+        if (FAILED(hr)) { // if
+            MessageBoxA(nullptr , "CreateDepthStencilView" , "" , MB_OK);
+            return false;
+        }
+    }
 
     // ビューポートの設定
     m_viewport = { 0.0f ,
@@ -127,6 +208,10 @@ bool DX11Graphics::Init(HWND _hWnd) {
 void DX11Graphics::BeforeRender() {
     // 背景色設定
     m_pDeviceContext->ClearRenderTargetView(m_pBackBufferView.Get() , m_backColor);
+    // Zバッファクリア
+    m_pDeviceContext->ClearDepthStencilView(
+        m_pDepthStencilView.Get() ,
+        D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL , 1.0f , 0);
 }
 
 void DX11Graphics::AfterRender() {

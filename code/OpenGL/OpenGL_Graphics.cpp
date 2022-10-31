@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: OpenGL_Graphics.cpp
+/// Description: OpenGLèâä˙âª
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #include "OpenGL_Graphics.h"
 
 OpenGLGraphics& GetInstance() {
@@ -54,7 +60,7 @@ bool OpenGLGraphics::Init(HWND _hWnd) {
     DirectX::XMFLOAT4 pos = GameCamera::GetInstance().GetPos();
     DirectX::XMFLOAT4 lookat = GameCamera::GetInstance().GetLookAt();
     DirectX::XMFLOAT4 up = GameCamera::GetInstance().GetUpVector();
-    gluLookAt(pos.x , pos.y , -pos.z ,
+    gluLookAt(pos.x , pos.y , pos.z ,
         lookat.x , lookat.y , lookat.z ,
         up.x , up.y , up.z);
 

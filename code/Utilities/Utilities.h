@@ -1,7 +1,7 @@
 //==============================================================================
-// Filename: Utilities.h
-// Description: 
-// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+/// Filename: Utilities.h
+/// Description: 共通のメソッド
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 #pragma once
 
@@ -30,8 +30,10 @@ protected:
 private:
     //-----------------------------------------------------------------------------
     // private method
+
     NonCopyable& operator = (const NonCopyable& src) {};
     NonCopyable(const NonCopyable& src) {};
+
     //-----------------------------------------------------------------------------
 
 };
@@ -55,6 +57,29 @@ struct ShaderObject {
     int   size;
 };
 
-template<typename T> void SafeRelease(T*& _ptr);
+//-----------------------------------------------------------------------------
+/// ポインタの開票処理
+/// 
+/// \param  [out]   _ptr    解放したいポインタ
+/// 
+/// \return void
+//-----------------------------------------------------------------------------
+template<typename T> void SafeRelease(
+    /*[out]*/ T*& _ptr);
+
+//-----------------------------------------------------------------------------
+/// キューブ情報の初期化
+/// 
+/// \return VertexCube
+//-----------------------------------------------------------------------------
 VertexCube CubeIdentify();
-VertexCube CubeIdentify(const float ratio);
+
+//-----------------------------------------------------------------------------
+/// キューブ情報の初期化
+/// 
+/// \param  [in]    ratio   大きさの倍率
+/// 
+/// \return VertexCube
+//-----------------------------------------------------------------------------
+VertexCube CubeIdentify(
+    /*[in]*/ const float ratio);

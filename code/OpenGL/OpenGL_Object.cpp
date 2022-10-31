@@ -1,11 +1,13 @@
-#include "OpenGL_Cube.h"
+#include "OpenGL_Object.h"
 
 #include <stdlib.h>
 
-bool OpenGLCube::Init(GameDevice* _pDevice) {
+bool OpenGLObject::Init(GameDevice* _pDevice) {
+
+    // 初期化
     InitCube(1.0f);
 
-
+    // テクスチャ作成
     unsigned char tex[TEXTURE_SIZE_X * TEXTURE_SIZE_Y * 4] = {};
 
     for (int y = 0; y < TEXTURE_SIZE_Y; y++) {
@@ -32,11 +34,11 @@ bool OpenGLCube::Init(GameDevice* _pDevice) {
     return true;
 }
 
-void OpenGLCube::Update(GameDevice* _pDevice) {
+void OpenGLObject::Update(GameDevice* _pDevice) {
     RotateMatrix();
 }
 
-void OpenGLCube::Draw() {
+void OpenGLObject::Draw() {
 
     // カラー、頂点
 
@@ -68,6 +70,6 @@ void OpenGLCube::Draw() {
     }
 }
 
-void OpenGLCube::Release() {
+void OpenGLObject::Release() {
 
 }

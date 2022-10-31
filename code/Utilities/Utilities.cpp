@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: Utilities.cpp
+/// Description: ã§í ÇÃÉÅÉ\ÉbÉh
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #include "Utilities.h"
 
 template<typename T> void SafeRelease(T*& ptr) {
