@@ -1,7 +1,7 @@
 //==============================================================================
-// Filename: DX12_Graohics.h
-// Description: DirectX12 クラス
-// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+/// Filename: DX12_Graohics.h
+/// Description: DirectX12 クラス
+/// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 #pragma once

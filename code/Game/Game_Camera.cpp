@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: Game_Camera.cpp
+/// Description: ƒJƒƒ‰‚ÉŠÖ‚·‚éƒNƒ‰ƒX
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #include "Game_Camera.h"
 
 GameCamera& GameCamera::GetInstance() {

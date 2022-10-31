@@ -1,3 +1,9 @@
+//==============================================================================
+/// Filename: OpenGL_Object.cpp
+/// Description: OpenGL用オブジェクトクラス
+/// Copyright (C)  Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
 #include "OpenGL_Object.h"
 
 #include <stdlib.h>

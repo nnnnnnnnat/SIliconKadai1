@@ -56,7 +56,6 @@ private:
     //-----------------------------------------------------------------------------
     // private methods
 
-    //-----------------------------------------------------------------------------
     D3D11_TEXTURE_ADDRESS_MODE  m_rappingMode[5] = {
         D3D11_TEXTURE_ADDRESS_WRAP ,
         D3D11_TEXTURE_ADDRESS_CLAMP ,
@@ -75,7 +74,6 @@ private:
         "D3D11_TEXTURE_ADDRESS_MIRROR_ONCE"
     };
 
-    //-----------------------------------------------------------------------------
     ///<
     /// m_rappingMode[5]        サンプラーモード
     /// m_samplerState[5]       サンプラーステート格納用変数

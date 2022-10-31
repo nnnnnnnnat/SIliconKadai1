@@ -118,7 +118,6 @@ bool DX11Graphics::Init(HWND _hWnd) {
         D3D11_TEXTURE2D_DESC depthBufferDesc;
         D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
         D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
-        D3D11_RASTERIZER_DESC rasterDesc;
 
         ZeroMemory(&depthBufferDesc , sizeof(depthBufferDesc));
 

@@ -22,7 +22,7 @@
 class DX11Object :public GameObject {
 public:
     //-----------------------------------------------------------------------------
-    // public methods
+    // public method
 
     //-----------------------------------------------------------------------------
     /// 初期化
@@ -62,9 +62,8 @@ public:
 
 private:
     //-----------------------------------------------------------------------------
-    // private method
+    // private variable
 
-    //-----------------------------------------------------------------------------
     ComPtr<ID3D11VertexShader> m_pVertexShader = nullptr;
     ComPtr<ID3D11PixelShader> m_pPixelShader = nullptr;
     ComPtr<ID3D11InputLayout> m_pInputLayout = nullptr;
@@ -73,7 +72,6 @@ private:
 
     ID3D11Device* m_pDevice = nullptr;
     ID3D11DeviceContext* m_pDeviceContext = nullptr;
-    //-----------------------------------------------------------------------------
 
     ///<
     /// m_pVertexShader         頂点シェーダー
